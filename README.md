@@ -7,7 +7,7 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 * Terraform templates write Ansible Playbook configuration, which can be customized
 * Post-deploy Powershell script that adds registry entries on each Windows 10 Pro endpoint to automatically log in each username into the Domain as respective user
 * Automatically uploads Badblood (but does not install) if you prefer to generate thousands of simulated users https://github.com/davidprowe/BadBlood
-* Post-deployment Powershell script provisions three domain users on the 2019 Domain Controller 
+* Post-deployment Powershell script provisions three domain users on the 2019 Domain Controller and can be customized for many more
 * Domain Users:  olivia (Domain Admin); lars (Domain User); liem (Domain User)
 * All Domain User passwords:  Password123
 * Domain:  RTC.LOCAL
@@ -95,6 +95,8 @@ $ terraform apply -var-file=terraform.tfvars -auto-approve
 
 This should start the Terraform automated deployment plan
 
+**Step 6:** Optional:  Unzip and run Badblood from C:\terraform directory (https://github.com/davidprowe/BadBlood)
+
 # Known Issues or Bugs
 Sometimes the Windows 10 Endpoints don't automatically log into the domain via registry entry.  I've traced this issue to a timing issue with the Domain Controller creation.  The powershell script creating the three users does not run correctly.  To resolve the issue, simply run the Ansible Playbooks in each module directory.  The following should resolve the issue:
 ```
@@ -117,4 +119,6 @@ $ ansible-playbook -i hosts.cfg playbook.yml
 
 @ghostinthewires for his Terraform templates (https://github.com/ghostinthewires)
 
-@mosesrenegade for his Ansible Playbook integration with Terraform + Powershell script
+@mosesrenegade for his Ansible Playbook integration with Terraform + Powershell script (https://github.com/mosesrenegade)
+
+@davidprowe for his Badblood (https://github.com/davidprowe/BadBlood)
