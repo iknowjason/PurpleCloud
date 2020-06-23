@@ -1,5 +1,5 @@
 # About JuliaRT
-Pentest Cyber Range for a small Active Directory Domain.  Automated templates for building your own Pentest/Red Team/Cyber Range in the Azure cloud!  JuliaRT is a small Active Directory enteprise deployment automated with Terraform / Ansible Playbook templates to be deployed in Azure.
+Pentest Cyber Range for a small Active Directory Domain.  Automated templates for building your own Pentest/Red Team/Cyber Range in the Azure cloud!  JuliaRT is a small Active Directory enterprise deployment automated with Terraform / Ansible Playbook templates to be deployed in Azure.
 # Quick Fun Facts:
 * Deploys one (1) Windows 2019 Domain Controller and three (3) Windows 10 Pro Endpoints
 * Automatically joins the three Windows 10 computers to the AD Domain
