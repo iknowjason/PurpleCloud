@@ -6,8 +6,8 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 * Uses Terraform templates to automatically deploy in Azure with VMs
 * Terraform templates write Ansible Playbook configuration, which can be customized
 * Post-deploy Powershell script that adds registry entries on each Windows 10 Pro endpoint to automatically log in each username into the Domain
-* Automatically uploads Badblood (does not install) https://github.com/davidprowe/BadBlood
-* Post-deployment Powershell script provisions three domain users 
+* Automatically uploads Badblood (but does not install) if you prefer to generate thousands of simulated users https://github.com/davidprowe/BadBlood
+* Post-deployment Powershell script provisions three domain users on the 2019 Domain Controller 
 * Domain Users:  olivia (Domain Admin); lars (Domain User); liem (Domain User)
 * All Domain User passwords:  Password123
 * Domain:  RTC.LOCAL
@@ -25,14 +25,11 @@ Requirements:
 
 **Note:**  Tested on Ubuntu Linux 18.04 built on Digital Ocean.
 
-**Step 1:** Install MySQL. These steps were verified on Ubuntu Linux 18.04.
+**Step 1:** Install Terraform and Ansible on your Linux system
 
+Download and install Terraform for your platform --> https://www.terraform.io/downloads.html
+
+Install Ansible
 ```
-$sudo apt update
-
-$sudo apt install mysql-server mysql-client libmysqlclient-dev -y
-
-Run the mysql_secure_installation script.
-
-$sudo mysql_secure_installation
+$ sudo apt-get install ansible
 ```
