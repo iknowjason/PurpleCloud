@@ -33,3 +33,52 @@ Install Ansible
 ```
 $ sudo apt-get install ansible
 ```
+
+**Step 2:** Set up an Azure Service Principal on your Azure subscription that allows Terraform to automate tasks under your Azure subscription
+
+Follow the exact instructions in this Microsoft link:
+https://docs.microsoft.com/en-us/azure/developer/terraform/getting-started-cloud-shell
+
+These were the two basic commands that were run based on this link above:
+```
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<subscription_id>
+```
+and
+```
+az login --service-principal -u <service_principal_name> -p "<service_principal_password>" --tenant "<service_principal_tenant>"
+```
+Take note of the following which we will use next to configure our Terraform Azure provider:
+```
+subscription_id = ""
+client_id = ""
+client_secret = ""
+tenant_id = ""
+```
+
+**Step 3:** Clone this repo
+```
+$ git clone https://github.com/iknowjason/juliart.git
+```
+
+**Step 4:** Using your favorite text editor, edit the terraform.tfvars file for the Azure resource provider matching your Azure Service Principal credentials
+
+```
+cd juliart/deploy
+vi terraform.tfvars
+```
+
+Edit these parameters in the terraform.tfvars file:
+```
+subscription_id = ""
+client_id = ""
+client_secret = ""
+tenant_id = ""
+```
+
+Should look something like this:
+```
+subscription_id = "aa9d8c9f-34c2-6262-89ff-3c67527c1b22"
+client_id = "7e9c2cce-8bd4-887d-b2b0-90cd1e6e4781"
+client_secret = ":+O$+adfafdaF-?%:.?d/EYQLK6po9`|E<["
+tenant_id = "8b6817d9-f209-2071-8f4f-cc03332847cb"
+```
