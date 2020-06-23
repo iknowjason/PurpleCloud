@@ -97,7 +97,7 @@ This should start the Terraform automated deployment plan
 
 # Known Issues or Bugs
 Sometimes the Windows 10 Endpoints don't automatically log into the domain via registry entry.  I've traced this issue to a timing issue with the Domain Controller creation.  The powershell script creating the three users does not run correctly.  To resolve the issue, simply run the Ansible Playbooks in each module directory.  The following should resolve the issue:
-``
+```
 $ cd ../modules/dc1-vm/
 $ ansible-playbook -i hosts.cfg playbook.yml
 
@@ -112,7 +112,6 @@ $ ansible-playbook -i hosts.cfg playbook.yml
 ```
 
 ![](images/Julia_Image1.jpeg)
-
 
 # Credits
 
