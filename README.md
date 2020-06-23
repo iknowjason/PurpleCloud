@@ -15,8 +15,6 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 * Deploys four IP subnets
 * Deploys intentionally insecure Azure Network Security Groups (NSGs) that allow RDP, WinRM (5985, 5986) from the Public Internet.  Secure this as per your requirements.  WinRM is used to automatically provision the hosts.
 
-![](images/Julia_Image1.jpeg)
-
 # JuliaRT Deployment Instructions
 **Note:**  Tested on Ubuntu Linux 20.04 
 
@@ -27,7 +25,7 @@ Requirements:
 
 ## Installation Steps
 
-**Note:**  Tested on Ubuntu Linux 18.04 built on Digital Ocean.
+**Note:**  Tested on Ubuntu 20.04
 
 **Step 1:** Install Terraform and Ansible on your Linux system
 
@@ -113,6 +111,7 @@ $ cd ../win10-vm-3/
 $ ansible-playbook -i hosts.cfg playbook.yml
 ```
 
+![](images/Julia_Image1.jpeg)
 
 # Credits
 
