@@ -12,6 +12,8 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 * All Domain User passwords:  Password123
 * Domain:  RTC.LOCAL
 * Domain Administrator Creds:  RTCAdmin:Password123
+* Deploys four IP subnets
+* Deploys intentionally insecure Azure Network Security Groups (NSGs) that allow RDP, WinRM (5985, 5986) from the Public Internet.  Secure this as per your requirements.  WinRM is used to automatically provision the hosts.
 
 # JuliaRT Deployment Instructions
 **Note:**  Tested on Ubuntu Linux 20.04 
@@ -75,10 +77,42 @@ client_secret = ""
 tenant_id = ""
 ```
 
-Should look something like this:
+Your terraform.tfvars file should look similar to this but with your own Azure Service Principal credentials:
 ```
 subscription_id = "aa9d8c9f-34c2-6262-89ff-3c67527c1b22"
 client_id = "7e9c2cce-8bd4-887d-b2b0-90cd1e6e4781"
 client_secret = ":+O$+adfafdaF-?%:.?d/EYQLK6po9`|E<["
 tenant_id = "8b6817d9-f209-2071-8f4f-cc03332847cb"
 ```
+
+**Step 5:** Run the commands to initialize terraform and apply the resource plan
+
+```
+$ cd juliart/deploy
+$ terraform init
+$ terraform apply -var-file=terraform.tfvars -auto-approve
+```
+
+This should start the Terraform automated deployment plan
+
+# Known Issues or Bugs
+Sometimes the Windows 10 Endpoints don't automatically log into the domain via registry entry.  I've traced this issue to a timing issue with the Domain Controller creation.  The powershell script creating the three users does not run correctly.  To resolve the issue, simply run the Ansible Playbooks in each module directory.  The following should resolve the issue:
+``
+$ cd ../modules/dc1-vm/
+$ ansible-playbook -i hosts.cfg playbook.yml
+
+$ cd ../win10-vm-1/
+$ ansible-playbook -i hosts.cfg playbook.yml
+
+$ cd ../win10-vm-2/
+$ ansible-playbook -i hosts.cfg playbook.yml
+
+$ cd ../win10-vm-3/
+$ ansible-playbook -i hosts.cfg playbook.yml
+```
+
+
+# Credits
+
+@ghostinthewires for his Terraform templates (https://github.com/ghostinthewires)
+@mosesrenegade for his Ansible Playbook integration with Terraform + Powershell script
