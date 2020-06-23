@@ -5,7 +5,7 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 * Automatically joins the three Windows 10 computers to the AD Domain
 * Uses Terraform templates to automatically deploy in Azure with VMs
 * Terraform templates write Ansible Playbook configuration, which can be customized
-* Post-deploy Powershell script that adds registry entries on each Windows 10 Pro endpoint to automatically log in each username into the Domain
+* Post-deploy Powershell script that adds registry entries on each Windows 10 Pro endpoint to automatically log in each username into the Domain as respective user
 * Automatically uploads Badblood (but does not install) if you prefer to generate thousands of simulated users https://github.com/davidprowe/BadBlood
 * Post-deployment Powershell script provisions three domain users on the 2019 Domain Controller 
 * Domain Users:  olivia (Domain Admin); lars (Domain User); liem (Domain User)
