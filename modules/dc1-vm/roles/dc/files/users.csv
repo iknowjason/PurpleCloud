@@ -1,0 +1,4 @@
+FirstName,LastName,username,ou,password,,,,,,,,
+Lars,Borgerson,lars,"OU=Finance,ou=users,dc=rtc,dc=local",Password123,,,,,,,,
+Olivia,Odinsdottir,olivia,"OU=Admins,ou=users,dc=rtc,dc=local",Password123,,,,,,,,
+Liem,Anderson,liem,"OU=Finance,ou=users,dc=rtc,dc=local",Password123,,,,,,,,

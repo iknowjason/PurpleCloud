@@ -1,0 +1,14 @@
+---
+- name: Copy the ps1 powershell script
+  win_copy:
+    src: files/autologon.ps1
+    dest: C:\terraform\autologon.ps1
+
+- name: Execute the autologon ps1 script
+  win_shell: powershell.exe C:\terraform\autologon.ps1
+  args:
+    executable: cmd
+  register: results
+
+- debug:
+    var: results.stdout_lines 

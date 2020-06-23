@@ -1,0 +1,6 @@
+---
+- name: windows_servers 
+  hosts: windows_servers
+  gather_facts: False
+  roles:
+    - endpoint
