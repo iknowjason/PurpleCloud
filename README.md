@@ -45,7 +45,7 @@ These were the two basic commands that were run based on this link above:
 ```
 az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<subscription_id>
 ```
-and
+and this command below.  From my testing I needed to use a role of "Owner" instead of "Contributor".  Default Microsoft documentation shows role of "Contributor" which resulted in errors.  
 ```
 az login --service-principal -u <service_principal_name> -p "<service_principal_password>" --tenant "<service_principal_tenant>"
 ```
