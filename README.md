@@ -113,6 +113,7 @@ $ ansible-playbook -i hosts.cfg playbook.yml
 
 ![](images/Julia_Image1.jpeg)
 
+
 # Credits
 
 @ghostinthewires for his Terraform templates (https://github.com/ghostinthewires)
