@@ -9,8 +9,9 @@ client_id = ""
 client_secret = ""
 tenant_id = ""
 
+
 # Generic info
-location = "East US"
+location = "West US"
 
 resource_group_name = "JuliaRT"
 
@@ -84,3 +85,5 @@ lbprivate_ip_address = "10.100.50.20"
 
 # SQL DB Servers
 sqlvmcount = "1"
+
+

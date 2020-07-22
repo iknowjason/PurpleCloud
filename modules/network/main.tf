@@ -9,7 +9,6 @@ resource "azurerm_virtual_network" "main" {
   location            = "${var.location}"
   resource_group_name = "${var.resource_group_name}-${var.environment_name}"
   #dns_servers         = ["${var.dns_servers}"]
-  #dns_servers         = "${var.dns_servers}"
   dns_servers         = ["10.100.1.4"]
 
   depends_on = ["azurerm_resource_group.network"]

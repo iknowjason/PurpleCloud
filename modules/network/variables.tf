@@ -3,6 +3,7 @@ variable environment_name {}
 variable location {}
 variable address_space {}
 
+
 /*variable dns_servers {
   type = "list"
 }*/
