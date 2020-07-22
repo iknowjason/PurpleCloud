@@ -18,6 +18,10 @@ output "user1_subnet_subnet_id" {
   value = "${azurerm_subnet.user1-subnet.id}"
 }
 
+output "user2_subnet_subnet_id" {
+  value = "${azurerm_subnet.user2-subnet.id}"
+}
+
 output "db_subnet_subnet_id" {
   value = "${azurerm_subnet.db-subnet.id}"
 }
