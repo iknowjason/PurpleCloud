@@ -3,12 +3,10 @@
 #################################################################
 
 # Provider info
+
 subscription_id = ""
-
 client_id = ""
-
 client_secret = ""
-
 tenant_id = ""
 
 # Generic info
@@ -22,7 +20,7 @@ environment_name = "devops1"
 address_space = "10.100.0.0/16"
 
 #dns_servers = ["10.100.1.4", "10.100.1.5"]
-dns_servers = "10.100.1.4"
+dns_servers = ["10.100.1.4"]
 
 dcsubnet_name = "sndc"
 
@@ -39,6 +37,10 @@ rpsubnet_prefix = "10.100.20.0/24"
 user1_subnet_name = "user_finance_subnet"
 
 user1_subnet_prefix = "10.100.30.0/24"
+
+user2_subnet_name = "adversary_subnet"
+
+user2_subnet_prefix = "10.100.40.0/24"
 
 dbsubnet_name = "sndb"
 
@@ -82,5 +84,3 @@ lbprivate_ip_address = "10.100.50.20"
 
 # SQL DB Servers
 sqlvmcount = "1"
-
-
