@@ -6,7 +6,6 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 * Automatically joins the three Windows 10 computers to the AD Domain
 * Uses Terraform templates to automatically deploy in Azure with VMs
 * Terraform templates write Ansible Playbook configuration, which can be customized
-* Post-deploy Powershell script that adds registry entries on each Windows 10 Pro endpoint to automatically log in each username into the Domain as respective user
 * Automatically uploads Badblood (but does not install) if you prefer to generate thousands of simulated users https://github.com/davidprowe/BadBlood
 * Post-deployment Powershell script provisions three domain users on the 2019 Domain Controller and can be customized for many more
 * Domain Users:  olivia (Domain Admin); lars (Domain User); liem (Domain User)
@@ -15,6 +14,8 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 * Domain Administrator Creds:  RTCAdmin:Password123
 * Deploys four IP subnets
 * Deploys intentionally insecure Azure Network Security Groups (NSGs) that allow RDP, WinRM (5985, 5986), and SSH from the Public Internet.  Secure this as per your requirements.  WinRM is used to automatically provision the hosts.
+* Post-deploy Powershell script that adds registry entries on each Windows 10 Pro endpoint to automatically log in each username into the Domain as respective user.  This feature simulates a real AD environment with workstations with interactive domain logons.  When you attempt to RDP into the endpoints, simulated adversary is met with:
+
 
 # AriaCloud Pentest Container - Automated Deployment
 
