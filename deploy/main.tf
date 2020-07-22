@@ -28,10 +28,10 @@ module "network" {
   wafsubnet_prefix    = "${var.wafsubnet_prefix}"
   rpsubnet_name       = "${var.rpsubnet_name}"
   rpsubnet_prefix     = "${var.rpsubnet_prefix}"
-  #issubnet_name       = "${var.issubnet_name}"
   user1_subnet_name       = "${var.user1_subnet_name}"
-  #issubnet_prefix     = "${var.issubnet_prefix}"
   user1_subnet_prefix     = "${var.user1_subnet_prefix}"
+  user2_subnet_name       = "${var.user2_subnet_name}"
+  user2_subnet_prefix     = "${var.user2_subnet_prefix}"
   dbsubnet_name       = "${var.dbsubnet_name}"
   dbsubnet_prefix     = "${var.dbsubnet_prefix}"
 }
@@ -39,7 +39,6 @@ module "network" {
 ##########################################################
 ## Create Primary DC VM & AD Forest
 ##########################################################
-
 module "dc1-vm" {
   source                        = "../modules/dc1-vm"
   resource_group_name           = "${module.network.out_resource_group_name}"
@@ -73,6 +72,17 @@ module "dc1-vm" {
   admin_password                = "${var.admin_password}"
   domainadmin_username          = "${var.domainadmin_username}"
 }*/
+
+##########################################################
+## Create the AriaCloud Adversary 1 
+##########################################################
+module "adversary1-vm" {
+  source                    = "../modules/adversary1-vm"
+  resource_group_name       = "${module.network.out_resource_group_name}"
+  location                  = "${var.location}"
+  prefix                    = "${var.prefix}"
+  subnet_id                 = "${module.network.user2_subnet_subnet_id}"
+}
 
 ### Create Windows 10 Pro VM-1
 module "win10-vm-1" {
@@ -123,4 +133,3 @@ module "win10-vm-3" {
   admin_password            = "${var.admin_password}"
   vmcount                   = "${var.vmcount}"
 }
-
