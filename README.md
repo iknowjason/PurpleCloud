@@ -105,6 +105,37 @@ This should start the Terraform automated deployment plan
 **Step 6:** Optional:  Unzip and run Badblood from C:\terraform directory (https://github.com/davidprowe/BadBlood)
 
 # Known Issues or Bugs
+There are issues that are WIP for me to debug and resolve based on timing.  They are mentioned below with workarounds.
+
+Sometimes one of the provisioning steps doesn't work with the DC.  It is the terraform module that calls the Ansible Playbook which runs a Powershell script to add domain users.  The error will look like this when running the steps:
+
+```
+module.dc1-vm.null_resource.provision-dc-users (local-exec): TASK [dc : debug] **************************************************************
+module.dc1-vm.null_resource.provision-dc-users (local-exec): ok: [52.255.151.90] => {
+module.dc1-vm.null_resource.provision-dc-users (local-exec):     "results.stdout_lines": [
+module.dc1-vm.null_resource.provision-dc-users (local-exec):         "WARNING: Error initializing default drive: 'Unable to find a default server with Active Directory Web Services ",
+module.dc1-vm.null_resource.provision-dc-users (local-exec):         "running.'."
+module.dc1-vm.null_resource.provision-dc-users (local-exec):     ]
+module.dc1-vm.null_resource.provision-dc-users (local-exec): }
+```
+
+If this happens, you can change into the **modules/dc1-vm** directory and immediately run the ansible playbook commands, as shown in README.ANSIBLE.txt:
+```ansible-playbook -i hosts.cfg playbook.yml```
+
+If you run this command before the Windows 10 endpoints are provisioned, they will run just fine.  If the entire script runs and you see this error, then you need to run the Ansible Playbook on the Windows server and all of the endpoints.
+
+Sometimes the adversary will throw this error:
+
+```
+module.adversary1-vm.null_resource.ansible-deploy (local-exec): fatal: [40.121.138.118]: FAILED! => {"changed": false, "msg": "Failed to update apt cache: "}
+```
+
+To resolve the issue, change into the **modules/adversary1-vm** directory and run the Ansible Playbook commands shown in README.ANSIBLE.txt:
+
+```
+ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ./hosts.cfg --private-key ssh_key.pem ./playbook.yml
+```
+
 Sometimes the Windows 10 Endpoints don't automatically log into the domain via registry entry.  I've traced this issue to a timing issue with the Domain Controller creation.  The powershell script creating the three users does not run correctly.  To resolve the issue, simply run the Ansible Playbooks in each module directory.  The following should resolve the issue:
 ```
 $ cd ../modules/dc1-vm/
