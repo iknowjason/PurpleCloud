@@ -160,3 +160,7 @@ $ ansible-playbook -i hosts.cfg playbook.yml
 @mosesrenegade for his Ansible Playbook integration with Terraform + Powershell script (https://github.com/mosesrenegade)
 
 @davidprowe for his Badblood (https://github.com/davidprowe/BadBlood)
+
+# Future Development
+* Blue Team - Endpoint visibility with Sysmon on endpoints
+* Blue Team - Endpoint visibility with Velociraptor agent on endpoints
