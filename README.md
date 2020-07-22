@@ -1,6 +1,7 @@
 # Overview:  JuliaRT
 Pentest Cyber Range for a small Active Directory Domain.  Automated templates for building your own Pentest/Red Team/Cyber Range in the Azure cloud!  JuliaRT is a small Active Directory enterprise deployment automated with Terraform / Ansible Playbook templates to be deployed in Azure.
 # Quick Fun Facts:
+* Deploys a pentest adversary Linux VM and Docker container (AriaCloud) accessible over RDP
 * Deploys one (1) Windows 2019 Domain Controller and three (3) Windows 10 Pro Endpoints
 * Automatically joins the three Windows 10 computers to the AD Domain
 * Uses Terraform templates to automatically deploy in Azure with VMs
@@ -13,7 +14,11 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 * Domain:  RTC.LOCAL
 * Domain Administrator Creds:  RTCAdmin:Password123
 * Deploys four IP subnets
-* Deploys intentionally insecure Azure Network Security Groups (NSGs) that allow RDP, WinRM (5985, 5986) from the Public Internet.  Secure this as per your requirements.  WinRM is used to automatically provision the hosts.
+* Deploys intentionally insecure Azure Network Security Groups (NSGs) that allow RDP, WinRM (5985, 5986), and SSH from the Public Internet.  Secure this as per your requirements.  WinRM is used to automatically provision the hosts.
+
+# AriaCloud Pentest Container - Automated Deployment
+
+This repo now includes a Terraform template and Ansible Playbook that automatically deploys AriaCloud into an Azure VM with remote access over RDP.  You can also do a standalone deployment of AriaCloud from within this repo.  For this option, navigate into the **aria-cloud** directory and see the README.  For more information on the AriaCloud docker container and included pentest tools, navigate to https://github.com/iknowjason/AriaCloud.
 
 # JuliaRT Deployment Instructions
 **Note:**  Tested on Ubuntu Linux 20.04 
