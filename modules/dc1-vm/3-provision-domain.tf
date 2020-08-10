@@ -6,15 +6,15 @@ locals {
   configure_ad_command = "Install-ADDSForest -CreateDnsDelegation:$false -DomainMode Win2012R2 -DomainName ${var.active_directory_domain} -DomainNetbiosName ${var.active_directory_netbios_name} -ForestMode Win2012R2 -InstallDns:$true -SafeModeAdministratorPassword $password -Force:$true"
 
   #configure_ad_command = "Install-ADDSForest -CreateDnsDelegation:$false -DomainName ${var.active_directory_domain} -DomainNetbiosName ${var.active_directory_netbios_name} -ForestMode Win2012R2 -InstallDns:$true -SafeModeAdministratorPassword $password -Force:$true"
-  shutdown_command     = "shutdown -r -t 10"
-  exit_code_hack       = "exit 0"
-  powershell_command   = "${local.import_command}; ${local.password_command}; ${local.install_ad_command}; ${local.configure_ad_command}; ${local.shutdown_command}; ${local.exit_code_hack}"
+  shutdown_command   = "shutdown -r -t 10"
+  exit_code_hack     = "exit 0"
+  powershell_command = "${local.import_command}; ${local.password_command}; ${local.install_ad_command}; ${local.configure_ad_command}; ${local.shutdown_command}; ${local.exit_code_hack}"
 }
 
 
 resource "azurerm_virtual_machine_extension" "create-active-directory-forest" {
   name                 = "create-active-directory-forest"
-  virtual_machine_id   = "${azurerm_virtual_machine.domain-controller.id}"
+  virtual_machine_id   = azurerm_virtual_machine.domain-controller.id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
   type_handler_version = "1.9"

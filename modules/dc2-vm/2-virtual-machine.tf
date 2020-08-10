@@ -6,10 +6,10 @@ locals {
 }
 
 resource "azurerm_virtual_machine" "domain-controller2" {
-  name                          = "${local.dc2virtual_machine_name}"
-  location                      = "${var.location}"
-  availability_set_id           = "${var.dcavailability_set_id}"
-  resource_group_name           = "${var.resource_group_name}"
+  name                          = local.dc2virtual_machine_name
+  location                      = var.location
+  availability_set_id           = var.dcavailability_set_id
+  resource_group_name           = var.resource_group_name
   network_interface_ids         = ["${azurerm_network_interface.dc2primary.id}"]
   vm_size                       = "Standard_A1"
   delete_os_disk_on_termination = false
@@ -29,10 +29,10 @@ resource "azurerm_virtual_machine" "domain-controller2" {
   }
 
   os_profile {
-    computer_name  = "${local.dc2virtual_machine_name}"
-    admin_username = "${var.admin_username}"
-    admin_password = "${var.admin_password}"
-    custom_data    = "${local.dc2custom_data_content}"
+    computer_name  = local.dc2virtual_machine_name
+    admin_username = var.admin_username
+    admin_password = var.admin_password
+    custom_data    = local.dc2custom_data_content
   }
 
   os_profile_windows_config {
@@ -50,7 +50,7 @@ resource "azurerm_virtual_machine" "domain-controller2" {
       pass         = "oobeSystem"
       component    = "Microsoft-Windows-Shell-Setup"
       setting_name = "FirstLogonCommands"
-      content      = "${file("${path.module}/files/FirstLogonCommands.xml")}"
+      content      = file("${path.module}/files/FirstLogonCommands.xml")
     }
   }
 

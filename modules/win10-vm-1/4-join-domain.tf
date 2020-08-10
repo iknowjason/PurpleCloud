@@ -1,10 +1,10 @@
 resource "azurerm_virtual_machine_extension" "join-domain" {
   name                 = "join-domain"
-  virtual_machine_id    = "${element(azurerm_virtual_machine.win10-1.*.id, count.index)}"
+  virtual_machine_id   = element(azurerm_virtual_machine.win10-1.*.id, count.index)
   publisher            = "Microsoft.Compute"
   type                 = "JsonADDomainExtension"
   type_handler_version = "1.3"
-  count                = "${var.vmcount}"
+  count                = var.vmcount
 
   # NOTE: the `OUPath` field is intentionally blank, to put it in the Computers OU
   settings = <<SETTINGS
@@ -23,5 +23,5 @@ SETTINGS
     }
 SETTINGS
 
-  depends_on = ["null_resource.wait-for-domain-to-provision"]
+  depends_on = [null_resource.wait-for-domain-to-provision]
 }

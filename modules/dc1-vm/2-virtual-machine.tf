@@ -6,18 +6,18 @@ locals {
 }
 resource "azurerm_availability_set" "dcavailabilityset" {
   name                         = "dcavailabilityset"
-  resource_group_name          = "${var.resource_group_name}"
-  location                     = "${var.location}"
+  resource_group_name          = var.resource_group_name
+  location                     = var.location
   platform_fault_domain_count  = 3
   platform_update_domain_count = 5
   managed                      = true
 }
 
 resource "azurerm_virtual_machine" "domain-controller" {
-  name                          = "${local.virtual_machine_name}"
-  location                      = "${var.location}"
-  resource_group_name           = "${var.resource_group_name}"
-  availability_set_id           = "${azurerm_availability_set.dcavailabilityset.id}"
+  name                          = local.virtual_machine_name
+  location                      = var.location
+  resource_group_name           = var.resource_group_name
+  availability_set_id           = azurerm_availability_set.dcavailabilityset.id
   network_interface_ids         = ["${azurerm_network_interface.primary.id}"]
   vm_size                       = "Standard_A1"
   delete_os_disk_on_termination = false
@@ -37,10 +37,10 @@ resource "azurerm_virtual_machine" "domain-controller" {
   }
 
   os_profile {
-    computer_name  = "${local.virtual_machine_name}"
-    admin_username = "${var.admin_username}"
-    admin_password = "${var.admin_password}"
-    custom_data    = "${local.custom_data_content}"
+    computer_name  = local.virtual_machine_name
+    admin_username = var.admin_username
+    admin_password = var.admin_password
+    custom_data    = local.custom_data_content
   }
 
   os_profile_windows_config {
@@ -59,19 +59,19 @@ resource "azurerm_virtual_machine" "domain-controller" {
       pass         = "oobeSystem"
       component    = "Microsoft-Windows-Shell-Setup"
       setting_name = "FirstLogonCommands"
-      content      = "${file("${path.module}/files/FirstLogonCommands.xml")}"
+      content      = file("${path.module}/files/FirstLogonCommands.xml")
     }
   }
 }
 
 resource "local_file" "hosts_cfg" {
-    content = templatefile("${path.module}/templates/hosts.tpl",
-	    {
-	      ip = "${azurerm_public_ip.dc1-external.ip_address}" 
-        auser = "${var.admin_username}"
-        apwd = "${var.admin_password}"
-	    }
-    )
-    filename = "${path.module}/hosts.cfg"
-    
+  content = templatefile("${path.module}/templates/hosts.tpl",
+    {
+      ip    = "${azurerm_public_ip.dc1-external.ip_address}"
+      auser = "${var.admin_username}"
+      apwd  = "${var.admin_password}"
+    }
+  )
+  filename = "${path.module}/hosts.cfg"
+
 }

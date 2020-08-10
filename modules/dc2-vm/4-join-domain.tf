@@ -1,9 +1,9 @@
 resource "azurerm_virtual_machine_extension" "join-domain" {
-  name                 = "join-domain"
+  name = "join-domain"
   #location             = "${azurerm_virtual_machine.domain-controller2.location}"
   #resource_group_name  = "${var.resource_group_name}"
   #virtual_machine_name = "${azurerm_virtual_machine.domain-controller2.name}"
-  virtual_machine_id   = "${azurerm_virtual_machine.domain-controller2.id}" 
+  virtual_machine_id   = azurerm_virtual_machine.domain-controller2.id
   publisher            = "Microsoft.Compute"
   type                 = "JsonADDomainExtension"
   type_handler_version = "1.3"

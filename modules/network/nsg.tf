@@ -1,6 +1,6 @@
 resource "azurerm_network_security_group" "nsg1" {
   name                = "${var.resource_group_name}-nsg"
-  location            = "${var.location}"
+  location            = var.location
   resource_group_name = "${var.resource_group_name}-${var.environment_name}"
 
   security_rule {
@@ -56,6 +56,6 @@ resource "azurerm_network_security_group" "nsg1" {
   }
 
 
-  depends_on = ["azurerm_resource_group.network"]
+  depends_on = [azurerm_resource_group.network]
 }
 

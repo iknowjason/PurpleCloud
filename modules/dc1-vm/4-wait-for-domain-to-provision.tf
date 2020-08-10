@@ -4,5 +4,5 @@ resource "null_resource" "wait-for-domain-to-provision" {
   provisioner "local-exec" {
     command = "sleep 780"
   }
-  depends_on = ["azurerm_virtual_machine.domain-controller"]
+  depends_on = [azurerm_virtual_machine.domain-controller]
 }
