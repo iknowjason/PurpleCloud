@@ -1,5 +1,5 @@
-# Overview:  JuliaRT
-Pentest Cyber Range for a small Active Directory Domain.  Automated templates for building your own Pentest/Red Team/Cyber Range in the Azure cloud!  JuliaRT is a small Active Directory enterprise deployment automated with Terraform / Ansible Playbook templates to be deployed in Azure.  JuliaRT also includes an adversary node implemented as a docker container remotely accessible over RDP.
+# Overview:  Purple Cloud
+Pentest Cyber Range for a small Active Directory Domain.  Automated templates for building your own Pentest/Red Team/Cyber Range in the Azure cloud!  JuliaRT is a small Active Directory enterprise deployment automated with Terraform / Ansible Playbook templates to be deployed in Azure.  Purple Cloud also includes an adversary node implemented as a docker container remotely accessible over RDP.
 # Quick Fun Facts:
 * Deploys a pentest adversary Linux VM and Docker container (AriaCloud) accessible over RDP
 * Deploys one (1) Windows 2019 Domain Controller and three (3) Windows 10 Pro Endpoints
@@ -22,7 +22,7 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 
 This repo now includes a Terraform template and Ansible Playbook that automatically deploys AriaCloud into an Azure VM with remote access over RDP.  You can also do a standalone deployment of AriaCloud from within this repo.  For this option, navigate into the **aria-cloud** directory and see the README.  For more information on the AriaCloud docker container and included pentest tools, navigate to https://github.com/iknowjason/AriaCloud.
 
-# JuliaRT Deployment Instructions
+# Purple Cloud Deployment Instructions
 **Note:**  Tested on Ubuntu Linux 20.04 
 
 Requirements:
@@ -162,5 +162,6 @@ $ ansible-playbook -i hosts.cfg playbook.yml
 @davidprowe for his Badblood (https://github.com/davidprowe/BadBlood)
 
 # Future Development
+* AWS Terraform Deployment
 * Blue Team - Endpoint visibility with Sysmon on endpoints
 * Blue Team - Endpoint visibility with Velociraptor agent on endpoints
