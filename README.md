@@ -66,13 +66,13 @@ tenant_id = ""
 
 **Step 3:** Clone this repo
 ```
-$ git clone https://github.com/iknowjason/juliart.git
+$ git clone https://github.com/iknowjason/PurpleCloud.git
 ```
 
 **Step 4:** Using your favorite text editor, edit the terraform.tfvars file for the Azure resource provider matching your Azure Service Principal credentials
 
 ```
-cd juliart/deploy
+cd PurpleCloud/deploy
 vi terraform.tfvars
 ```
 
@@ -95,7 +95,7 @@ tenant_id = "8b6817d9-f209-2071-8f4f-cc03332847cb"
 **Step 5:** Run the commands to initialize terraform and apply the resource plan
 
 ```
-$ cd juliart/deploy
+$ cd PurpleCloud/deploy
 $ terraform init
 $ terraform apply -var-file=terraform.tfvars -auto-approve
 ```
