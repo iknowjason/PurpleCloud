@@ -15,6 +15,7 @@ Pentest Cyber Range for a small Active Directory Domain.  Automated templates fo
 * Deploys four IP subnets
 * Deploys intentionally insecure Azure Network Security Groups (NSGs) that allow RDP, WinRM (5985, 5986), and SSH from the Public Internet.  Secure this as per your requirements.  WinRM is used to automatically provision the hosts.
 * Post-deploy Powershell script that adds registry entries on each Windows 10 Pro endpoint to automatically log in each username into the Domain as respective user.  This feature simulates a real AD environment with workstations with interactive domain logons.  When you attempt to RDP into the endpoints, simulated adversary is met with:
+* Approximate build time:  24 minutes
 
 ![](images/ss-logged-in.png)
 
