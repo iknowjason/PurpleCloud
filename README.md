@@ -153,7 +153,7 @@ $ cd ../win10-vm-3/
 $ ansible-playbook -i hosts.cfg playbook.yml
 ```
 
-![](images/Julia_Image1.jpeg)
+![](images/PurpleCloud.png)
 
 # Credits
 
@@ -163,7 +163,3 @@ $ ansible-playbook -i hosts.cfg playbook.yml
 
 @davidprowe for his Badblood (https://github.com/davidprowe/BadBlood)
 
-# Future Development
-* AWS Terraform Deployment
-* Blue Team - Endpoint visibility with Sysmon on endpoints
-* Blue Team - Endpoint visibility with Velociraptor agent on endpoints
