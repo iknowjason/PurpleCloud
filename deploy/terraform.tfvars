@@ -90,4 +90,4 @@ sqlvmcount = "1"
 ### Uncomment; otherwise, all of the public Internet will be permitted
 ### https://ifconfig.me/ 
 ### curl https://ifconfig.me
-src_ip = "99.xxx.xxx.yyy"
+#src_ip = "99.xxx.xxx.yyy"
