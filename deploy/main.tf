@@ -25,6 +25,7 @@ module "network" {
   location            = var.location
   src_ip              = var.src_ip
   dcsubnet_prefix     = var.dcsubnet_prefix
+  dcsubnet_name       = var.dcsubnet_name
   wafsubnet_name      = var.wafsubnet_name
   wafsubnet_prefix    = var.wafsubnet_prefix
   rpsubnet_name       = var.rpsubnet_name
