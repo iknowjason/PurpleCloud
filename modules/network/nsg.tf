@@ -12,7 +12,7 @@ resource "azurerm_network_security_group" "nsg1" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "3389"
-    source_address_prefix      = "Internet"
+    source_address_prefix      = var.src_ip 
     destination_address_prefix = "*"
   }
 
@@ -25,7 +25,7 @@ resource "azurerm_network_security_group" "nsg1" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "5986"
-    source_address_prefix      = "Internet"
+    source_address_prefix      = var.src_ip 
     destination_address_prefix = "*"
   }
 
@@ -38,7 +38,7 @@ resource "azurerm_network_security_group" "nsg1" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "5985"
-    source_address_prefix      = "Internet"
+    source_address_prefix      = var.src_ip 
     destination_address_prefix = "*"
   }
 
@@ -51,11 +51,10 @@ resource "azurerm_network_security_group" "nsg1" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "Internet"
+    source_address_prefix      = var.src_ip 
     destination_address_prefix = "*"
   }
 
 
   depends_on = [azurerm_resource_group.network]
 }
-
