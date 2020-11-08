@@ -23,7 +23,7 @@ module "network" {
   environment_name    = var.environment_name
   resource_group_name = var.resource_group_name
   location            = var.location
-  dcsubnet_name       = var.dcsubnet_name
+  src_ip              = var.src_ip
   dcsubnet_prefix     = var.dcsubnet_prefix
   wafsubnet_name      = var.wafsubnet_name
   wafsubnet_prefix    = var.wafsubnet_prefix
