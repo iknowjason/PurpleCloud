@@ -21,3 +21,8 @@ variable dbsubnet_name {}
 variable dbsubnet_prefix {}
 variable dcsubnet_name {}
 variable dcsubnet_prefix {}
+
+variable "src_ip" {
+  type = string
+  default = "*"
+}
