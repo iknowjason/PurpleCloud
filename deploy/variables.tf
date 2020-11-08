@@ -68,3 +68,9 @@ variable "endpoint2_username" {}
 
 variable "endpoint3_machine_name" {}
 variable "endpoint3_username" {}
+
+variable "src_ip" {
+  type = string
+  default = "*"
+}
+
