@@ -85,4 +85,9 @@ lbprivate_ip_address = "10.100.50.20"
 # SQL DB Servers
 sqlvmcount = "1"
 
-
+###
+### Set variable below for IP address prefix for white listing Azure NSG
+### Uncomment; otherwise, all of the public Internet will be permitted
+### https://ifconfig.me/ 
+### curl https://ifconfig.me
+src_ip = "99.xxx.xxx.yyy"
