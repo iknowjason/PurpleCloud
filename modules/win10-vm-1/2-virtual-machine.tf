@@ -19,7 +19,8 @@ resource "azurerm_virtual_machine" "win10-1" {
   location                      = var.location
   availability_set_id           = azurerm_availability_set.isavailabilityset.id
   resource_group_name           = var.resource_group_name
-  network_interface_ids         = ["${element(azurerm_network_interface.primary.*.id, count.index)}"]
+  #network_interface_ids         = ["${element(azurerm_network_interface.primary.*.id, count.index)}"]
+  network_interface_ids         = [element(azurerm_network_interface.primary.*.id, count.index)]
   vm_size                       = "Standard_DS1_v2"
   delete_os_disk_on_termination = true
   count                         = var.vmcount
@@ -69,9 +70,9 @@ resource "azurerm_virtual_machine" "win10-1" {
 resource "local_file" "hosts_cfg" {
   content = templatefile("${path.module}/templates/hosts.tpl",
     {
-      ip    = "${azurerm_public_ip.win10-1-external.ip_address}"
-      auser = "${var.admin_username}"
-      apwd  = "${var.admin_password}"
+      ip    = azurerm_public_ip.win10-1-external.ip_address
+      auser = var.admin_username
+      apwd  = var.admin_password
     }
   )
   filename = "${path.module}/hosts.cfg"

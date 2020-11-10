@@ -18,7 +18,8 @@ resource "azurerm_virtual_machine" "domain-controller" {
   location                      = var.location
   resource_group_name           = var.resource_group_name
   availability_set_id           = azurerm_availability_set.dcavailabilityset.id
-  network_interface_ids         = ["${azurerm_network_interface.primary.id}"]
+  #network_interface_ids         = ["${azurerm_network_interface.primary.id}"]
+  network_interface_ids         = [azurerm_network_interface.primary.id]
   vm_size                       = "Standard_A1"
   delete_os_disk_on_termination = false
 
@@ -67,9 +68,9 @@ resource "azurerm_virtual_machine" "domain-controller" {
 resource "local_file" "hosts_cfg" {
   content = templatefile("${path.module}/templates/hosts.tpl",
     {
-      ip    = "${azurerm_public_ip.dc1-external.ip_address}"
-      auser = "${var.admin_username}"
-      apwd  = "${var.admin_password}"
+      ip    = azurerm_public_ip.dc1-external.ip_address
+      auser = var.admin_username
+      apwd  = var.admin_password
     }
   )
   filename = "${path.module}/hosts.cfg"

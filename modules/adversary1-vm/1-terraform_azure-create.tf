@@ -40,7 +40,7 @@ resource "azurerm_network_interface" "adversarynic" {
 resource "random_id" "randomId" {
   keepers = {
     # Generate a new ID only when a new resource group is defined
-    resource_group_name = "${var.resource_group_name}"
+    resource_group_name = var.resource_group_name
     #resource_group = azurerm_resource_group.myterraformgroup.name
   }
 
@@ -114,7 +114,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 resource "local_file" "hosts_cfg" {
   content = templatefile("${path.module}/templates/hosts.tpl",
     {
-      ip    = "${azurerm_public_ip.myterraformpublicip.ip_address}"
+      ip    = azurerm_public_ip.myterraformpublicip.ip_address
       auser = "aria"
     }
   )
