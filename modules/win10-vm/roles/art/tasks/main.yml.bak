@@ -1,0 +1,9 @@
+---
+- name: Execute Invoke-Atomic powershell script for Atomic Red Team
+  win_shell: powershell.exe Invoke-AtomicTest T1007 -PathToAtomicsFolder C:\terraform\ART\atomic-red-team-master\atomics 
+  args:
+    executable: cmd
+  register: results
+
+- debug:
+    var: results.stdout_lines 

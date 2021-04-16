@@ -1,0 +1,128 @@
+#################################################
+# Playbook for Linux Adversary System (Adapted from AriaCloud pentest container) 
+#################################################
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    - name: Install aptitude using apt
+      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+    - name: Install required system packages
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt: update_cache=yes name=docker-ce state=latest
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Install some miscellaneous favorites 
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: [ 'net-tools', 'smbclient', 'socat', 'nmap', 'unzip', 'docker-compose', 'firefox', 'terminator', 'gnome-session-flashback' ]
+
+    - name: Install the aws cli and s3cmd tools (aws, s3cmd) 
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: [ 'awscli', 's3cmd' ]
+
+    - name: Install Azure cli tool (az) 
+      shell: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash 
+      args:
+        chdir: /home/aria
+        warn: false
+
+    - name: Install Google Cloud Platform cli tool (gcloud)
+      shell: | 
+        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+        apt-get update -y && sudo apt-get install google-cloud-sdk kubectl -y 
+      args:
+        chdir: /home/aria
+        warn: false
+
+    - name: Install ROADTools 
+      shell: pip3 install roadrecon 
+
+    - name: Install ScouteSuite 
+      shell: |
+        virtualenv -p python3 venv
+        source venv/bin/activate
+        sudo pip3 install scoutsuite 
+
+    - name: Install Stormspotter 
+      shell: | 
+        git clone https://github.com/Azure/Stormspotter
+        cd Stormspotter
+        sudo docker-compose up -d        
+
+    - name: Install Impacket Python libraries for interacting with AD 
+      shell: |
+        cd /opt
+        git clone https://github.com/SecureauthCorp/impacket
+        cd impacket
+        pip3 install pyasn1
+        pip3 install . 
+
+    - name: Install Neo4j for Bloodhound 
+      shell: |
+        wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
+        echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a /etc/apt/sources.list.d/neo4j.list
+        apt-get update -y
+        apt-get install neo4j -y
+      args:
+        warn: false
+
+    - name: Install Bloodhound tool 
+      shell: |
+        sudo wget -O /opt/Bloodhound.zip https://github.com/BloodHoundAD/BloodHound/releases/download/4.0.2/BloodHound-linux-x64.zip
+        sudo unzip -o /opt/Bloodhound.zip 
+      args:
+        warn: false
+
+    - name: Install fox-it bloodhound-python data ingestor
+      shell: pip3 install bloodhound 
+
+    - name: Install cloudmapper 
+      shell: |
+        apt-get install autoconf automake libtool python3-tk python3-venv -y
+        cd opt
+        git clone https://github.com/duo-labs/cloudmapper.git
+        cd cloudmapper
+        pip3 install -r requirements.txt 
+      args:
+        warn: false
+
+    - name: Install Trufflehog
+      shell: pip3 install truffleHog 
+
+    - name: Install detect-secrets 
+      shell: pip3 install detect-secrets 
+       
+    - name: Install xrdp
+      shell: |
+        apt install xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils -y
+        apt install xrdp -y
+        adduser xrdp ssl-cert
+        useradd -ms /bin/bash -p $(openssl passwd -1 Ubuntu123) ubuntu
+        usermod -a -G sudo ubuntu
+
+    - name: Copy xrdp file - startwm.sh
+      copy:
+        src: startwm.sh
+        dest: /etc/xrdp/startwm.sh
+        backup: yes 

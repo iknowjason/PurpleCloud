@@ -1,0 +1,48 @@
+#################################################
+# Playbook: Deploy Velociraptor 
+#################################################
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Download Velociraptor for Linux 
+      action: shell curl -L 'https://github.com/iknowjason/BlueTools/blob/main/velociraptor-v0.5.6-linux-amd64.gz?raw=true' -o velociraptor.gz 
+
+    - name: decompress the Velociraptor gzip
+      shell: gzip -d velociraptor.gz
+      args:
+        chdir: /home/helk
+
+    - name: Chmod the Velociraptor binary
+      shell: chmod +x velociraptor 
+      args:
+        chdir: /home/helk
+
+    - name: Copy the velociraptor binary
+      shell: cp velociraptor /usr/sbin/. 
+      args:
+        chdir: /home/helk
+
+    - name: Add admin user credentials of helk:helk 
+      shell: velociraptor --config server.config.yaml user add helk helk --role administrator 
+      args:
+        chdir: /home/helk
+
+    - name: Add the self-signed certificate parameter for the client configuration
+      replace:
+        path: /home/helk/server.config.yaml 
+        regexp: "  pinned_server_name: VelociraptorServer"
+        replace: "  use_self_signed_ssl: true\n  pinned_server_name: VelociraptorServer"
+
+    - name: Build a velociraptor deb package 
+      shell: velociraptor --config server.config.yaml debian server 
+      args:
+        chdir: /home/helk
+
+    - name: Install deb package and service 
+      shell: dpkg -i velociraptor_0.5.6_server.deb 
+      args:
+        chdir: /home/helk
+
+    - debug: var=out.stdout_lines

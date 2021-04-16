@@ -1,0 +1,52 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "apiVersion": {
+            "value": "2020-01-01"
+        },
+        "sku": {
+            "value": "Standard"
+        },
+        "domainConfigurationType": {
+            "value": "FullySynced"
+        },
+        "domainName": {
+            "value": "storasecurity.onmicrosoft.com"
+        },
+        "filteredSync": {
+            "value": "Disabled"
+        },
+        "location": {
+            "value": "eastus"
+        },
+        "notificationSettings": {
+            "value": {
+                "notifyGlobalAdmins": "Enabled",
+                "notifyDcAdmins": "Enabled",
+                "additionalRecipients": []
+            }
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "tags": {
+            "value": {}
+        },
+        "vnetName": {
+            "value": "Security_Lab_AAD-vnet"
+        },
+        "vnetResourceGroup": {
+            "value": "Security_Lab_AAD"
+        },
+        "vnetLocation": {
+            "value": "eastus"
+        },
+        "subnetAddressPrefix": {
+            "value": "10.0.0.0/24"
+        },
+        "nsgName": {
+            "value": "aadds-nsg"
+        }
+    }
+}

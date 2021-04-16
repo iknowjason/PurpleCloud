@@ -1,0 +1,14 @@
+---
+- name: Copy the ps1 powershell script
+  win_copy:
+    src: files/bluetools.ps1
+    dest: C:\terraform\bluetools.ps1
+
+- name: Execute the blue team security tools ps1 script
+  win_shell: powershell.exe C:\terraform\bluetools.ps1
+  args:
+    executable: cmd
+  register: results
+
+- debug:
+    var: results.stdout_lines 

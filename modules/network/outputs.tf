@@ -10,10 +10,6 @@ output "waf_subnet_subnet_id" {
   value = azurerm_subnet.waf-subnet.id
 }
 
-output "rp_subnet_subnet_id" {
-  value = azurerm_subnet.rp-subnet.id
-}
-
 output "user1_subnet_subnet_id" {
   value = azurerm_subnet.user1-subnet.id
 }

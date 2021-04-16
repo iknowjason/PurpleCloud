@@ -1,0 +1,19 @@
+#################################################
+# Playbook: Deploy HELK
+#################################################
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Git checkout
+      git:
+        repo: 'https://github.com/iknowjason/HELK.git'
+        dest: /usr/src/HELK
+
+    - name: Install HELK
+      command: chdir=/usr/src/HELK/docker sudo ./helk_install.sh 
+      register: out
+
+    - debug: var=out.stdout_lines
+

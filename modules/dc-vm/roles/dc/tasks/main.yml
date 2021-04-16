@@ -1,0 +1,17 @@
+---
+- name: Copy the ps1 powershell script
+  win_copy:
+    src: files/import-users.ps1
+    dest: C:\terraform\import-users.ps1
+
+- name: Copy the csv
+  win_copy:
+    src: files/users.csv
+    dest: C:\terraform\users.csv
+
+- name: Execute the import-users ps1 script
+  win_command: powershell.exe -ExecutionPolicy Bypass -File C:\terraform\import-users.ps1
+  register: results
+
+- debug:
+    var: results.stdout_lines 
