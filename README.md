@@ -36,7 +36,6 @@ Multi-use Hybrid + Identity Cyber Range implementing a small Active Directory Do
 * Default Modules (Enabled):  One Windows Server, One Windows 10 Endpoint, One Velociraptor + HELK Server
 * Extra Modules (Disabled):  One Linux Adversary, Three Windows 10 Endpoints, Azure AD, Azure AD Domain Services
 * **Approximate build time:**  16 minutes
-* **Approximate Monthly Cost:**  $ per month
 
 # Infrastructure and Credentials
 * **All Domain User passwords:**  Password123
