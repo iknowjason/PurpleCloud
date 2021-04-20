@@ -35,7 +35,7 @@ theme:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
 
-    # Dark mode
+    # Dark mode test
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: indigo 
