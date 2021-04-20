@@ -1,4 +1,6 @@
 site_name: Hybrid + Identity Cyber Range 
+repo_url: https://github.com/iknowjason/PurpleCloud
+repo_name: iknowjason/PurpleCloud
 nav:
    - Home: index.md
    - Use Cases: usecases.md
@@ -13,6 +15,14 @@ nav:
    - Credits : credits.md
 theme:
   name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - navigation.tabs
   font:
     text: Roboto
   palette:

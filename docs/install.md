@@ -19,7 +19,7 @@ If you want to enable and use the Azure Active Directory module, it requires you
 
 This is what it looks like:
 
-![](images/aad_permissions.png)
+![](./images/aad_permissions.png)
 
 
 

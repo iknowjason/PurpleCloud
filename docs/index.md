@@ -7,5 +7,5 @@ form / Ansible Playbook templates to be deployed in Azure.  Purple Cloud also in
 cludes an adversary node accessible over RDP as well as a SIEM, DFIR, & Live Response
  system (Velociraptor + HELK).
 
-![](images/pce.png)
+![](./images/pce.png)
 
