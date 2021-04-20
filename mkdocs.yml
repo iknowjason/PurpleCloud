@@ -1,0 +1,35 @@
+site_name: Hybrid + Identity Cyber Range 
+nav:
+   - Home: index.md
+   - Use Cases: usecases.md
+   - Features: features.md
+   - Credentials : infrastructure.md
+   - Remote Access : remoteaccess.md
+   - Installation : install.md
+   - APT Simulation : apt.md
+   - Issues : issues.md
+   - References : references.md
+   - Future Ideas : future.md
+   - Credits : credits.md
+theme:
+  name: material
+  font:
+    text: Roboto
+  palette:
+    # Light mode
+    - green: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo 
+      accent: indigo 
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
