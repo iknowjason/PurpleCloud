@@ -4,6 +4,7 @@ on:
     branches:
       - master
       - main
+      - gh-pages
 jobs:
   deploy:
     runs-on: ubuntu-latest
