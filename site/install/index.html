@@ -1,0 +1,837 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
+    
+    
+      
+        <title>Installation - Hybrid + Identity Cyber Range</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.33e2939f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7C&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:""}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#installation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Hybrid + Identity Cyber Range" class="md-header__button md-logo" aria-label="Hybrid + Identity Cyber Range" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hybrid + Identity Cyber Range
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Installation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" type="radio" name="__palette" id="__palette_1">
+          <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m10-3a5 5 0 0 1 5 5 5 5 0 0 1-5 5H7a5 5 0 0 1-5-5 5 5 0 0 1 5-5h10M7 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3h10a3 3 0 0 0 3-3 3 3 0 0 0-3-3H7z"/></svg>
+          </label>
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo" type="radio" name="__palette" id="__palette_2">
+          <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg>
+          </label>
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/iknowjason/PurpleCloud/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    iknowjason/PurpleCloud
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href=".." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../usecases/" class="md-tabs__link">
+      Use Cases
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../features/" class="md-tabs__link">
+      Features
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../infrastructure/" class="md-tabs__link">
+      Credentials
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../remoteaccess/" class="md-tabs__link">
+      Remote Access
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  <li class="md-tabs__item">
+    <a href="./" class="md-tabs__link md-tabs__link--active">
+      Installation
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../apt/" class="md-tabs__link">
+      APT Simulation
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../issues/" class="md-tabs__link">
+      Issues
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../references/" class="md-tabs__link">
+      References
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../future/" class="md-tabs__link">
+      Future Ideas
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../credits/" class="md-tabs__link">
+      Credits
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Hybrid + Identity Cyber Range" class="md-nav__button md-logo" aria-label="Hybrid + Identity Cyber Range" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Hybrid + Identity Cyber Range
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/iknowjason/PurpleCloud/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    iknowjason/PurpleCloud
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usecases/" class="md-nav__link">
+        Use Cases
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/" class="md-nav__link">
+        Features
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infrastructure/" class="md-nav__link">
+        Credentials
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remoteaccess/" class="md-nav__link">
+        Remote Access
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Installation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Installation
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note-for-azure-ad-module-azure-active-directory-permission-requirements" class="md-nav__link">
+    Note for Azure AD Module:  Azure Active Directory Permission Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note-for-azure-ad-ds-module-azure-ad-domain-services-permission-requirements" class="md-nav__link">
+    Note for Azure AD DS Module:  Azure AD Domain Services Permission Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-steps" class="md-nav__link">
+    Installation Steps
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apt/" class="md-nav__link">
+        APT Simulation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../issues/" class="md-nav__link">
+        Issues
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        References
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../future/" class="md-nav__link">
+        Future Ideas
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../credits/" class="md-nav__link">
+        Credits
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note-for-azure-ad-module-azure-active-directory-permission-requirements" class="md-nav__link">
+    Note for Azure AD Module:  Azure Active Directory Permission Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note-for-azure-ad-ds-module-azure-ad-domain-services-permission-requirements" class="md-nav__link">
+    Note for Azure AD DS Module:  Azure AD Domain Services Permission Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-steps" class="md-nav__link">
+    Installation Steps
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/iknowjason/PurpleCloud/edit/master/docs/install.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="installation">Installation</h1>
+<p><strong>Note:</strong>  Tested on Ubuntu Linux 20.04 </p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>Azure tenant and subscription</li>
+<li>Global Administrator role</li>
+<li>Terraform:  Tested on v0.14.7</li>
+<li>Ansible:  Tested on 2.9.6</li>
+</ul>
+<h2 id="note-for-azure-ad-module-azure-active-directory-permission-requirements">Note for Azure AD Module:  Azure Active Directory Permission Requirements</h2>
+<p>If you want to enable and use the Azure Active Directory module, it requires your service principal to have special permissions.  There are two options listed below.  Either one of them will work just fine.  Both are not required:</p>
+<p><strong>Method #1:</strong>  Assign the "Global Administrator" role to the service principal</p>
+<p><strong>Method #2:</strong>  Assign the following API permissions to the service principal:
+* Azure Active Directory Graph --&gt; Application.ReadWrite.All
+* Azure Active Directory Graph --&gt; Directory.ReadWrite.All
+* Microsoft Graph --&gt; User.Read</p>
+<p>This is what it looks like:</p>
+<p><img alt="" src="../images/aad_permissions.png" /></p>
+<h2 id="note-for-azure-ad-ds-module-azure-ad-domain-services-permission-requirements">Note for Azure AD DS Module:  Azure AD Domain Services Permission Requirements</h2>
+<p>If you want to enable and use the Azure AD Domain Services, it requires your service principal to have special permissions.  The only requirement here is that your Service Principal must have the "Global Administrator" role assigned to it.</p>
+<h2 id="installation-steps">Installation Steps</h2>
+<p><strong>Note:</strong>  Tested on Ubuntu 20.04</p>
+<p><strong>Step 1:</strong> Install Terraform and Ansible on your Linux system</p>
+<p>Download and install Terraform for your platform --&gt; https://www.terraform.io/downloads.html</p>
+<p>Install Ansible</p>
+<pre><code>$ sudo apt-get install ansible
+</code></pre>
+<p><strong>Step 2:</strong> Set up an Azure Service Principal on your Azure subscription that allows Terraform to automate tasks under your Azure subscription.</p>
+<p>Follow the exact instructions in this Microsoft link:
+https://docs.microsoft.com/en-us/azure/developer/terraform/getting-started-cloud-shell</p>
+<p>These were the two basic commands that were run based on this link above:</p>
+<pre><code>az ad sp create-for-rbac --role=&quot;Owner&quot; --scopes=&quot;/subscriptions/&lt;subscription_id&gt;&quot;
+</code></pre>
+<p>and this command below.  From my testing I needed to use a role of "Owner" instead of "Contributor".  Default Microsoft documentation shows role of "Contributor" which resulted in errors.  </p>
+<pre><code>az login --service-principal -u &lt;service_principal_name&gt; -p &quot;&lt;service_principal_password&gt;&quot; --tenant &quot;&lt;service_principal_tenant&gt;&quot;
+</code></pre>
+<p>Take note of the following which we will use next to configure our Terraform Azure provider:</p>
+<pre><code>subscription_id = &quot;&quot;
+client_id = &quot;&quot;
+client_secret = &quot;&quot;
+tenant_id = &quot;&quot;
+</code></pre>
+<p><strong>Step 3:</strong> Clone this repo</p>
+<pre><code>$ git clone https://github.com/iknowjason/PurpleCloud.git
+</code></pre>
+<p><strong>Step 4:</strong> First, copy the terraform.tfexample to terraform.tfvars.  Next, using your favorite text editor, edit the terraform.tfvars file for the Azure resource provider matching your Azure Service Principal credentials.  </p>
+<pre><code>cd PurpleCloud/deploy
+cp terraform.tfexample terraform.tfvars
+vi terraform.tfvars
+</code></pre>
+<p>Edit these parameters in the terraform.tfvars file, replacing "REPLACE_WITH_YOUR_VALUES" to correctly match your Azure environment.  </p>
+<pre><code>arm_client_id = &quot;REPLACE_WITH_YOUR_VALUES&quot;
+arm_client_secret = &quot;REPLACE_WITH_YOUR_VALUES&quot;
+subscription_id = &quot;REPLACE_WITH_YOUR_VALUES&quot;
+tenant_id = &quot;REPLACE_WITH_YOUR_VALUES&quot;
+</code></pre>
+<p>Your terraform.tfvars file should look similar to this but with your own Azure Service Principal credentials:</p>
+<pre><code>arm_client_id = &quot;7e9c2cce-8bd4-887d-b2b0-90cd1e6e4781&quot;
+arm_client_secret = &quot;:+O$+adfafdaF-?%:.?d/EYQLK6po9`|E&lt;[&quot;
+subscription_id = &quot;aa9d8c9f-34c2-6262-89ff-3c67527c1b22&quot;
+tenant_id = &quot;8b6817d9-f209-2071-8f4f-cc03332847cb&quot;
+</code></pre>
+<p><strong>Step 5a: (Optional Azure AD)</strong> If you wish to enable Azure AD, configure the Azure AD provider service principal credentials in the terraform.tvfars file.  Edit these parameters, replacing "REPLACE_WITH_YOUR_VALUES" to correctly match your Azure environment.  These credentials are necessary for the Azure AD provider to use the service principal and create users, groups, and applications with the correct API permissions.</p>
+<pre><code>aad_client_id = &quot;REPLACE_WITH_YOUR_VALUES&quot;
+aad_client_secret = &quot;REPLACE_WITH_YOUR_VALUES&quot;
+</code></pre>
+<p>Your terraform.tfvars file should look similar to this but with your own credentials:</p>
+<pre><code>aad_client_id = &quot;7e9c2cce-8bd4-887d-b2b0-90cd1e6e4781&quot;
+aad_client_secret = &quot;:+O$+adfafdaF-?%:.?d/EYQLK6po9`|E&lt;[&quot;
+</code></pre>
+<p><strong>Step 5b: (Optional Azure AD)</strong> Uncomment the Azure AD module in main.tf.  It is disabled by default.  Look for this section block and remove the multi-line comments.  It should look like this:</p>
+<pre><code>##########################################################
+## Azure AD Module - Create Azure AD Users, Groups, and Application
+##########################################################
+module &quot;azure_ad&quot; {
+  source              = &quot;../modules/azure_ad&quot;
+  upn_suffix          = local.upn_suffix
+  tenant_id           = local.tenant_id
+}
+</code></pre>
+<p><strong>Step 5c: (Optional Azure AD)</strong> In main.tf, set the following two variables correctly for Azure AD:
+* tenant_id
+* upn_suffix</p>
+<p>The tenant_id variable should be the username associated with your tenant account when it was setup and it forms the universal principal name (UPN) suffix for your AD users.  Let's say your username is acmecorp.  Then the upn suffix will be acmecorp.onmicrosoft.com.  If you have added a custom domain to Azure, then you can use that custom domain as your upn suffix instead of 'tenant_id.onmicrosoft.com'.</p>
+<p><strong>Step 6a: (Optional Azure AD Domain Services)</strong> Azure Domain Servies is disabled by default.  If you wish to enable Azure AD Domain Services, uncomment the Azure AD Domain Services module in main.tf.  Look for this section block and remove the multi-line comments.  It should look like this at the beginning and end of the module:</p>
+<pre><code>module &quot;azure_adds&quot; {
+&lt;Skipping Lines&gt;
+}
+</code></pre>
+<p><strong>Step 6b: (Optional Azure AD Domain Services)</strong> In main.tf, set the following two variables correctly for Azure AD Domain Services:
+* tenant_id_ds
+* upn_suffix_ds</p>
+<p><strong>Step 7:</strong>  Edit the terraform.tfvars file to include your source network prefix for properly white listing Azure Network Security Groups (NSGs).
+Edit the following file:  deploy/terraform.tfvars
+At the bottom of the file, uncomment the "src_ip" variable and populate it with your correct source IP address.  If you don't do this, the Azure NSGs will open up your two VMs to the public Internet.  Below is exactly where the variable should be uncommented and an example of what it looks like:</p>
+<pre><code># Set variable below for IP address prefix for white listing Azure NSG
+# uncomment variable below; otherwise, all of the public Internet will be permitted
+# https://ifconfig.me/
+# curl https://ifconfig.me
+src_ip = &quot;192.168.87.4&quot;
+</code></pre>
+<p><strong>Step 8:</strong> Run the commands to initialize terraform and apply the resource plan</p>
+<pre><code>$ cd PurpleCloud/deploy
+$ terraform init
+$ terraform apply -var-file=terraform.tfvars -auto-approve
+</code></pre>
+<p>This should start the Terraform automated deployment plan</p>
+<p><strong>Step 9:</strong> Optional:  Unzip and run Badblood from C:\terraform directory (https://github.com/davidprowe/BadBlood)</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../remoteaccess/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Remote Access
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../apt/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              APT Simulation
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.expand", "navigation.indexes", "navigation.top", "navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d892486b.min.js"></script>
+      
+    
+  </body>
+</html>
