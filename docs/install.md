@@ -7,6 +7,9 @@
 * Terraform:  Tested on v0.14.7
 * Ansible:  Tested on 2.9.6
 
+## Important Security Information:  Security Groups
+Some people might be concerned about publicly exposing these cloud resources.  By default, the security groups are wide open for all source prefixes.  There is a variable that will whitelist your source prefix so that only the networks you specify will be allowed through Azure NSGs.  Make sure you pay close attention to the "src_ip" variable in step 7 below.  
+
 ## Note for Azure AD Module:  Azure Active Directory Permission Requirements
 If you want to enable and use the Azure Active Directory module, it requires your service principal to have special permissions.  There are two options listed below.  Either one of them will work just fine.  Both are not required:
 

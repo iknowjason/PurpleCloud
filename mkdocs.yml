@@ -3,15 +3,14 @@ repo_url: https://github.com/iknowjason/PurpleCloud
 repo_name: iknowjason/PurpleCloud
 nav:
    - Home: index.md
-   - Use Cases: usecases.md
-   - Features: features.md
-   - Credentials : infrastructure.md
-   - Remote Access : remoteaccess.md
-   - Installation : install.md
-   - APT Simulation : apt.md
+   - Overview: overview.md
+   - Cost: cost.md
+   - Creds and Access: infrastructure.md
+   - Getting Started : install.md
+   - Security Testing : apt.md
    - Issues : issues.md
    - References : references.md
-   - Future Ideas : future.md
+   - Roadmap Ideas : future.md
    - Credits : credits.md
 theme:
   name: material
