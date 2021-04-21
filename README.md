@@ -19,4 +19,4 @@ Multi-use Hybrid + Identity Cyber Range implementing a small Active Directory Do
 Please see the full documentation for details and getting started with installation.  
 
 
-[GitHub](http://github.com)
+[Full Documentation Site](https://purple.iknowjason.io)
