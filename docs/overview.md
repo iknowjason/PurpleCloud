@@ -2,6 +2,7 @@
 * Research and pentest lab for Azure AD and Azure Domain Services
 * Security testing of Hybrid Join and Azure AD Joined devices 
 * EDR Testing lab 
+* PoC / Product Security Lab
 * Enterprise Active Directory lab with domain joined devices
 * Malware / reverse engineering to study artifacts against domain joined devices
 * SIEM / Threat Hunting / DFIR / Live Response lab with HELK + Velociraptor [1, 2]
