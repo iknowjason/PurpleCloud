@@ -6,4 +6,15 @@ As this tool spins up cloud resources, it will result in charges to your Azure a
 ## Cost Analysis
 Use the Cost Analysis feature of Azure to measure the daily cost of the enabled resources.  Here are some approximate figures with standing up a new subscription and resource group and running all of the PurpleCloud default modules.  Approximate cost is $5.91 after 24 hours, based on the collected sample shown.  The following image shows the Cost Analysis after the first morning.
 
-![](images/pc-day1.png)
+### Table:  Accrued Costs
+| Days Accrued  |  Costs Accrued |
+|---------------|----------------|
+|    1 day      |     $5.91      |
+|    2 days     |     $21.61     |
+
+
+### Screen Shot from Subscription 
+Here is a screen shot showing costs accrued from a new installation on my subscription after 2 days.
+
+ 
+![](images/pc-day2.png)
