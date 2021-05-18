@@ -3,3 +3,4 @@ variable "upn_suffix" {
 }
 
 variable "tenant_id" {}
+#variable "azure_aad_creds" {}
