@@ -85,12 +85,12 @@ subscription_id = "REPLACE_WITH_YOUR_VALUES"
 tenant_id = "REPLACE_WITH_YOUR_VALUES"
 ```
 
-Your terraform.tfvars file should look similar to this but with your own Azure Service Principal credentials:
+Your terraform.tfvars file should look similar to this but with your own Azure Service Principal credentials.  Note that these credentials below are fake dummy credentials used for demonstration purposes.  They are not valid credentials that will work against an Azure account:
 ```
-arm_client_id = "7e9c2cce-8bd4-887d-b2b0-90cd1e6e4781"
-arm_client_secret = ":+O$+adfafdaF-?%:.?d/EYQLK6po9`|E<["
+arm_client_id = "7e9c2cce-8bd4-657d-b2b0-90cd1e6e4781"
+arm_client_secret = ":+O$+aeehgdaF-?%:.?d/EYQLK6po9`|E<["
 subscription_id = "aa9d8c9f-34c2-6262-89ff-3c67527c1b22"
-tenant_id = "8b6817d9-f209-2071-8f4f-cc03332847cb"
+tenant_id = "8b6817d9-f209-8071-7f4f-cc03332847cb"
 ```
 
 **Step 5a: (Optional Azure AD)** If you wish to enable Azure AD, configure the Azure AD provider service principal credentials in the terraform.tvfars file.  Edit these parameters, replacing "REPLACE_WITH_YOUR_VALUES" to correctly match your Azure environment.  These credentials are necessary for the Azure AD provider to use the service principal and create users, groups, and applications with the correct API permissions.
@@ -100,10 +100,10 @@ aad_client_id = "REPLACE_WITH_YOUR_VALUES"
 aad_client_secret = "REPLACE_WITH_YOUR_VALUES"
 ```
 
-Your terraform.tfvars file should look similar to this but with your own credentials:
+Your terraform.tfvars file should look similar to this but with your own credentials.  Note that these credentials are fake dummy credentials used for demonstration purposes.  They are not real or valid against an Azure account.
 ```
-aad_client_id = "7e9c2cce-8bd4-887d-b2b0-90cd1e6e4781"
-aad_client_secret = ":+O$+adfafdaF-?%:.?d/EYQLK6po9`|E<["
+aad_client_id = "7e9c2cce-8bd4-677d-b2b0-90cd1e6e4781"
+aad_client_secret = ":+O$+aefaadaF-?%:.?d/EYQLK6po9`|E<["
 ```
 **Step 5b: (Optional Azure AD)** Uncomment the Azure AD module in main.tf.  It is disabled by default.  Look for this section block and remove the multi-line comments.  It should look like this:
 
