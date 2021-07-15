@@ -98,7 +98,8 @@ lwrite("$mtime Download Elastic and Atomic Red Team (ART)")
 
 (New-Object System.Net.WebClient).DownloadFile('https://github.com/elastic/detection-rules/archive/main.zip', 'C:\terraform\Elastic_Detections.zip')
 
-(New-Object System.Net.WebClient).DownloadFile('https://github.com/redcanaryco/atomic-red-team/archive/master.zip', 'C:\terraform\ART.zip')
+(New-Object System.Net.WebClient).DownloadFile('https://github.com/redcanaryco/atomic-red-team/archive/refs/heads/master.zip', 'C:\terraform\ART.zip')
+
 
 (New-Object System.Net.WebClient).DownloadFile('https://github.com/NextronSystems/APTSimulator/releases/download/v0.8.0/APTSimulator_pw_apt.zip', 'C:\terraform\APTSimulator.zip')
 
