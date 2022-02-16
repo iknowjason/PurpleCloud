@@ -185,6 +185,12 @@ terraform apply run.plan
 
 ![](images/pce.png)
 
+# Screen Shots
+
+![](images/pc1.png)
+
+![](images/pc2.png)
+
 # Use Cases
 * Research and pentest lab for Azure AD and Azure Domain Services
 * Security testing of Hybrid Join and Azure AD Joined devices
