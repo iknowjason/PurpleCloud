@@ -138,8 +138,6 @@ export ARM_CLIENT_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
 export ARM_CLIENT_SECRET="YOUR_SERVICE_PRINCIPAL_VALUES"
 ```
 
-Here are some references for correct configuration. 
-
 4. Run terraform 
 ```
 terraform init
