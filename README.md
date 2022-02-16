@@ -22,7 +22,7 @@ This will generate an Azure AD range with a UPN suffix of ```rtcfingroup.com``` 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 1000```
 
 **Description:** 
-Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  The password applied to all users will be displayed at the end of ```terraform apply`.``.  To display the passwor again, run ```terraform output```.
+Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  The password applied to all users will be displayed at the end of ```terraform apply```.  To display the passwor again, run ```terraform output```.
 
 ## Usage Example:  Generate a range with Azure applications and groups
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5```
