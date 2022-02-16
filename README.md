@@ -130,7 +130,7 @@ default_ad_users = [
 
 ```$ pip3 install faker```
 
-3. Create an Azure Service Principal with the correct permissions and add the four environment variables to your local shell using .env or .envrc:
+3. After you have a valid Azure subscription, create an Azure Service Principal with the correct permissions and add the four environment variables to your local shell using .env or .envrc:
 
 ```
 export ARM_SUBSCRIPTION_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
@@ -141,9 +141,14 @@ export ARM_CLIENT_SECRET="YOUR_SERVICE_PRINCIPAL_VALUES"
 
 Here are some references for creating a Service Principal to use with Azure.
 
-1.  Creating a Service Principal:  https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
+1.  Creating a Service Principal
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
 
-2.  Configuring a Service Principal to manage Azure Active Directory:  https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/guides/service_principal_configuration
+2.  Configuring a Service Principal to manage Azure Active Directory
+https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/guides/service_principal_configuration
+
+3.  Microsoft docs:  Creating a Service Principal in Cloud Shell with Bash
+https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash?tabs=bash
 
 These are the settings that have worked best.  For Azure AD, set up the Service Principal as Global Administrator and/or the following Graph API permissions:
 
