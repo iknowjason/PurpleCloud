@@ -2,7 +2,7 @@
 PurpleCloud has changed!  Introducing a Terraform generator using python.  Instead of offering terraform templates that have to be manually edited, the starting point is a Python terraform generator.  The python scripts will create your own custom terraform files based on user input.  The old terraform templates files have been moved to the archive directory.
 
 # Overview
-Multi-use Identity Azure Active Directory range.  Easily build your own Pentest / Red Team / Cyber Range in Azure cloud.  PurpleCloud was created as a platform for researching Azure Identity.
+Identity Range supporting Azure AD and Active Directory enterprise deployment with SIEM in Azure.  Easily build your own Pentest / Red Team / Cyber Range in Azure cloud.  PurpleCloud was created as a platform for researching Azure Identity.
 
 # Generating an Azure AD Range using azure_ad.py
 
