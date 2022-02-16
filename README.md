@@ -15,7 +15,7 @@ This will generate an Azure AD range with a UPN suffix of 'rtcfingroup.com' with
 
 * **azure_users.csv**
 * **azure_usernames.txt**
-* **azure_emails.txt*
+* **azure_emails.txt**
 
 ## Usage Example:  Generate a range with 1,000 users 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 1000```
