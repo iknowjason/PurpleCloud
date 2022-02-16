@@ -82,13 +82,15 @@ This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat
 
 ```--password <password>```:  The local Administrator password and default AD user password (Default:  auto generate a strong password) 
 
+```--domain_join```:  Join the Windows 10 Pro systems to the AD Domain (Default:  false)
+
 ## Other Options to Manually Edit in azure.py
 
 These are located in the ```config_win10_endpoints``` dictionary:
 
 ```hostname_base:```  The base Windows 10 hostname (Default: win10)
 
-```join_domain:```  Whether to join the Windows 10 Pro to the AD Domain.  This is disabled by default.  So if you add a DC you must set this to true to have the systems join to the domain.
+```join_domain:```  Whether to join the Windows 10 Pro to the AD Domain.  This is disabled by default.  So if you add a DC and want to join the Windows 10 Pro systems to the AD Domain, you can set this to true.  Or you can use the command line parameter ```--domain-join```.
 
 ```auto_logon_domain_users:```  Configure the endpoint (via registry) to automatically log in the domain user.  This will randomly select an AD user.  Disabled by default and requires domain join and DC.
 
@@ -185,10 +187,10 @@ terraform apply run.plan
 * PoC / Product Security Lab
 * Enterprise Active Directory lab with domain joined devices
 * Malware / reverse engineering to study artifacts against domain joined devices
-* SIEM / Threat Hunting / DFIR / Live Response lab with HELK + Velociraptor [1, 2]
+* SIEM / Threat Hunting / DFIR / Live Response lab with HELK + Velociraptor
 * Log aggregator architecture to forward logs to a cloud native SIEM (Azure Sentinel)
 * Data Science research with HELK server, Jupyter notebooks
-* Detection Engineering research with Mordor [3, 4]
+* Detection Engineering research with Mordor
 
  
 # Documentation
