@@ -86,6 +86,8 @@ This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat
 
 ## Other Options to Manually Edit in azure.py
 
+**Windows 10 Pro configuration:**   The Windows 10 Pro default configuration can be adjusted to meet your needs.
+
 These are located in the ```config_win10_endpoints``` dictionary:
 
 ```hostname_base:```  The base Windows 10 hostname (Default: win10)
@@ -122,6 +124,9 @@ default_ad_users = [
         "groups":"IT"
     },
 ```
+
+**Network Subnets configuration:**   The configuration for the subnets can be adjusted in the python list named ```config_subnets```.  Some changes include changing the default subnet names or adding/removing subnets.  By default there are four subnets created.  
+
 
 # Getting Started
 
