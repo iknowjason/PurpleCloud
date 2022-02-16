@@ -51,7 +51,7 @@ This will create a Domain Controller in dc.tf and install AD DS with forest name
 ```$ python3 azure.py --helk --endpoint 1```
 
 **Description:**
-This will add a Hunting ELK server with one Windows 10 Endpoing.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.
+This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.
 
 ## Full Usage and Other Details for Advanced Usage:  Azure.py
 ```--resource_group <rg_name>```:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)
