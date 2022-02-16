@@ -1,4 +1,4 @@
-# Recent Valentine's Day Changes:  2/14/22 
+# Valentine's Day Changes:  2/14/22 
 PurpleCloud has changed!  Introducing a Terraform generator using python.  Instead of offering terraform templates that have to be manually edited, the starting point is a Python terraform generator.  The python scripts will create your own custom terraform files based on user input.  The terraform template files have been moved to archive.
 
 # Overview
