@@ -4,9 +4,9 @@ PurpleCloud has changed!  Introducing a Terraform generator using python.  Inste
 # Overview
 Identity Range supporting Azure AD and Active Directory enterprise deployment with SIEM in Azure.  Easily build your own Pentest / Red Team / Cyber Range in Azure cloud.  PurpleCloud was created as a platform for researching Azure Identity.  This repository contains two basic python scripts.  The first one is ```azure_ad.py``` and it is used to generate the terraform for a custom Azure AD range.  It uses a python library (faker) to generate as many Azure AD users as you desire, also creating AD Groups and AD Applications.  The second script is ```azure.py.```  This script is used to generate a more traditional infrastructure range.  It can create an Active Directory Domain Services range, generating as many AD users as you wish.  It also supports many other features such as Domain Join of Windows 10 systems, in addition to a SIEM instrumented with Sysmon.
 
-# Generating an Azure AD Range using azure_ad.py
+# Generating an Azure AD lab using azure_ad.py
 
-## Usage Example:  Generate a basic Azure AD Range 
+## Usage Example:  Generate a basic Azure AD lab
 
 ```$ python3 azure_ad.py --upn rtcfingroup.com```
 
@@ -18,14 +18,14 @@ This will generate an Azure AD range with a UPN suffix of ```rtcfingroup.com``` 
 * **azure_emails.txt:** A file including just the email addresses.
 * **users.tf:** Terraform file that will build the users.
 
-## Usage Example:  Generate an Azure AD range with 1,000 users 
+## Usage Example:  Generate an Azure AD lab with 1,000 users 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 1000```
 
 **Description:** 
 Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  The password applied to all users will be displayed at the end of ```terraform apply```.  To display the passwor again, run ```terraform output```.  
 
 
-## Usage Example:  Generate a range with Azure applications and groups
+## Usage Example:  Generate a lab with Azure applications and groups
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5```
 
 **Description:**
@@ -35,7 +35,7 @@ Same as above, except generate 500 users in Azure AD.  Create 3 Azure applicatio
 - **groups.tf:**  A terraform file with the Azure groups.
 
 
-# Generating an Azure infrastructure range using azure.py 
+# Generating an Azure infrastructure lab using azure.py 
 
 ## Usage Example:  Generate a single Windows 10 Endpoint with Sysmon installed
 
