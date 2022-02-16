@@ -1,4 +1,4 @@
-# Recent Valentine's Day Changes - 2/14/22 
+# Recent Valentine's Day Changes:  2/14/22 
 PurpleCloud has changed!  Introducing a Terraform generator using python.  Instead of offering terraform templates that have to be manually edited, the starting point is a Python terraform generator.  The python scripts will create your own custom terraform files based on user input.  The old terraform templates files have been moved to the archive directory.
 
 # Overview
@@ -129,22 +129,24 @@ default_ad_users = [
 # Getting Started
 
 ## Pre-Requisites
-Python:  Tested version:  3.8.10
-Terraform:  Tested version:  1.1.2
-Azure account with subscription:  https://portal.azure.com
+* **Python:**  Tested version:  3.8.10
+
+* **Terraform:**  Tested version:  1.1.2
+
+* **Azure account with subscription:  https://portal.azure.com
  
 ## Installing 
 
 1. Clone this repository
 
 2. Install the python faker using pip 
-$ pip3 install faker
+```$ pip3 install faker```
 
 3. Create an Azure Service Principal with the correct permissions and add the four environment variables to your local shell using .env or .envrc:
-export ARM_SUBSCRIPTION_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
+```export ARM_SUBSCRIPTION_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
 export ARM_TENANT_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
 export ARM_CLIENT_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
-export ARM_CLIENT_SECRET="YOUR_SERVICE_PRINCIPAL_VALUES"
+export ARM_CLIENT_SECRET="YOUR_SERVICE_PRINCIPAL_VALUES"```
 
 Here are some references for correct configuration. 
 
