@@ -44,7 +44,7 @@ Same as above, except generate 500 users in Azure AD.  Create 3 Azure applicatio
 **Description:**
 This will generate a single Windows 10 Endpoint and generate a random, unique password with a default local Administrator account named 'RTCAdmin'.  This generates four terraform files:
 - **main.tf:** Terraform file with resource group and location.
-- ** network.tf:** Terraform file with VNet and subnets. 
+- **network.tf:** Terraform file with VNet and subnets. 
 - **nsg.tf:** Terraform file with Network Security Groups.
 - **win10-1.tf:** Terraform file with Windows 10 Pro configuration.
 
