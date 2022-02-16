@@ -9,18 +9,21 @@ Multi-use Identity Cyber Range implementing a customized Active Directory Domain
 ## Usage Example:  Generate a basic Azure AD Range 
 
 ```$ python3 azure_ad.py --upn rtcfingroup.com```
-Description:  This will generate an Azure AD range with a UPN suffix of 'rtcfingroup.com' with 100 users. It will output three files.   The Azure AD password for all users will be automatically generated and output after terraform apply.
+**Description:** 
+This will generate an Azure AD range with a UPN suffix of 'rtcfingroup.com' with 100 users. It will output three files.   The Azure AD password for all users will be automatically generated and output after terraform apply.
 azure_users.csv
 azure_usernames.txt
 azure_emails.txt
 
 ## Usage Example:  Generate a range with 1000 users 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 1000```
-Description:  Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.
+**Description:** 
+Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.
 
 ## Usage Example:  Generate a range with Azure applications and groups
-$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5
-Description:  Same as above, except generate 500 users in Azure AD.  Create 3 Azure applications and 5 groups.  Automatically put the 500 users into separate groups. 
+```$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5```
+**Description: **
+Same as above, except generate 500 users in Azure AD.  Create 3 Azure applications and 5 groups.  Automatically put the 500 users into separate groups. 
 
 
 # Generating an Azure infrastructure range using azure.py 
@@ -28,60 +31,78 @@ Description:  Same as above, except generate 500 users in Azure AD.  Create 3 Az
 ## Usage Example:  Generate a single Windows 10 Endpoint with Sysmon installed
 
 ```$ python3 azure.py --endpoint 1```
-Description:  This will generate a single Windows 10 Endpoint and generate a random, unique password with a default local Administrator account named 'RTCAdmin'.  This generates four terraform files - main.tf, network.tf, nsg.tf, and win10-1.tf.
+**Description:**
+This will generate a single Windows 10 Endpoint and generate a random, unique password with a default local Administrator account named 'RTCAdmin'.  This generates four terraform files - main.tf, network.tf, nsg.tf, and win10-1.tf.
 
 ## Usage Example:  Build a Domain Controller with Forest and Users + Windows Domain Join 
 
 ```$ python3 azure.py --domain_controller --ad_domain rtcfingroup.com --admin Administrator --password MyPassword012345 --ad_users 500 --endpoints 2```
-Description:  This will create a Domain Controller in dc.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro.  To enable it you must edit the pytyhon script and find the config_win10_endpoint dictionary. Edit 'join_domain' and set the value to true.  This will create two Windows 10 Pro endpoints and automatically join them to the domain.
+**Description:**
+This will create a Domain Controller in dc.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro.  To enable it you must edit the pytyhon script and find the config_win10_endpoint dictionary. Edit 'join_domain' and set the value to true.  This will create two Windows 10 Pro endpoints and automatically join them to the domain.
 
 ## Usage Example:  Build a Hunting ELK server and automatically export sysmon winlog beat logs 
 
 ```$ python3 azure.py --helk --endpoint 1```
-Description:  This will add a Hunting ELK server with one Windows 10 Endpoing.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.
+**Description:**
+This will add a Hunting ELK server with one Windows 10 Endpoing.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.
 
 ## Full Usage and Other Details for Advanced Usage:  Azure.py
 ```--resource_group <rg_name>```:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)
---location:  The Azure location to use (Default:  centralus)
---endpoints:  Number of Windows 10 Professional systems to build (Default: 0)
---helk:  Create a hunting ELK server (with Velociraptor installed) (Default:  Disabled)
---domain_controller:  Create a Domain Controller and install AD DS with Forest (Default:  Disabled)
---ad_domain:  The name of the AD Domain to provision (Default:  rtc.local)
---ad_users:  The number of AD users to automatically build (Default:  Disabled)
---admin:  The Local Administrator account (Default:  RTCAdmin)
---password:  The local Administrator password and default AD user password (Default:  auto generate a strong password) 
+
+```--location <location>```:  The Azure location to use (Default:  centralus)
+
+```--endpoints <num_of_endpoints>```:  Number of Windows 10 Professional systems to build (Default: 0)
+
+```--helk```:  Create a hunting ELK server (with Velociraptor installed) (Default:  Disabled)
+
+```--domain_controller```:  Create a Domain Controller and install AD DS with Forest (Default:  Disabled)
+
+```--ad_domain <domain>```:  The name of the AD Domain to provision (Default:  rtc.local)
+
+```--ad_users <num_of_domain_users>```:  The number of AD users to automatically build (Default:  Disabled)
+
+```--admin <admin_username>```:  The Local Administrator account (Default:  RTCAdmin)
+
+```--password <password>```:  The local Administrator password and default AD user password (Default:  auto generate a strong password) 
 
 ## Other Options to Manually Edit in azure.py
+
 These are located in the ```config_win10_endpoints``` dictionary:
-hostname_base:  The base Windows 10 hostname (Default: win10)
-join_domain:  Whether to join the Windows 10 Pro to the AD Domain.  This is disabled by default.  So if you add a DC you must set this to true to have the systems join to the domain.
-auto_logon_domain_users:  Configure the endpoint (via registry) to automatically log in the domain user.  This will randomly select an AD user.  Disabled by default and requires domain join and DC.
-install_sysmon:  Automatically install Sysmon with Swift on Security configuration (Default:  Enabled)
-install_art:  Install Atomic Red Team (art).  (Default:  Enabled) 
+
+```hostname_base:```  The base Windows 10 hostname (Default: win10)
+
+```join_domain:```  Whether to join the Windows 10 Pro to the AD Domain.  This is disabled by default.  So if you add a DC you must set this to true to have the systems join to the domain.
+
+```auto_logon_domain_users:```  Configure the endpoint (via registry) to automatically log in the domain user.  This will randomly select an AD user.  Disabled by default and requires domain join and DC.
+
+```install_sysmon:```  Automatically install Sysmon with Swift on Security configuration (Default:  Enabled)
+
+```install_art:```  Install Atomic Red Team (art).  (Default:  Enabled) 
+
 
 ```
-### WINDOWS 10 CONFIGURATION / CONFIGURATION FOR WINDOWS 10 PRO ENDPOINTS
-### The Default Configuration for all of the Windows 10 Endpoints
 config_win10_endpoint = {
     "hostname_base":"win10",
     "join_domain":"false",
     "auto_logon_domain_user":"false",
     "install_sysmon":"true",
     "install_art":"true",
-}```
+}
+```
 
-Default AD Users:  There is a python dictionary specifying the default AD users.  This can be changed to suit your needs.  These are the first five users automaticaly created.  After the first five, users are randomly generated to meet the ```--ad_users <number> amount.
+Default AD Users:  There is a python dictionary specifying the default AD users.  This can be changed to suit your needs.  These are the first five users automaticaly created.  After the first five, users are randomly generated to meet the ```--ad_users <number>``` amount.
 
 Here is the default_ad_users list along with the first user, that can be searched for in the file:
-```default_ad_users = [
+```
+default_ad_users = [
     {
         "name":"Lars Borgerson",
         "ou": "CN=users,DC=rtc,DC=local",
         "password": get_password(),
         "domain_admin":"",
         "groups":"IT"
-    },```
-
+    },
+```
 
 ![](images/pce.png)
 
@@ -130,5 +151,3 @@ terraform apply run.plan
 # Documentation
 Please see the full documentation for details and getting started with installation.  
 
-
-[Full Documentation Site](https://purple.iknowjason.io)
