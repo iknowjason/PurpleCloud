@@ -2,13 +2,14 @@
 PurpleCloud has changed!  Introducing a Terraform generator using python.  Instead of offering terraform templates that have to be manually edited, the starting point is a Python terraform generator.  The python scripts will create your own custom terraform files based on user input.  The old terraform templates files have been moved to the archive directory.
 
 # Overview
-Multi-use Identity Cyber Range implementing a customized Active Directory Domain Services in Azure alongside Azure AD.  Automated terraform templates for building your own Pentest / Red Team / Cyber Range in Azure cloud.  PurpleCloud was created as a platform for researching Azure Identity.
+Multi-use Identity Cyber Range implementing a customized Active Directory Domain Services in Azure alongside Azure AD.  Easily build your own Pentest / Red Team / Cyber Range in Azure cloud.  PurpleCloud was created as a platform for researching Azure Identity.
 
 # Generating an Azure AD Range using azure_ad.py
 
 ## Usage Example:  Generate a basic Azure AD Range 
 
 ```$ python3 azure_ad.py --upn rtcfingroup.com```
+
 **Description:** 
 This will generate an Azure AD range with a UPN suffix of 'rtcfingroup.com' with 100 users. It will output three files.   The Azure AD password for all users will be automatically generated and output after terraform apply.
 azure_users.csv
@@ -17,12 +18,14 @@ azure_emails.txt
 
 ## Usage Example:  Generate a range with 1000 users 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 1000```
+
 **Description:** 
 Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.
 
 ## Usage Example:  Generate a range with Azure applications and groups
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5```
-**Description: **
+
+**Description:**
 Same as above, except generate 500 users in Azure AD.  Create 3 Azure applications and 5 groups.  Automatically put the 500 users into separate groups. 
 
 
@@ -31,18 +34,21 @@ Same as above, except generate 500 users in Azure AD.  Create 3 Azure applicatio
 ## Usage Example:  Generate a single Windows 10 Endpoint with Sysmon installed
 
 ```$ python3 azure.py --endpoint 1```
+
 **Description:**
 This will generate a single Windows 10 Endpoint and generate a random, unique password with a default local Administrator account named 'RTCAdmin'.  This generates four terraform files - main.tf, network.tf, nsg.tf, and win10-1.tf.
 
 ## Usage Example:  Build a Domain Controller with Forest and Users + Windows Domain Join 
 
 ```$ python3 azure.py --domain_controller --ad_domain rtcfingroup.com --admin Administrator --password MyPassword012345 --ad_users 500 --endpoints 2```
+
 **Description:**
 This will create a Domain Controller in dc.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro.  To enable it you must edit the pytyhon script and find the config_win10_endpoint dictionary. Edit 'join_domain' and set the value to true.  This will create two Windows 10 Pro endpoints and automatically join them to the domain.
 
 ## Usage Example:  Build a Hunting ELK server and automatically export sysmon winlog beat logs 
 
 ```$ python3 azure.py --helk --endpoint 1```
+
 **Description:**
 This will add a Hunting ELK server with one Windows 10 Endpoing.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.
 
@@ -90,7 +96,7 @@ config_win10_endpoint = {
 }
 ```
 
-Default AD Users:  There is a python dictionary specifying the default AD users.  This can be changed to suit your needs.  These are the first five users automaticaly created.  After the first five, users are randomly generated to meet the ```--ad_users <number>``` amount.
+**Default AD Users:**   There is a python dictionary specifying the default AD users.  This can be changed to suit your needs.  These are the first five users automaticaly created.  After the first five, users are randomly generated to meet the ```--ad_users <number>``` amount.
 
 Here is the default_ad_users list along with the first user, that can be searched for in the file:
 ```
@@ -103,6 +109,7 @@ default_ad_users = [
         "groups":"IT"
     },
 ```
+# Overview 
 
 ![](images/pce.png)
 
