@@ -109,37 +109,23 @@ default_ad_users = [
         "groups":"IT"
     },
 ```
-# Overview 
-
-![](images/pce.png)
-
-# Use Cases
-* Research and pentest lab for Azure AD and Azure Domain Services
-* Security testing of Hybrid Join and Azure AD Joined devices 
-* EDR Testing lab 
-* PoC / Product Security Lab
-* Enterprise Active Directory lab with domain joined devices
-* Malware / reverse engineering to study artifacts against domain joined devices
-* SIEM / Threat Hunting / DFIR / Live Response lab with HELK + Velociraptor [1, 2]
-* Log aggregator architecture to forward logs to a cloud native SIEM (Azure Sentinel)
-* Data Science research with HELK server, Jupyter notebooks
-* Detection Engineering research with Mordor [3, 4]
-
 
 # Getting Started
 
 ## Pre-Requisites
+
 * **Python:**  Tested version:  3.8.10
 
 * **Terraform:**  Tested version:  1.1.2
 
-* **Azure account with subscription:  https://portal.azure.com
+* **Azure account with subscription:**  https://portal.azure.com
  
 ## Installing 
 
 1. Clone this repository
 
-2. Install the python faker using pip 
+2. Install the python faker using pip.  This is a dependency of both python scripts to generate users.
+
 ```$ pip3 install faker```
 
 3. Create an Azure Service Principal with the correct permissions and add the four environment variables to your local shell using .env or .envrc:
@@ -156,6 +142,23 @@ terraform init
 terraform plan run.plan
 terraform apply run.plan
 ```
+
+# Network Diagram 
+
+![](images/pce.png)
+
+# Use Cases
+* Research and pentest lab for Azure AD and Azure Domain Services
+* Security testing of Hybrid Join and Azure AD Joined devices
+* EDR Testing lab
+* PoC / Product Security Lab
+* Enterprise Active Directory lab with domain joined devices
+* Malware / reverse engineering to study artifacts against domain joined devices
+* SIEM / Threat Hunting / DFIR / Live Response lab with HELK + Velociraptor [1, 2]
+* Log aggregator architecture to forward logs to a cloud native SIEM (Azure Sentinel)
+* Data Science research with HELK server, Jupyter notebooks
+* Detection Engineering research with Mordor [3, 4]
+
  
 # Documentation
 Please see the full documentation for details and getting started with installation.  
