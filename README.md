@@ -129,10 +129,13 @@ default_ad_users = [
 ```$ pip3 install faker```
 
 3. Create an Azure Service Principal with the correct permissions and add the four environment variables to your local shell using .env or .envrc:
-```export ARM_SUBSCRIPTION_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
+
+```
+export ARM_SUBSCRIPTION_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
 export ARM_TENANT_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
 export ARM_CLIENT_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
-export ARM_CLIENT_SECRET="YOUR_SERVICE_PRINCIPAL_VALUES"```
+export ARM_CLIENT_SECRET="YOUR_SERVICE_PRINCIPAL_VALUES"
+```
 
 Here are some references for correct configuration. 
 
