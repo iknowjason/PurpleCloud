@@ -18,7 +18,7 @@ This will generate an Azure AD range with a UPN suffix of ```rtcfingroup.com``` 
 * **azure_emails.txt:** A file including just the email addresses.
 * **users.tf:** Terraform file that will build the users.
 
-## Usage Example:  Generate a range with 1,000 users 
+## Usage Example:  Generate an Azure AD range with 1,000 users 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 1000```
 
 **Description:** 
