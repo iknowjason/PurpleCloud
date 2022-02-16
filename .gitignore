@@ -6,3 +6,4 @@ ad_users.csv
 azure_users.csv
 azure_emails.txt
 azure_usernames.txt
+files/bootstrap-dc.ps1

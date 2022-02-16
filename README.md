@@ -41,10 +41,10 @@ This will generate a single Windows 10 Endpoint and generate a random, unique pa
 
 ## Usage Example:  Build a Domain Controller with Forest and Users + Windows Domain Join 
 
-```$ python3 azure.py --domain_controller --ad_domain rtcfingroup.com --admin Administrator --password MyPassword012345 --ad_users 500 --endpoints 2```
+```$ python3 azure.py --domain_controller --ad_domain rtcfingroup.com --admin Administrator --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join```
 
 **Description:**
-This will create a Domain Controller in dc.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro.  To enable it you must edit the python script and find the config_win10_endpoint dictionary. Edit 'join_domain' and set the value to true.  This will create two Windows 10 Pro endpoints and automatically join them to the domain.
+This will create a Domain Controller in dc.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the ```domain_join``` parameter enables it for all Windows 10 Pro created.
 
 ## Usage Example:  Build a Hunting ELK server and automatically export sysmon winlog beat logs 
 

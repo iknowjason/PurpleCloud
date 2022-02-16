@@ -75,6 +75,9 @@ parser.add_argument('-u', '--admin', dest='admin_set')
 # Add argument for password  
 parser.add_argument('-p', '--password', dest='password_set')
 
+# Add argument for domain_join 
+parser.add_argument('-dj', '--domain_join', dest='domain_join', action='store_true')
+
 # parse arguments
 args = parser.parse_args()
 
@@ -353,6 +356,13 @@ config_win10_endpoint = {
     "install_sysmon":"true",
     "install_art":"true",
 }
+
+## Check if domain_join argument is enabled
+## If it is, set the configuration above
+if args.domain_join:
+    print("[+] Domain Join is set to true")
+    logging.info('[+] Domain Join is set to true')
+    config_win10_endpoint['join_domain'] = "true"
 
 ## Check the configuration above
 ## Can only join the domain or auto logon domain users if dc enable
