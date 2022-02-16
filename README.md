@@ -22,7 +22,7 @@ This will generate an Azure AD range with a UPN suffix of ```rtcfingroup.com``` 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 1000```
 
 **Description:** 
-Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  To output the password at the end of ```terraform apply```, you can run ```terraform output```.
+Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  The password applied to all users will be displayed at the end of ```terraform apply`.``.  To display the passwor again, run ```terraform output```.
 
 ## Usage Example:  Generate a range with Azure applications and groups
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5```
@@ -138,6 +138,20 @@ export ARM_TENANT_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
 export ARM_CLIENT_ID="YOUR_SERVICE_PRINCIPAL_VALUES"
 export ARM_CLIENT_SECRET="YOUR_SERVICE_PRINCIPAL_VALUES"
 ```
+
+Here are some references for creating a Service Principal to use with Azure.
+
+1.  Creating a Service Principal:  https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
+
+2.  Configuring a Service Principal to manage Azure Active Directory:  https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/guides/service_principal_configuration
+
+These are the settings that have worked best.  For Azure AD, set up the Service Principal as Global Administrator and/or the following Graph API permissions:
+
+- Application.ReadWrite.All
+- User.ReadWrite.All
+- Group.ReadWrite.All
+
+For building the Azure infrastructure resources, assigning the Service Principal a role of ```Owner``` can help as well.
 
 4. Run terraform 
 ```
