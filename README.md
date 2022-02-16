@@ -2,7 +2,7 @@
 PurpleCloud has changed!  Introducing a Terraform generator using python.  Instead of offering terraform templates that have to be manually edited, the starting point is a Python terraform generator.  The python scripts will create your own custom terraform files based on user input.  The old terraform templates files have been moved to the archive directory.
 
 # Overview
-Identity Range supporting Azure AD and Active Directory enterprise deployment with SIEM in Azure.  Easily build your own Pentest / Red Team / Cyber Range in Azure cloud.  PurpleCloud was created as a platform for researching Azure Identity.
+Identity Range supporting Azure AD and Active Directory enterprise deployment with SIEM in Azure.  Easily build your own Pentest / Red Team / Cyber Range in Azure cloud.  PurpleCloud was created as a platform for researching Azure Identity.  This repository contains two basic python scripts.  The first one is ```azure_ad.py``` and it is used to generate the terraform for a custom Azure AD range.  It uses a python library (faker) to generate as many Azure AD users as you desire, also creating AD Groups and AD Applications.  The second script is ```azure.py.```  This script is used to generate a more traditional infrastructure range.  It can create an Active Directory Domain Services range, generating as many AD users as you wish.  It also supports many other features such as Domain Join of Windows 10 systems, in addition to a SIEM instrumented with Sysmon.
 
 # Generating an Azure AD Range using azure_ad.py
 
@@ -22,13 +22,17 @@ This will generate an Azure AD range with a UPN suffix of ```rtcfingroup.com``` 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 1000```
 
 **Description:** 
-Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  The password applied to all users will be displayed at the end of ```terraform apply```.  To display the passwor again, run ```terraform output```.
+Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  The password applied to all users will be displayed at the end of ```terraform apply```.  To display the passwor again, run ```terraform output```.  
+
 
 ## Usage Example:  Generate a range with Azure applications and groups
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5```
 
 **Description:**
 Same as above, except generate 500 users in Azure AD.  Create 3 Azure applications and 5 groups.  Automatically put the 500 users into separate groups. 
+
+- **apps.tf:**  A terraform file with the Azure applications.
+- **groups.tf:**  A terraform file with the Azure groups.
 
 
 # Generating an Azure infrastructure range using azure.py 
@@ -38,21 +42,26 @@ Same as above, except generate 500 users in Azure AD.  Create 3 Azure applicatio
 ```$ python3 azure.py --endpoint 1```
 
 **Description:**
-This will generate a single Windows 10 Endpoint and generate a random, unique password with a default local Administrator account named 'RTCAdmin'.  This generates four terraform files - main.tf, network.tf, nsg.tf, and win10-1.tf.
+This will generate a single Windows 10 Endpoint and generate a random, unique password with a default local Administrator account named 'RTCAdmin'.  This generates four terraform files:
+- **main.tf:** Terraform file with resource group and location.
+- ** network.tf:** Terraform file with VNet and subnets. 
+- **nsg.tf:** Terraform file with Network Security Groups.
+- **win10-1.tf:** Terraform file with Windows 10 Pro configuration.
+
 
 ## Usage Example:  Build a Domain Controller with Forest and Users + Windows Domain Join 
 
 ```$ python3 azure.py --domain_controller --ad_domain rtcfingroup.com --admin Administrator --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join```
 
 **Description:**
-This will create a Domain Controller in dc.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the ```domain_join``` parameter enables it for all Windows 10 Pro created.
+This will create a Domain Controller in dc.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the ```domain_join``` parameter enables it for all Windows 10 Pro created.  This will also create two Windows 10 Pro terraform files (win10-1.tf, win10-2.tf) as well as a terraform file for the Domain Controller (dc.tf).
 
 ## Usage Example:  Build a Hunting ELK server and automatically export sysmon winlog beat logs 
 
 ```$ python3 azure.py --helk --endpoint 1```
 
 **Description:**
-This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.
+This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.  This will create a terraform file for the HELK server (helk.tf)
 
 ## Full Usage and Other Details for Advanced Usage:  Azure.py
 ```--resource_group <rg_name>```:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)
