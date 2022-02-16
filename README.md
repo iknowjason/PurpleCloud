@@ -193,7 +193,6 @@ terraform apply run.plan
 # Screen Shots
 
 ![](images/pc1.png)
-
 ![](images/pc2.png)
 
 # Use Cases
@@ -207,8 +206,3 @@ terraform apply run.plan
 * Log aggregator architecture to forward logs to a cloud native SIEM (Azure Sentinel)
 * Data Science research with HELK server, Jupyter notebooks
 * Detection Engineering research with Mordor
-
- 
-# Documentation
-Please see the full documentation for details and getting started with installation.  
-
