@@ -105,18 +105,33 @@ def get_password():
     #length of password
     length = 10 
 
-    # Generate based on one
     lower = string.ascii_lowercase
     upper = string.ascii_uppercase
     num = string.digits
     all = lower + upper + num
-    temp = random.sample(all, length)
-    password = "".join(temp)
+    #temp = random.sample(all, length)
+    #password = "".join(temp)
+
+    # create blank password string / array
+    password = []
+    # at least one lower
+    password.append(random.choice(lower))
+    # at least one upper
+    password.append(random.choice(upper))
+    # at least one number 
+    password.append(random.choice(num))
+    for i in range(1, length - 2):
+        if len(password) < length:
+            password.append(random.choice(all))
+
+    random.shuffle(password)
+
+    final_random_password = ''.join(password)
 
     if args.password_set:
         return default_input_password 
     else:
-        return password
+        return final_random_password 
 
 #### ACTIVE DIRECTORY CONFIGURATION
 ### Default Domain / Default AD Domain
@@ -722,11 +737,10 @@ resource "local_file" "DEBUG_BOOTSTRAP_SCRIPT_VAR_NAME" {
 }
 
 resource "azurerm_windows_virtual_machine" "AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
-  #name                          = local.WIN10VMNAME_VAR_NAME
   name                          = "${local.WIN10VMNAME_VAR_NAME}-${random_string.suffix.id}"
   resource_group_name           = "${var.resource_group_name}-${random_string.suffix.id}"
   location                      = var.location
-  size                       = "Standard_DS1_v2"
+  size                       = "Standard_A1"
   computer_name  = local.WIN10VMNAME_VAR_NAME
   admin_username = var.ADMIN_USERNAME_VAR_NAME
   admin_password = var.ADMIN_PASSWORD_VAR_NAME
@@ -821,6 +835,10 @@ provider "azurerm" {
   features {}
 }
 
+locals {
+  storage_account_name = "purplecloud${random_string.suffix.id}"
+}
+
 variable "location" {
   default = "DEFAULT_LOCATION"
 }
@@ -829,11 +847,19 @@ variable "resource_group_name" {
   default = "RG_NAME_DEFAULT"
 }
 
+variable "storage_container_name" {
+  default = "staging"
+}
+
+variable "azure_users_file" {
+  default = "ad_users.csv"
+}
+
 # Random string for resources
 resource "random_string" "suffix" {
-  length  = 4
+  length  = 5
   special = false
-  upper   = true
+  upper   = false 
 }
 
 # Specify the resource group
@@ -842,9 +868,35 @@ resource "azurerm_resource_group" "network" {
   location = var.location
 }
 
+# Create a storage account
+resource "azurerm_storage_account" "storage-account" {
+  name                     = local.storage_account_name 
+  resource_group_name      = "${var.resource_group_name}-${random_string.suffix.id}"
+  location                 = var.location 
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+  allow_blob_public_access = true
+
+  depends_on = [azurerm_resource_group.network]
+}
+
+# Create storage container
+resource "azurerm_storage_container" "storage-container" {
+  name                  = var.storage_container_name 
+  storage_account_name  = azurerm_storage_account.storage-account.name
+  container_access_type = "blob"
+
+  depends_on = [azurerm_resource_group.network]
+}
+
 output "rg_name" {
   value   = "${var.resource_group_name}-${random_string.suffix.id}"
 }
+
+output "storage_container" {
+  value   = var.storage_container_name
+}
+
 '''
 
     return template 
@@ -1344,10 +1396,8 @@ locals {
 
 resource "azurerm_public_ip" "dc1-external" {
   name                     = "dc1-public-ip-${random_string.suffix.id}"
-  #name                    = "${var.prefix}-dc1-external"
   location                = var.location
   resource_group_name = "${var.resource_group_name}-${random_string.suffix.id}"
-  #resource_group_name     = var.resource_group_name
   allocation_method       = "Static"
   idle_timeout_in_minutes = 30
 
@@ -1371,7 +1421,6 @@ resource "azurerm_network_interface" "dc1-nic-int" {
 }
 
 locals {
-  #virtual_machine_name = "${var.prefix}-dc1"
   virtual_machine_name = "dc1"
   virtual_machine_fqdn = "${local.virtual_machine_name}.DEFAULT_DOMAIN"
   custom_data_params   = "Param($RemoteHostName = \\"${local.virtual_machine_fqdn}\\", $ComputerName = \\"${local.virtual_machine_name}\\")"
@@ -1383,12 +1432,14 @@ data "template_file" "ps_template" {
   template = file("${path.module}/files/bootstrap-dc.ps1")
 
   vars  = {
-
     winrm_username            = "WINRM_USERNAME" 
     winrm_password            = "WINRM_PASSWORD" 
     admin_username            = "ADMIN_USERNAME" 
     admin_password            = "ADMIN_PASSWORD" 
     ad_domain                 = "DEFAULT_DOMAIN" 
+    storage_acct              = "purplecloud${random_string.suffix.id}"
+    storage_container	      = var.storage_container_name
+    users_file                = var.azure_users_file
   }
 }
 
@@ -1402,19 +1453,14 @@ resource "local_file" "debug_bootstrap_script" {
 resource "azurerm_windows_virtual_machine" "domain-controller" {
   name                          = local.virtual_machine_name
   location                      = var.location
-  #resource_group_name           = var.resource_group_name
   resource_group_name = "${var.resource_group_name}-${random_string.suffix.id}"
-  #resource_group_name     = var.resource_group_name
   size                       = "Standard_A1"
   computer_name  = local.virtual_machine_name
-  #admin_username = var.admin_username
   admin_username = "ADMIN_USERNAME" 
-  #admin_password = var.admin_password
   admin_password = "ADMIN_PASSWORD" 
   custom_data    = local.custom_data
 
   network_interface_ids         = [
-    #azurerm_network_interface.primary.id,
     azurerm_network_interface.dc1-nic-int.id,
   ]
 
@@ -1467,6 +1513,15 @@ resource "local_file" "hosts_cfg" {
   )
   filename = "${path.module}/hosts-dc.cfg"
 
+}
+
+# Upload the ad_users.csv to the storage account
+resource "azurerm_storage_blob" "users_csv" {
+  name                   = "ad_users.csv"
+  storage_account_name   = azurerm_storage_account.storage-account.name
+  storage_container_name = azurerm_storage_container.storage-container.name
+  type                   = "Block"
+  source                 = "ad_users.csv"
 }
 
 '''
@@ -1702,7 +1757,7 @@ if args.dc_enable:
         if domain_admin.lower() != 'true':
             domain_admin = "False" 
         upn = usernm + "@" + default_domain
-        oupath = "OU=" + groups + "," + "DC=" + ou_split[0] + ",DC=" + ou_split[1]
+        oupath = "OU=" + groups + ";" + "DC=" + ou_split[0] + ";DC=" + ou_split[1]
         line = user['name'] + "," + upn + "," + password + "," + groups + "," + oupath + "," + domain_admin + '\n'
         ad_csv.write(line)
 
@@ -1728,25 +1783,14 @@ if args.dc_enable:
         ou_split = default_domain.split('.')
         domain_admin = "False"
         upn = usernm + "@" + default_domain
-        oupath = "OU=" + groups + "," + "DC=" + ou_split[0] + ",DC=" + ou_split[1]
+        oupath = "OU=" + groups + ";" + "DC=" + ou_split[0] + ";DC=" + ou_split[1]
         line = user + "," + upn + "," + password + "," + groups + "," + oupath + "," + domain_admin + '\n'
         ad_csv.write(line)
-
-        ad_user_string = ""
-
-        user_line = '  $ADUsers += (@{FirstName = "%s"; LastName = "%s"; usernm = "%s"; ou = "%s"; pcred = "%s"; groups = "%s"; domain_admin = "%s"})' % (first, last, usernm, ou, password, groups, domain_admin)
-
-        ad_user_string += user_line
-        new_ad_users += ad_user_string
-        new_ad_users += '\n\n'
-
-    # replace the ADUSERS_ARRAY with new_ad_users
-    new_data = data.replace("ADUSERS_ARRAY", new_ad_users)
 
     # new dc bootstrap script
     new_text_file = open("files/bootstrap-dc.ps1", "w")
 
-    n = new_text_file.write(new_data)
+    n = new_text_file.write(data)
 
     new_text_file.close() 
 

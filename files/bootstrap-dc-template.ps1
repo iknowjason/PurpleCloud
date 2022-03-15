@@ -21,7 +21,6 @@ winrm set winrm/config/service/Auth $WinRmBasic
 
 Write-Host "Open Firewall Ports"
 netsh advfirewall firewall add rule name="Windows Remote Management (HTTP-In)" dir=in action=allow protocol=TCP localport=5985
-
 netsh advfirewall firewall add rule name="Windows Remote Management (HTTPS-In)" dir=in action=allow protocol=TCP localport=5986
 
 # Beginning of script contents
@@ -38,7 +37,13 @@ lwrite("$mtime Starting script")
 $forest = "${ad_domain}"
 $forest_elements = $forest.split(".")
 $ParentOU = "DC=" + $forest_elements[0] + ",DC=" + $forest_elements[1]
+$storage_acct = "${storage_acct}"
+$storage_container = "${storage_container}"
+$users_file = "${users_file}"
 
+lwrite("$mtime storage account: $storage_acct")
+lwrite("$mtime storage container: $storage_container")
+lwrite("$mtime users file: $users_file")
 $mtime = Get-Date
 lwrite ("$mtime Starting to verify AD forest")
 $op = Get-WMIObject Win32_NTDomain | Select -ExpandProperty DnsForestName
@@ -52,8 +57,24 @@ if ( $op -Contains $forest ){
   $mtime = Get-Date
   lwrite ("$mtime Checking to add Domain Users to $forest AD Domain")
 
+  $dst = "C:\terraform\${users_file}"
+  if ( Test-Path $dst ) {
+    lwrite("$mtime File already exists: $dst")
+  } else {
+    lwrite ("$mtime Downloading ad users list from staging container")
+    $uri = "https://${storage_acct}.blob.core.windows.net/${storage_container}/${users_file}"
+    lwrite ("$mtime Uri: $uri")
+    Invoke-WebRequest -Uri $uri -OutFile $dst
+  } 
+
   # Active Directory users array/collection to be imported into AD 
-  ADUSERS_ARRAY 
+  $ADUsers = @()
+
+  # Parse the CSV
+  if ( Test-Path $dst ) {
+    lwrite ("$mtime Importing AD users from csv: $dst")
+    $ADUsers = Import-Csv -Path $dst 
+  }
 
   # Get the unique Active Directory Groups in the array
   $adgroups = @()
@@ -88,9 +109,9 @@ if ( $op -Contains $forest ){
     # check to add the AD Group
     $exists = Get-ADGroup -Filter {SamAccountName -eq $gr}
     If ($exists) {
-      lwrite("AD Group already exists: $gr")
+      lwrite("$mtime AD Group already exists: $gr")
     } else {
-      lwrite("Creating AD Group: $gr")
+      lwrite("$mtime Creating AD Group: $gr")
       New-ADGroup -Name $gr -SamAccountName $gr -GroupCategory Security -GroupScope Global -DisplayName $gr -Path $newOU -Description "Members of the $gr team"
     }
     
@@ -98,23 +119,28 @@ if ( $op -Contains $forest ){
 
   foreach ($User in $ADUsers) {
 
+      # Get name
+      $name = $User.name
+      lwrite("$mtime Adding AD User $name")
+
+      # Split the names
+      $names = $name.Split(" ")
+
+      # First Name
+      $first = $names[0]
+
+      # Last Name
+      $last = $names[1]
+
       # Set username
-      $Username = $User.usernm
+      $Username = $first.ToLower() + $last.ToLower() 
 
       # Set password
-      $Pass = $User.pcred
-
-      # Set first name 
-      $Firstname = $User.firstname
-
-      # Set last name 
-      $Lastname = $User.lastname
-
-      # Set display name 
-      $DisplayName = $Firstname + " " + $Lastname
+      $Pass = $User.password
+      lwrite("$mtime With password $Pass")
 
       # Set ou
-      $OU = $User.ou
+      $OU = $User.oupath
     
       # Get the Group
       $Group = $User.groups
@@ -123,22 +149,23 @@ if ( $op -Contains $forest ){
       $path = "OU=$Group,$ParentOU"
 
       # set sam name username
-      $Sam = $User.usernm
+      $Sam = $Username
 
       # set UPN
-      $UPN = $User.usernm + "@" + "${ad_domain}"
+      $UPN = $Username + "@" + "${ad_domain}"
 
       # Set password
       $Password = $Pass | ConvertTo-SecureString -AsPlainText -Force
 
       # Set domain_admin property
       $DA = $User.domain_admin 
+      lwrite ("$mtime DA Setting $DA")
 
       #Check to see if the user already exists in AD
       if (Get-ADUser -F {SamAccountName -eq $Username}) {
         Write-Warning "A user account with username $Username already exists in AD."
       } else {
-        New-AdUser -SamAccountName $Username -UserPrincipalName $UPN -Name $DisplayName -GivenName $Firstname -Surname $Lastname -Path $path -AccountPassword $Password -ChangePasswordAtLogon $False -Enabled $True
+        New-AdUser -SamAccountName $Username -UserPrincipalName $UPN -Name $name -GivenName $first -Surname $last -Path $path -AccountPassword $Password -ChangePasswordAtLogon $False -Enabled $True
         $mtime = Get-Date
         lwrite ("$mtime Username added: $Username to OUPath $path")
 
