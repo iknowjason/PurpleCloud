@@ -189,7 +189,9 @@ terraform plan run.plan
 terraform apply run.plan
 ```
 
-5.  Destroy the range resources
+## Destroying the Range
+
+Destroy the range resources when you are finished:
 ```
 terraform destroy
 ```
