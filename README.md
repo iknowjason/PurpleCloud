@@ -189,6 +189,11 @@ terraform plan run.plan
 terraform apply run.plan
 ```
 
+5.  Destroy the range resources
+```
+terraform destroy
+```
+
 # Network Diagram 
 
 ![](images/pce.png)
