@@ -21,6 +21,11 @@ whitelist_nsg = "*"
 # logfile configuration
 logging.basicConfig(format='%(asctime)s %(message)s', filename='ranges.log', level=logging.INFO)
 
+# The instance size for each system
+size_win10 = "Standard_A1"
+size_dc    = "Standard_A1"
+size_helk  = "Standard_DS3_v2"
+
 # dc_ip - The domain controller IP address
 dc_ip = ""
 
@@ -77,6 +82,9 @@ parser.add_argument('-p', '--password', dest='password_set')
 
 # Add argument for domain_join 
 parser.add_argument('-dj', '--domain_join', dest='domain_join', action='store_true')
+
+# Add argument for auto login 
+parser.add_argument('-al', '--auto_logon', dest='auto_logon', action='store_true')
 
 # parse arguments
 args = parser.parse_args()
@@ -378,6 +386,13 @@ if args.domain_join:
     print("[+] Domain Join is set to true")
     logging.info('[+] Domain Join is set to true')
     config_win10_endpoint['join_domain'] = "true"
+
+## Check if auto_logon argument is enabled
+## If it is, set the configuration above
+if args.auto_logon:
+    print("[+] Auto Logon is set to true")
+    logging.info('[+] Auto Logon is set to true')
+    config_win10_endpoint['auto_logon_domain_user'] = "true"
 
 ## Check the configuration above
 ## Can only join the domain or auto logon domain users if dc enable
@@ -740,7 +755,7 @@ resource "azurerm_windows_virtual_machine" "AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_
   name                          = "${local.WIN10VMNAME_VAR_NAME}-${random_string.suffix.id}"
   resource_group_name           = "${var.resource_group_name}-${random_string.suffix.id}"
   location                      = var.location
-  size                       = "Standard_A1"
+  size                       = "SIZE_WIN10"
   computer_name  = local.WIN10VMNAME_VAR_NAME
   admin_username = var.ADMIN_USERNAME_VAR_NAME
   admin_password = var.ADMIN_PASSWORD_VAR_NAME
@@ -812,7 +827,6 @@ resource "null_resource" "VCONFIG_UPLOAD" {
     }
   }
 depends_on = [azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME]
-#depends_on = [azurerm_linux_virtual_machine.vh_vm]
 }
 
 '''
@@ -1325,6 +1339,9 @@ if (win10_count > 0):
         # replace the user subnet name variable for this Windows 10 Pro 
         new_endpoint_template = new_endpoint_template.replace("SUBNET_NAME_VARIABLE", user_subnet_name + "-subnet" )
 
+        # replace the Windows 10 instance size 
+        new_endpoint_template = new_endpoint_template.replace("SIZE_WIN10", size_win10 )
+
         # replace install_agent if applicable
         if install_agent:
             new_endpoint_template = new_endpoint_template.replace("INSTALL_AGENT", "true")
@@ -1454,7 +1471,7 @@ resource "azurerm_windows_virtual_machine" "domain-controller" {
   name                          = local.virtual_machine_name
   location                      = var.location
   resource_group_name = "${var.resource_group_name}-${random_string.suffix.id}"
-  size                       = "Standard_A1"
+  size                       = "SIZE_DC"
   computer_name  = local.virtual_machine_name
   admin_username = "ADMIN_USERNAME" 
   admin_password = "ADMIN_PASSWORD" 
@@ -1587,7 +1604,7 @@ resource "azurerm_linux_virtual_machine" "vh_vm" {
   location                      = var.location
   resource_group_name = "${var.resource_group_name}-${random_string.suffix.id}"
   network_interface_ids         = [azurerm_network_interface.vh-nic-int.id]
-  size                       = "Standard_DS3_v2"
+  size                       = "SIZE_HELK"
   admin_username		= "helk"
   disable_password_authentication = true
 
@@ -1675,6 +1692,9 @@ if args.helk_enable:
 
     # replace to the correct helk_ip 
     helk_string = helk_string.replace("VH_PRIVATE_IP", helk_ip)
+  
+    # replace the Helk instance size 
+    helk_string = helk_string.replace("SIZE_HELK", size_helk)
 
     # Write the helk.tf
     print("[+] Creating the helk terraform file: ",thelk_file)
@@ -1711,6 +1731,9 @@ if args.dc_enable:
 
     # replace with local Admin Password 
     dc_string = dc_string.replace("ADMIN_PASSWORD", default_admin_password)
+  
+    # replace the DC instance size 
+    dc_string = dc_string.replace("SIZE_DC", size_dc)
 
     # Write the dc.tf
     print("[+] Creating the dc terraform file: ",tdc_file)
