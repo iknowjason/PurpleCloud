@@ -4,6 +4,38 @@ PurpleCloud has changed!  Introducing a Terraform generator using python.  Inste
 # Overview
 Identity lab supporting Azure AD and Active Directory enterprise deployment with SIEM in Azure.  Easily build your own Pentest / Red Team / Cyber Range in Azure cloud.  PurpleCloud was created as a platform for researching Azure Identity.  This repository contains two basic python scripts.  The first one is ```azure_ad.py``` and it is used to generate the terraform for a custom Azure AD range.  It uses a python library (faker) to generate as many Azure AD users as you desire, also creating AD Groups and AD Applications.  The second script is ```azure.py.```  This script is used to generate a more traditional infrastructure range.  It can create an Active Directory Domain Services range, generating as many AD users as you wish.  It also supports many other features such as Domain Join of Windows 10 systems, in addition to a SIEM instrumented with Sysmon.  These two scripts can be used for separate use cases independently and don't depend on each other.  Or you can use them together to build a Hybrid lab with AD Connect synchronizing identity from the on-premise AD into Azure AD.
 
+## Cost Analysis / Pricing Estimate
+As this tool spins up cloud resources, it will result in charges to your Azure subscription.  Efforts have been made to minimize the costs incurred and research the best options for most uses cases.  The best way to use this is reference the estimated cost below, check your Azure costs daily, and verify them against this information included below.  Be sure to tear down all resources when not using them.
+
+There are other small costs associated with Azure cloud resources, but the most expensive resources by far are the Azure Virtual Machines.  When it comes to Compute VM resources, Azure is more expensive than AWS.  If you are looking to run this range in AWS, check out the sister project, BlueCloud:  https://github.com/iknowjason/BlueCloud
+
+By default, both the Windows 10 Pro and Domain Controller are using a ```Standard_A1``` instance size, which is the lowest cost hardware that I could find which will provide sufficient performance.  The Hunting ELK SIEM system requires a scaled up Linux instance size of ```Standard_DS3_v2```.  This is because it uses HELK install option four for data science capabilities.  
+
+Reference the Azure "Windows Virtual Machine Pricing" for the most up to date pricing:
+https://azure.microsoft.com/en-us/pricing/details/virtual-machines/windows/
+
+Reference the Azure "Linux Virtual Machines Pricing" for the most up to date pricing on the Linux VM:
+https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/
+
+Here are the defaults I've researched for this range.  Each Windows and Linux VM should approximately accrue the following with range defaults:
+### Table:  Azure Accrued Costs per VM with Windows License Included
+| System   |  Default Size  | Default Region |  1 day cost |  7 day cost | 30 day cost |
+|----------|----------------|----------------|-------------|-------------|-------------|
+| Win10Pro |  Standard_A1   |   US Central   |     $2.21   |   $15.17    |   $64.85    |
+|    DC    |  Standard_A1   |   US Central   |     $2.21   |   $15.17    |   $64.85    |
+|  HELK    | Standard_DS3_v2|   US Central   |     $7.08   |   $49.27    |   $211.01   |
+
+### Changing Default VM Instance Size in azure.py
+To change the default hardware instance sizes for each VM, modify the following variables in azure.py:
+
+```
+# The instance size for each system
+size_win10 = "Standard_A1"
+size_dc    = "Standard_A1"
+size_helk  = "Standard_DS3_v2"
+```
+
+
 # Generating an Azure AD lab using azure_ad.py
 
 ## Usage Example:  Generate a basic Azure AD lab
