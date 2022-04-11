@@ -1618,7 +1618,7 @@ resource "azurerm_linux_virtual_machine" "vh_vm" {
   }
 
   os_disk {
-    name              = "${local.virtual_machine_name}-disk1"
+    name              = "${local.virtual_machine_name_helk}-disk1"
     caching           = "ReadWrite"
     storage_account_type = "Premium_LRS"
     disk_size_gb	= 100
