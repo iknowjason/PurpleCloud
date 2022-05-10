@@ -250,7 +250,6 @@ if not args.upn_suffix:
     print("[+] No suffix defined ~ writing default to terraform file")
     terraform_users_template = terraform_users_template.replace("REPLACE_CUSTOM_STRING","")
 else:
-    #print("[+] Placing new upn suffix into terraform file:  ",args.upn_suffix)
     terraform_users_template = terraform_users_template.replace("REPLACE_CUSTOM_STRING",args.upn_suffix)
 
 ### Write the beginning portion of terraform file
@@ -400,15 +399,12 @@ if groups > 0:
         print("[-] No extra groups to add the user into")
     else: 
         while index < ucount:
-            #print("Looping through user index: ",index)
             good = False
             while good is False:
                 random_entry = random.choice(groups_added)
                 if random_entry in all_users_groups:
                     pass
-                    #print("Skipping all users_groups") 
                 else:
-                    #print("[+] Assigning user index %d into group %s" % (index, random_entry))
                     good = True
                     ugm.append(random_entry) 
             index+=1

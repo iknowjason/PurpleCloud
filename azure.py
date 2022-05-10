@@ -117,8 +117,6 @@ def get_password():
     upper = string.ascii_uppercase
     num = string.digits
     all = lower + upper + num
-    #temp = random.sample(all, length)
-    #password = "".join(temp)
 
     # create blank password string / array
     password = []
@@ -164,6 +162,7 @@ if args.admin_set:
 
 # duplicate count for created AD users
 duplicate_count = 0
+
 # Extra AD users beyond the default in default_ad_users
 extra_users_list = [] 
 all_ad_users = []
@@ -623,12 +622,10 @@ for prefix in subnet_prefixes:
 ## Get helk_ip if helk is enabled
 if args.helk_enable:
     if siem_vlan_count == 1:
-        #print("[+] Analyzing ", siem_subnet_prefix)
         # This is the last octet of the helk_ip
         last_octet = "4"
         elements = siem_subnet_prefix.split('.')
         helk_ip = elements[0] + "." + elements[1] + "." + elements[2] + "." + last_octet
-        #print("[+] HELK IP ", helk_ip)
     else:
         print("[-] Helk is enabled without a subnet assignment")
         print("[-] Set a type of siem_vlan to one of the subnets")
@@ -647,12 +644,10 @@ if args.helk_enable:
 ## Get dc_ip if dc is enabled
 if args.dc_enable:
     if ad_vlan_count == 1:
-        #print("[+] Analyzing ", siem_subnet_prefix)
         # This is the last octet of the helk_ip
         last_octet = "4"
         elements = ad_subnet_prefix.split('.')
         dc_ip = elements[0] + "." + elements[1] + "." + elements[2] + "." + last_octet
-        #print("[+] HELK IP ", helk_ip)
     else:
         print("[-] DC is enabled without a subnet assignment")
         print("[-] Set a type of ad_vlan to one of the subnets")
@@ -718,7 +713,6 @@ resource "azurerm_network_interface" "AZURERM_NETWORK_INTERFACE_VAR_NAME" {
 
 locals {
   WIN10VMNAME_VAR_NAME = var.ENDPOINT_HOSTNAME_VAR_NAME 
-  #WIN10VMFQDN_VAR_NAME = "${local.WIN10VMNAME_VAR_NAME}.rtcfingroup.local"
   WIN10VMFQDN_VAR_NAME = "${local.WIN10VMNAME_VAR_NAME}.DEFAULT_DOMAIN"
   WIN10CUSTOMDATAPARAMS_VAR_NAME   = "Param($RemoteHostName = \\"${local.WIN10VMFQDN_VAR_NAME}\\", $ComputerName = \\"${local.WIN10VMNAME_VAR_NAME}\\")"
   WIN10CUSTOMDATACONTENT_VAR_NAME  = base64encode(join(" ", [local.WIN10CUSTOMDATAPARAMS_VAR_NAME, data.template_file.PS_TEMPLATE_VAR_NAME.rendered ]))
@@ -1209,11 +1203,9 @@ if (win10_count > 0):
     hostname_base = config_win10_endpoint['hostname_base']
     print("    [+] Base Hostname:", hostname_base) 
     logging.info('[+] Base Hostname: %s', hostname_base)
-    #admin_username = config_win10_endpoint['admin_username']
     admin_username = default_admin_username 
     print("    [+] Administrator Username:",admin_username) 
     logging.info('[+] Administrator Username: %s', admin_username)
-    #admin_password = config_win10_endpoint['admin_password']
     admin_password = default_admin_password 
     print("    [+] Administrator Password:",admin_password) 
     logging.info('[+] Administrator Password: %s', admin_password)
@@ -1494,7 +1486,6 @@ resource "azurerm_windows_virtual_machine" "domain-controller" {
   }
 
   additional_unattend_content {
-      #content      = "<AutoLogon><Password><Value>${var.admin_password}</Value></Password><Enabled>true</Enabled><LogonCount>1</LogonCount><Username>${var.admin_username}</Username></AutoLogon>"
       content      = "<AutoLogon><Password><Value>ADMIN_PASSWORD</Value></Password><Enabled>true</Enabled><LogonCount>1</LogonCount><Username>ADMIN_USERNAME</Username></AutoLogon>"
       setting = "AutoLogon"
   }
