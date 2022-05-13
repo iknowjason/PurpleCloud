@@ -18,6 +18,15 @@ parser.add_argument('-a', '--apps', dest='app_count')
 # Add argument for azure groups enabled 
 parser.add_argument('-g', '--groups', dest='group_count')
 
+# Add argument for enabling application administrator assignment 
+parser.add_argument('-aa', '--app_admin', dest='aa_enable', action='store_true')
+
+# Add argument for enabling privileged role administrator assignment
+parser.add_argument('-pra', '--pra_admin', dest='pra_enable', action='store_true')
+
+# Add argument for enabling global administrator assignment
+parser.add_argument('-ga', '--global_admin', dest='ga_enable', action='store_true')
+
 # parse arguments
 args = parser.parse_args()
 
@@ -70,6 +79,47 @@ app_count = len(azure_ad_applications)
 
 # Number of groups by counting number of keys in dict
 group_count = len(azure_ad_groups)
+
+# Check if either pra_admin or global_admin are enabled
+# if they are, load a new app_list with discrete apps
+app_list = []
+if args.pra_enable or args.ga_enable:
+    count = int(args.app_count)
+    if count > app_count:
+        count = app_count
+    for x in range(count):
+        for key in azure_ad_applications[x]:
+            app_list.append(key)
+
+# If both pra and ga are enabled, make sure unique apps assigned
+pra_app = ""
+ga_app = ""
+if args.pra_enable and args.ga_enable:
+    if int(args.app_count) < 2:
+    # Make sure enough apps enabled
+        print("[-] Must enable at least two apps (--apps 2) for enabling PRA and GA apps")
+        exit(1)
+
+    # Get two random selects from app list
+    selections = random.sample(app_list, 2)
+
+    # assign the pra_app
+    pra_app = selections[0]
+
+    # assign the ga_app
+    ga_app = selections[1]
+
+else:
+    # either pra or ga is enabled - not both
+
+    if args.pra_enable:
+        # assign pra_app
+        tmp_pra_app = random.sample(app_list, 1)
+        pra_app = tmp_pra_app[0]
+    else:
+        # assign ga_app
+        tmp_ga_app = random.sample(app_list, 1)
+        ga_app = tmp_ga_app[0] 
 
 # A list of users 
 users_list = []
@@ -246,6 +296,19 @@ resource "azuread_user" "LINE1" {
 }
 '''
 
+application_admin_template = '''
+# Activate the Application administrator directory role
+resource "azuread_directory_role" "application_admin" {
+  display_name = "Application administrator"
+}
+
+# Assign Application administrator to a random user
+resource "azuread_directory_role_member" "assign_application_admin" {
+  role_object_id   = azuread_directory_role.application_admin.object_id
+  member_object_id = azuread_user.userAPP_ADMIN_USER_NUM.object_id
+}
+'''
+
 if not args.upn_suffix:
     print("[+] No suffix defined ~ writing default to terraform file")
     terraform_users_template = terraform_users_template.replace("REPLACE_CUSTOM_STRING","")
@@ -286,6 +349,21 @@ for users in users_list:
     # Write the user_template_new to file
     n = azure_ad_text_file.write(user_template_new)
 
+# Add the Application administrator role if enabled
+if args.aa_enable:
+    # Get the application admin template
+    new_app_admin_template = application_admin_template
+
+    # Select random user number
+    random_int = random.randint(1, len(users_list))
+    user_string = str(random_int)
+
+    # replace the user number with random
+    new_app_admin_template = new_app_admin_template.replace("APP_ADMIN_USER_NUM", user_string)
+
+    # write it to users.tf string
+    n = azure_ad_text_file.write(new_app_admin_template)
+
 # Close the file
 azure_ad_text_file.close()
 
@@ -310,6 +388,33 @@ resource "azuread_service_principal" "LINE3" {
 }
 '''
     return buffer
+
+pra_template = '''
+# Activate the Privileged role administrator directory role
+resource "azuread_directory_role" "pra" {
+  display_name = "Privileged role administrator"
+}
+
+# Assign PRA to a random SP
+resource "azuread_directory_role_member" "assign_pra" {
+  role_object_id   = azuread_directory_role.pra.object_id
+  member_object_id = azuread_service_principal.SP_APPLICATION_NAME.object_id
+}
+'''
+
+ga_template = '''
+# Activate the global administrator directory role
+resource "azuread_directory_role" "ga" {
+  display_name = "Global administrator"
+}
+
+# Assign GA to a random SP
+resource "azuread_directory_role_member" "assign_ga" {
+  role_object_id   = azuread_directory_role.ga.object_id
+  #member_object_id = azuread_service_principal.SP_Finance_Application.object_id
+  member_object_id = azuread_service_principal.SP_APPLICATION_NAME.object_id
+}
+'''
 
 def fetch_group_template():
     buffer = '''
@@ -371,6 +476,19 @@ if apps > 0:
                 # write the new sp str
                 n = azure_ad_apps_file.write(new_sp_str)
         index+=1
+
+    # Check if pra is enabled
+    if args.pra_enable:
+        pra_assignment_string = pra_template.replace("APPLICATION_NAME", pra_app) 
+        n = azure_ad_apps_file.write(pra_assignment_string)
+        print("    [+] Assigning the Privileged Role Administrator to", pra_app)
+
+    # Check if ga is enabled
+    if args.ga_enable:
+        ga_assignment_string = ga_template.replace("APPLICATION_NAME", ga_app) 
+        n = azure_ad_apps_file.write(ga_assignment_string)
+        print("    [+] Assigning the Global Administrator role to", ga_app)
+
 
     # Close the azure ad applications terraform file
     azure_ad_apps_file.close()
