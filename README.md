@@ -1,4 +1,4 @@
-# 5/13/22:  Added Service Principal Abuse Attack Primitives
+# 5/13/22:  Added Service Principal abuse attack primitives optional support
 Added support to dynamically add some Service Princial abuse attack primitives.  This includes dynamically adding an Application Administrator to a random Azure AD user (```-aa```), a Privileged role admin to a random application SP (```-pra```), as well as a Global admin role target to a random application SP (```-ga```).
 
 # 2/14/22:  Valentine's Day Updates:  Python terraform generator
