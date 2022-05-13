@@ -1,3 +1,6 @@
+# Update to Service Principal Abuse Attack Primitives:  5/13/22
+Added support to dynamically add some Service Princial abuse attack primitives.  This includes dynamically adding an Application Administrator to a random Azure AD user (-aa), a Privileged role admin to a random application SP (-pra), as well as a Global admin role target to a random application SP (-ga).
+
 # Valentine's Day Updates:  2/14/22 
 PurpleCloud has changed!  Introducing a Terraform generator using python.  Instead of offering terraform templates that have to be manually edited, the starting point is a Python terraform generator.  The python scripts will create your own custom terraform files based on user input.  The terraform template files have been moved to archive.
 
