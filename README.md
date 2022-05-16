@@ -1,4 +1,7 @@
-# Valentine's Day Updates:  2/14/22 
+# 5/13/22:  Added Service Principal abuse attack primitives optional support
+Added support to dynamically add some Service Principal abuse attack primitives.  This includes dynamically adding an Application Administrator to a random Azure AD user (```-aa```), a Privileged role admin to a random application SP (```-pra```), as well as a Global admin role target to a random application SP (```-ga```).  See the ```azure_ad.py``` usage examples below for more information.
+
+# 2/14/22:  Valentine's Day Updates:  Python terraform generator
 PurpleCloud has changed!  Introducing a Terraform generator using python.  Instead of offering terraform templates that have to be manually edited, the starting point is a Python terraform generator.  The python scripts will create your own custom terraform files based on user input.  The terraform template files have been moved to archive.
 
 # Overview
@@ -65,6 +68,14 @@ Same as above, except generate 500 users in Azure AD.  Create 3 Azure applicatio
 
 - **apps.tf:**  A terraform file with the Azure applications.
 - **groups.tf:**  A terraform file with the Azure groups.
+
+## Usage Example:  Generate a lab for Service Principal abuse attack primitives
+
+```$ python3 azure_ad.py -c 25 --upn rtcfingroup.com --apps 7 -aa -ga -pra```
+
+**Description:** 
+This will generate an Azure AD range with a UPN suffix of ```rtcfingroup.com``` with 25 users. It will add some service principal abuse attack primitives to some random resources.  First, the ```--apps 7``` will add 7 Azure AD applications (App Registrations) with associated Service Principals (Enterprise Applications).  The ```-aa``` flag will assign an Application Administrator role randomly to one of the 25 Azure AD users.  The ```-ga``` flag will assign the Global Administrator role randomly to one of the 7 application SPs.  Finally, the ```-pra``` flag will assign the Privileged role administrator role randomly to one of the other 7 application SPs.
+
 
 
 # Generating an Azure infrastructure lab using azure.py 
