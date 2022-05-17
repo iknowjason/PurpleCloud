@@ -91,7 +91,7 @@ if ( $targetappRegistration.count -ge 1 ) {
   Add-Content -Path output.txt -Value "Target AppId: $appid"
   $tenantDetails = Get-AzureADTenantDetail
   $tenantid = $tenantDetails.ObjectId
-  Write-Host("This is the TenantId to target in the next step:  $tenantid") -Append
+  Write-Host("This is the TenantId to target in the next step:  $tenantid")
   Add-Content -Path output.txt -Value "Target TenantId: $tenantid"
 }
 
