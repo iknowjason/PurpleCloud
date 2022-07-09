@@ -116,10 +116,12 @@ else:
         # assign pra_app
         tmp_pra_app = random.sample(app_list, 1)
         pra_app = tmp_pra_app[0]
-    else:
+    elif args.ga_enable:
         # assign ga_app
         tmp_ga_app = random.sample(app_list, 1)
         ga_app = tmp_ga_app[0] 
+    else:
+        pass
 
 # A list of users 
 users_list = []
