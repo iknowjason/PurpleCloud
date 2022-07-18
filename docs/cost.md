@@ -24,8 +24,8 @@ Here are the defaults I've researched for this range.  Each Windows and Linux VM
 |    DC    |  Standard_A1   |   US Central   |     $2.21   |   $15.17    |   $64.85    |
 |  HELK    | Standard_DS3_v2|   US Central   |     $7.08   |   $49.27    |   $211.01   |
 
-### Changing Default VM Instance Size in azure.py
-To change the default hardware instance sizes for each VM, modify the following variables in azure.py:
+### Changing Default VM Instance Size in ad.py
+To change the default hardware instance sizes for each VM, modify the following variables in ad.py:
 
 ```
 # The instance size for each system
