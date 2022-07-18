@@ -1,0 +1,964 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.3">
+    
+    
+      
+        <title>Usage - Hybrid + Identity Cyber Range</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.adb8469c.css">
+      
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7C&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+    
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#usage" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href=".." title="Hybrid + Identity Cyber Range" aria-label="Hybrid + Identity Cyber Range" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Hybrid + Identity Cyber Range
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Usage
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/iknowjason/PurpleCloud/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    iknowjason/PurpleCloud
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href=".." title="Hybrid + Identity Cyber Range" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Hybrid + Identity Cyber Range
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/iknowjason/PurpleCloud/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    iknowjason/PurpleCloud
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../overview/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../install/" title="Installation" class="md-nav__link">
+      Installation
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Usage
+      </label>
+    
+    <a href="./" title="Usage" class="md-nav__link md-nav__link--active">
+      Usage
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#azure-active-directory-lab" class="md-nav__link">
+    Azure Active Directory lab
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-basic-azure-ad-lab" class="md-nav__link">
+    Generate a basic Azure AD lab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-an-azure-ad-lab-with-1000-users" class="md-nav__link">
+    Generate an Azure AD lab with 1,000 users
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-lab-with-azure-applications-and-groups" class="md-nav__link">
+    Generate a lab with Azure applications and groups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-lab-for-service-principal-abuse-attack-primitives" class="md-nav__link">
+    Generate a lab for Service Principal abuse attack primitives
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-vms-active-directory-and-siem" class="md-nav__link">
+    Azure VMs, Active Directory, and SIEM
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-single-windows-10-endpoint-with-sysmon-installed" class="md-nav__link">
+    Generate a single Windows 10 Endpoint with Sysmon installed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-a-domain-controller-with-forest-and-users-windows-domain-join" class="md-nav__link">
+    Build a Domain Controller with Forest and Users + Windows Domain Join
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-a-hunting-elk-server-and-automatically-export-sysmon-winlog-beat-logs" class="md-nav__link">
+    Build a Hunting ELK server and automatically export sysmon winlog beat logs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    Advanced Usage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#edit-script-options-in-adpy" class="md-nav__link">
+    Edit script options in ad.py
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-sentinel-lab" class="md-nav__link">
+    Azure Sentinel lab
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-storage-lab" class="md-nav__link">
+    Azure Storage lab
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resources-created" class="md-nav__link">
+    Resources Created
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-managed-identity-lab" class="md-nav__link">
+    Azure Managed Identity lab
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resources-created_1" class="md-nav__link">
+    Resources Created
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options_1" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-variables-in-script" class="md-nav__link">
+    Other Variables in Script
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../cost/" title="Cost" class="md-nav__link">
+      Cost
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../infrastructure/" title="Creds and Access" class="md-nav__link">
+      Creds and Access
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../references/" title="References" class="md-nav__link">
+      References
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../future/" title="Roadmap Ideas" class="md-nav__link">
+      Roadmap Ideas
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../credits/" title="Credits" class="md-nav__link">
+      Credits
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#azure-active-directory-lab" class="md-nav__link">
+    Azure Active Directory lab
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-basic-azure-ad-lab" class="md-nav__link">
+    Generate a basic Azure AD lab
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-an-azure-ad-lab-with-1000-users" class="md-nav__link">
+    Generate an Azure AD lab with 1,000 users
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-lab-with-azure-applications-and-groups" class="md-nav__link">
+    Generate a lab with Azure applications and groups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-lab-for-service-principal-abuse-attack-primitives" class="md-nav__link">
+    Generate a lab for Service Principal abuse attack primitives
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-vms-active-directory-and-siem" class="md-nav__link">
+    Azure VMs, Active Directory, and SIEM
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generate-a-single-windows-10-endpoint-with-sysmon-installed" class="md-nav__link">
+    Generate a single Windows 10 Endpoint with Sysmon installed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-a-domain-controller-with-forest-and-users-windows-domain-join" class="md-nav__link">
+    Build a Domain Controller with Forest and Users + Windows Domain Join
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-a-hunting-elk-server-and-automatically-export-sysmon-winlog-beat-logs" class="md-nav__link">
+    Build a Hunting ELK server and automatically export sysmon winlog beat logs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    Advanced Usage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#edit-script-options-in-adpy" class="md-nav__link">
+    Edit script options in ad.py
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-sentinel-lab" class="md-nav__link">
+    Azure Sentinel lab
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-storage-lab" class="md-nav__link">
+    Azure Storage lab
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resources-created" class="md-nav__link">
+    Resources Created
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#azure-managed-identity-lab" class="md-nav__link">
+    Azure Managed Identity lab
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resources-created_1" class="md-nav__link">
+    Resources Created
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options_1" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-variables-in-script" class="md-nav__link">
+    Other Variables in Script
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/iknowjason/PurpleCloud/edit/master/docs/usage.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="usage">Usage</h1>
+<h2 id="azure-active-directory-lab">Azure Active Directory lab</h2>
+<p>Generating an Azure AD lab using <code>azure_ad.py</code>.</p>
+<p>This generates terraform formatted HCL files for <code>users.tf</code>.  If applications and groups are created, the <code>apps.tf</code> and <code>groups.tf</code> will also be created.</p>
+<h3 id="generate-a-basic-azure-ad-lab">Generate a basic Azure AD lab</h3>
+<p>Usage Example:  Generate a basic Azure AD lab</p>
+<p><code>$ python3 azure_ad.py --upn rtcfingroup.com</code></p>
+<p><strong>Description:</strong> 
+This will generate an Azure AD range with a UPN suffix of <code>rtcfingroup.com</code> with 100 users. It will output three files.   The Azure AD password for all users will be automatically generated and output after terraform apply.</p>
+<ul>
+<li><strong>azure_users.csv:</strong> A csv including the Azure AD user's full name, username, and email address.</li>
+<li><strong>azure_usernames.txt:</strong>  A file including just the usernames.</li>
+<li><strong>azure_emails.txt:</strong> A file including just the email addresses.</li>
+<li><strong>users.tf:</strong> Terraform file that will build the users.</li>
+</ul>
+<h3 id="generate-an-azure-ad-lab-with-1000-users">Generate an Azure AD lab with 1,000 users</h3>
+<p>Usage Example:  Generate an Azure AD lab with 1,000 users </p>
+<p><code>$ python3 azure_ad.py --upn rtcfingroup.com --count 1000</code></p>
+<p><strong>Description:</strong> 
+Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  The password applied to all users will be displayed at the end of <code>terraform apply</code>.  To display the passwor again, run <code>terraform output</code>.  </p>
+<h3 id="generate-a-lab-with-azure-applications-and-groups">Generate a lab with Azure applications and groups</h3>
+<p>Usage Example:  Generate a lab with Azure applications and groups</p>
+<p><code>$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5</code></p>
+<p><strong>Description:</strong>
+Same as above, except generate 500 users in Azure AD.  Create 3 Azure applications and 5 groups.  Automatically put the 500 users into separate groups. </p>
+<ul>
+<li><strong>apps.tf:</strong>  A terraform file with the Azure applications.</li>
+<li><strong>groups.tf:</strong>  A terraform file with the Azure groups.</li>
+</ul>
+<h3 id="generate-a-lab-for-service-principal-abuse-attack-primitives">Generate a lab for Service Principal abuse attack primitives</h3>
+<p>Usage Example:  Generate a lab for Service Principal abuse attack primitives</p>
+<p><code>$ python3 azure_ad.py -c 25 --upn rtcfingroup.com --apps 7 -aa -ga -pra</code></p>
+<p><strong>Description:</strong> 
+This will generate an Azure AD range with a UPN suffix of <code>rtcfingroup.com</code> with 25 users. It will add some service principal abuse attack primitives to some random resources.  First, the <code>--apps 7</code> will add 7 Azure AD applications (App Registrations) with associated Service Principals (Enterprise Applications).  The <code>-aa</code> flag will assign an Application Administrator role randomly to one of the 25 Azure AD users.  The <code>-ga</code> flag will assign the Global Administrator role randomly to one of the 7 application SPs.  Finally, the <code>-pra</code> flag will assign the Privileged role administrator role randomly to one of the other 7 application SPs.</p>
+<h2 id="azure-vms-active-directory-and-siem">Azure VMs, Active Directory, and SIEM</h2>
+<p>Generating an Azure infrastructure lab using ad.py </p>
+<h3 id="generate-a-single-windows-10-endpoint-with-sysmon-installed">Generate a single Windows 10 Endpoint with Sysmon installed</h3>
+<p>Usage Example:  Generate a single Windows 10 Endpoint with Sysmon installed</p>
+<p><code>$ python3 ad.py --endpoint 1</code></p>
+<p><strong>Description:</strong>
+This will generate a single Windows 10 Endpoint and generate a random, unique password with a default local Administrator account named 'RTCAdmin'.  This generates four terraform files:
+- <strong>main.tf:</strong> Terraform file with resource group and location.
+- <strong>network.tf:</strong> Terraform file with VNet and subnets. 
+- <strong>nsg.tf:</strong> Terraform file with Network Security Groups.
+- <strong>win10-1.tf:</strong> Terraform file with Windows 10 Pro configuration.</p>
+<h3 id="build-a-domain-controller-with-forest-and-users-windows-domain-join">Build a Domain Controller with Forest and Users + Windows Domain Join</h3>
+<p><code>$ python3 ad.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join</code></p>
+<p><strong>Description:</strong>
+This will create a Domain Controller in dc.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the <code>domain_join</code> parameter enables it for all Windows 10 Pro created.  This will also create two Windows 10 Pro terraform files (win10-1.tf, win10-2.tf) as well as a terraform file for the Domain Controller (dc.tf).</p>
+<h3 id="build-a-hunting-elk-server-and-automatically-export-sysmon-winlog-beat-logs">Build a Hunting ELK server and automatically export sysmon winlog beat logs</h3>
+<p><code>$ python3 ad.py --helk --endpoint 1</code></p>
+<p><strong>Description:</strong>
+This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.  This will create a terraform file for the HELK server (helk.tf)</p>
+<h3 id="advanced-usage">Advanced Usage</h3>
+<p><code>--resource_group &lt;rg_name&gt;</code>:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)</p>
+<p><code>--location &lt;location&gt;</code>:  The Azure location to use (Default:  centralus)</p>
+<p><code>--endpoints &lt;num_of_endpoints&gt;</code>:  Number of Windows 10 Professional systems to build (Default: 0)</p>
+<p><code>--helk</code>:  Create a hunting ELK server (with Velociraptor installed) (Default:  Disabled)</p>
+<p><code>--domain_controller</code>:  Create a Domain Controller and install AD DS with Forest (Default:  Disabled)</p>
+<p><code>--ad_domain &lt;domain&gt;</code>:  The name of the AD Domain to provision (Default:  rtc.local)</p>
+<p><code>--ad_users &lt;num_of_domain_users&gt;</code>:  The number of AD users to automatically build (Default:  Disabled)</p>
+<p><code>--admin &lt;admin_username&gt;</code>:  The Local Administrator account (Default:  RTCAdmin)</p>
+<p><code>--password &lt;password&gt;</code>:  The local Administrator password and default AD user password (Default:  auto generate a strong password) </p>
+<p><code>--domain_join</code>:  Join the Windows 10 Pro systems to the AD Domain (Default:  false)</p>
+<p><code>--auto_logon</code>:  Automatically logon the domain user with their credentials upon system start (Default:  false)</p>
+<h3 id="edit-script-options-in-adpy">Edit script options in ad.py</h3>
+<p><strong>Windows 10 Pro configuration:</strong>   The Windows 10 Pro default configuration can be adjusted to meet your needs.</p>
+<p>These are located in the <code>config_win10_endpoints</code> dictionary:</p>
+<p><code>hostname_base:</code>  The base Windows 10 hostname (Default: win10)</p>
+<p><code>join_domain:</code>  Whether to join the Windows 10 Pro to the AD Domain.  This is disabled by default.  So if you add a DC and want to join the Windows 10 Pro systems to the AD Domain, you can set this to true.  Or you can use the command line parameter <code>--domain-join</code>.</p>
+<p><code>auto_logon_domain_users:</code>  Configure the endpoint (via registry) to automatically log in the domain user.  This will randomly select an AD user.  Disabled by default and requires domain join and DC.</p>
+<p><code>install_sysmon:</code>  Automatically install Sysmon with Swift on Security configuration (Default:  Enabled)</p>
+<p><code>install_art:</code>  Install Atomic Red Team (art).  (Default:  Enabled) </p>
+<pre><code>config_win10_endpoint = {
+    &quot;hostname_base&quot;:&quot;win10&quot;,
+    &quot;join_domain&quot;:&quot;false&quot;,
+    &quot;auto_logon_domain_user&quot;:&quot;false&quot;,
+    &quot;install_sysmon&quot;:&quot;true&quot;,
+    &quot;install_art&quot;:&quot;true&quot;,
+}
+</code></pre>
+<p><strong>Default AD Users:</strong>   There is a python dictionary specifying the default AD users.  This can be changed to suit your needs.  These are the first five users automaticaly created.  After the first five, users are randomly generated to meet the <code>--ad_users &lt;number&gt;</code> amount.</p>
+<p>Here is the default_ad_users list along with the first user, that can be searched for in the file:</p>
+<pre><code>default_ad_users = [
+    {
+        &quot;name&quot;:&quot;Lars Borgerson&quot;,
+        &quot;ou&quot;: &quot;CN=users,DC=rtc,DC=local&quot;,
+        &quot;password&quot;: get_password(),
+        &quot;domain_admin&quot;:&quot;&quot;,
+        &quot;groups&quot;:&quot;IT&quot;
+    },
+</code></pre>
+<p><strong>Network Subnets configuration:</strong>   The configuration for the subnets can be adjusted in the python list named <code>config_subnets</code>.  Some changes include changing the default subnet names or adding/removing subnets.  By default there are four subnets created.  </p>
+<p><strong>Other Details:</strong>   </p>
+<ul>
+<li>
+<p><strong>Logging Passwords:</strong> By default, all passwords are randomly generated.  So if you are not aware of this, it might be easy to lose track of a password.  For this reason we have added a logging feature that captures all passwords created.  The <code>ad.py</code> script will automatically log all output to a logfile called <code>ranges.log</code>.  This is for the specific purpose of being able to track the ranges created and the passwords that are auto-generated for AD users and local Administrator accounts. </p>
+</li>
+<li>
+<p><strong>Azure Network Security Groups:</strong>  By default, the ad.py script will try to auto-detect your public IP address using a request to http://ifconfig.me.  Your public IP address will be used to white list the Azure NSG source prefix setting.  You can over-ride this behavior by changing the <code>override_whitelist</code> variable to False.  By default it will then use the value set in <code>whitelist_nsg</code>.  This is set to wide open ("*") and you can change this to a static value.</p>
+</li>
+</ul>
+<h2 id="azure-sentinel-lab">Azure Sentinel lab</h2>
+<p><code>$ python3 sentinel.py -n &lt;NAME&gt; -l &lt;LOCATION&gt; -odc -adc</code></p>
+<p>This generates a terraform format HCL file for <code>sentinel.tf</code> and <code>providers.tf</code>.</p>
+<p>Specify the resource group and name of resources with <code>NAME</code> and the Azure location wit <code>LOCATION</code>.</p>
+<p><code>-n &lt;NAME&gt;</code>:  Specify a resource group name and name for other resources (Default: purplecloud-sentinel)</p>
+<p><code>-l &lt;LOCATION&gt;</code>:  Specify a different location (Default: centralus)</p>
+<p><code>-odc</code>:  Optionally enables the Office 365 data connector for Sentinel.</p>
+<p><code>-adc</code>:  Optionally enables the Azure AD data connector for Sentinel.</p>
+<h2 id="azure-storage-lab">Azure Storage lab</h2>
+<p><code>$ python3 storage.py -n &lt;NAME&gt; -l &lt;LOCATION&gt;</code></p>
+<p>Generates a terraform format HCL file for <code>storage.tf</code> and <code>providers.tf</code>.</p>
+<p>This is a great generator for quickly creating a bunch of vulnerable cloud storage resources or studying the different security permission levels.  It also builds an Azure Key Vault resources.</p>
+<h3 id="resources-created">Resources Created</h3>
+<ul>
+<li>Azure Storage Account (1)</li>
+<li>Azure Containers (3)
+The containers have three different access levels (Blob, Container, Private)</li>
+<li>Azure Blobs (3).  All three are uploaded to all three containers.</li>
+<li>Azure Shares (2)</li>
+<li>Two files are uploaded to the two shares</li>
+<li>Azure Key Vault</li>
+<li>Secrets (3)</li>
+<li>Private Keys (1)</li>
+<li>Certificates (1) </li>
+</ul>
+<h3 id="options">Options</h3>
+<p>Specify the resource group and name of resources with <code>NAME</code> and the Azure location wit <code>LOCATION</code>.</p>
+<p><code>-n &lt;NAME&gt;</code>:  Specify a resource group name and name for other resources (Default: purplecloud-sentinel)</p>
+<p><code>-l &lt;LOCATION&gt;</code>:  Specify a different location (Default: centralus)</p>
+<h2 id="azure-managed-identity-lab">Azure Managed Identity lab</h2>
+<p><code>$ python3 managed_identity.py -u &lt;UPN_SUFFIX&gt; -n &lt;NAME&gt; -l &lt;LOCATION&gt; -a &lt;ADMIN_USERNAME&gt; -p &lt;PASSWORD&gt; -sa -ua &lt;USER_ASSGNED_IDENTITY&gt;</code></p>
+<p>Create a security lab for practicing managed identity attack and defense.  Generates a terraform format HCL file for <code>managed_identity.tf</code>,  <code>providers.tf</code>, and <code>mi_user.tf</code>.</p>
+<h3 id="resources-created_1">Resources Created</h3>
+<ul>
+<li>One Azure AD User with a configurable Role Assignment (Default:  Virtual Machine Contributor)</li>
+<li>One Azure VM with a Managed Identity configured (Default:  User Assigned Identity with Reader on the Subscription)</li>
+<li>Azure Storage Account (1)</li>
+<li>Azure Containers (3)
+The containers have three different access levels (Blob, Container, Private)</li>
+<li>Azure Blobs (3).  All three are uploaded to all three containers.</li>
+<li>Azure Shares (2)</li>
+<li>Two files are uploaded to the two shares</li>
+<li>Azure Key Vault</li>
+<li>Secrets (3)</li>
+<li>Private Keys (1)</li>
+<li>Certificates (1)</li>
+</ul>
+<h3 id="options_1">Options</h3>
+<p><code>-u &lt;UPN_SUFFIX&gt;</code>:  Mandatory.  Specify the correct UPN Suffix for your tenant.  Needed for creating the Azure AD user. </p>
+<p><code>-a &lt;ADMIN_USERNAME&gt;</code>:  Specify the local Administrator Username for the Windows 10 Pro Azure VM. (Default:  MIAdmin)</p>
+<p><code>-p &lt;PASSWORD&gt;</code>: Specify the password for the local Administrator account on the VM as well as the Azure AD user (Default:  Auto-generated)</p>
+<p><code>-sa</code>: Enables the System Assigned Identity for the Azure VM (Note:  both user assigned and system assigned can be enabled)  </p>
+<p><code>-ua reader|contributor|owner</code>: Enables the User Assigned Identity for the Azure VM with possible values of reader, contributor, owner (Default:  reader) </p>
+<p><code>-n &lt;NAME&gt;</code>:  Specify a resource group name and name for other resources</p>
+<p><code>-l &lt;LOCATION&gt;</code>:  Specify a different location (Default: centralus)</p>
+<h3 id="other-variables-in-script">Other Variables in Script</h3>
+<pre><code># This is the src_ip for white listing Azure NSGs
+# allow every public IP address by default
+variable &quot;src_ip&quot; {
+  default = &quot;0.0.0.0/0&quot;
+}
+</code></pre>
+<p>The role of the managed identity by default is scoped to the subscription</p>
+<pre><code># Assign the reader role on the Key vault to the Managed Identity
+resource &quot;azurerm_role_assignment&quot; &quot;uai&quot; {
+  #Scope to the key vault in line below
+  #scope                = azurerm_key_vault.example.id
+  #Scope to the subscription in line below
+  scope                = data.azurerm_subscription.mi.id
+  role_definition_name = &quot;ROLE_DEFINITION_NAME&quot;
+  principal_id         = azurerm_user_assigned_identity.uai.principal_id
+}
+</code></pre>
+<p>The role of the Azure AD user</p>
+<pre><code># The role scoped to subscription for AAD user
+# uncomment as needed
+variable &quot;user_role&quot; {
+  default = &quot;Virtual Machine Contributor&quot;
+  #default = &quot;Contributor&quot;
+  #default = &quot;Reader&quot;
+  #default = &quot;Owner&quot;
+}
+</code></pre>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../install/" title="Installation" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Installation
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../cost/" title="Cost" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Cost
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs</a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+    
+  </body>
+</html>
