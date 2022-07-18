@@ -1,3 +1,10 @@
+# Create an Active Directory environment with Azure VMs!
+# Optionally, also create a Hunting ELK (HELK) + Velociraptor system
+# Windows endpoints are configured to ship logs to HELK and register a Velociraptor agent
+# This script helps you to automatically and quickly write terraform
+# From there you can customize your terraform further and create your own templates!
+# Author:  Jason Ostrom
+
 from faker import Faker
 import random
 import argparse
@@ -326,6 +333,7 @@ install_art = False
 
 # Names of the terraform files
 tmain_file = "main.tf"
+tproviders_file = "providers.tf"
 tnet_file = "network.tf"
 tnsg_file = "nsg.tf"
 thelk_file = "helk.tf"
@@ -827,14 +835,14 @@ depends_on = [azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VA
     return template
 
 
-def get_main_template():
+def get_providers_template():
     template = '''
 
 terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = "=2.94.0"
+      version = "=3.13.0"
     }
   }
 }
@@ -842,6 +850,13 @@ terraform {
 provider "azurerm" {
   features {}
 }
+
+'''
+    return template 
+# End of providers template
+
+def get_main_template():
+    template = '''
 
 locals {
   storage_account_name = "purplecloud${random_string.suffix.id}"
@@ -883,7 +898,7 @@ resource "azurerm_storage_account" "storage-account" {
   location                 = var.location 
   account_tier             = "Standard"
   account_replication_type = "LRS"
-  allow_blob_public_access = true
+  allow_nested_items_to_be_public = true
 
   depends_on = [azurerm_resource_group.network]
 }
@@ -1111,6 +1126,9 @@ endpoint_template = get_endpoint_template()
 # Get the main.tf template
 main_template = get_main_template()
 
+# Get the providers.tf template
+providers_template = get_providers_template()
+
 # replace the RG name
 main_template = main_template.replace("RG_NAME_DEFAULT", default_rg_name)
 
@@ -1123,6 +1141,13 @@ n = main_text_file.write(main_template)
 print("[+] Creating the main terraform file: ",tmain_file)
 logging.info('[+] Creating the main terraform file: %s', tmain_file)
 main_text_file.close()
+
+# Write the providers.tf
+providers_text_file = open(tproviders_file, "w")
+n = providers_text_file.write(providers_template)
+print("[+] Creating the providers terraform file: ",tproviders_file)
+logging.info('[+] Creating the providers terraform file: %s', tproviders_file)
+providers_text_file.close()
 
 # open the network.tf
 net_text_file = open(tnet_file, "w")

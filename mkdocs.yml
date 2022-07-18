@@ -1,0 +1,43 @@
+site_name: Hybrid + Identity Cyber Range 
+repo_url: https://github.com/iknowjason/PurpleCloud
+repo_name: iknowjason/PurpleCloud
+nav:
+   - Home: index.md
+   - Overview: overview.md
+   - Installation : install.md
+   - Usage: usage.md
+   - Cost: cost.md
+   - Creds and Access: infrastructure.md
+   - References : references.md
+   - Roadmap Ideas : future.md
+   - Credits : credits.md
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - navigation.tabs
+  font:
+    text: Roboto
+  palette:
+    # Light mode
+    - green: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+
+    # Dark mode 
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo 
+      accent: indigo 
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
