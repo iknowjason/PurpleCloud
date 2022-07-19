@@ -282,8 +282,16 @@ locals {
 .id}"
 }
 
-output "my_aad_creds" {
-  value = local.creds
+output "azure_ad_details" {
+
+  value = <<EOS
+
+------------------------------------
+Azure AD Security Lab Setup Complete
+------------------------------------
+Azure AD Password: ${local.creds}
+
+EOS
 }
 
 # write azure ad user password to file
