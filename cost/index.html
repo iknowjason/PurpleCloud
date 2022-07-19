@@ -460,7 +460,7 @@
 <h2 id="cost-analysis-pricing-estimate">Cost Analysis / Pricing Estimate</h2>
 <p>As this tool spins up cloud resources, it will result in charges to your Azure subscription.  Efforts have been made to minimize the costs incurred and research the best options for most uses cases.  The best way to use this is reference the estimated cost below, check your Azure costs daily, and verify them against this information included below.  Be sure to tear down all resources when not using them.</p>
 <p>There are other small costs associated with Azure cloud resources, but the most expensive resources by far are the Azure Virtual Machines.  When it comes to Compute VM resources, Azure is more expensive than AWS.  If you are looking to run this range in AWS, check out the sister project, BlueCloud:  https://github.com/iknowjason/BlueCloud</p>
-<p>By default, both the Windows 10 Pro and Domain Controller are using a <code>Standard_A1</code> instance size, which is the lowest cost hardware that I could find which will provide sufficient performance.  The Hunting ELK SIEM system requires a scaled up Linux instance size of <code>Standard_DS3_v2</code>.  This is because it uses HELK install option four for data science capabilities.  </p>
+<p>By default, both the Windows 10 Pro and Domain Controller are using a <code>Standard_D2as_v4</code> instance size, which is the lowest cost hardware that I could find which will provide sufficient performance.  The Hunting ELK SIEM system requires a scaled up Linux instance size of <code>Standard_D2s_v3</code>.  This is because it uses HELK install option four for data science capabilities.  </p>
 <p>Reference the Azure "Windows Virtual Machine Pricing" for the most up to date pricing:
 https://azure.microsoft.com/en-us/pricing/details/virtual-machines/windows/</p>
 <p>Reference the Azure "Linux Virtual Machines Pricing" for the most up to date pricing on the Linux VM:
@@ -482,35 +482,36 @@ https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/</p>
 <tr>
 <td>Win10Pro</td>
 <td>Standard_A1</td>
-<td>US Central</td>
-<td>$2.21</td>
-<td>$15.17</td>
-<td>$64.85</td>
+<td>US East</td>
+<td>$2.30</td>
+<td>$16.10</td>
+<td>$70.08</td>
 </tr>
 <tr>
 <td>DC</td>
 <td>Standard_A1</td>
-<td>US Central</td>
-<td>$2.21</td>
-<td>$15.17</td>
-<td>$64.85</td>
+<td>US East</td>
+<td>$2.30</td>
+<td>$16.10</td>
+<td>$70.08</td>
 </tr>
 <tr>
 <td>HELK</td>
 <td>Standard_DS3_v2</td>
-<td>US Central</td>
-<td>$7.08</td>
-<td>$49.27</td>
-<td>$211.01</td>
+<td>US East</td>
+<td>$2.30</td>
+<td>$16.10</td>
+<td>$70.08</td>
 </tr>
 </tbody>
 </table>
 <h3 id="changing-default-vm-instance-size-in-adpy">Changing Default VM Instance Size in ad.py</h3>
 <p>To change the default hardware instance sizes for each VM, modify the following variables in ad.py:</p>
 <pre><code># The instance size for each system
-size_win10 = &quot;Standard_A1&quot;
-size_dc    = &quot;Standard_A1&quot;
-size_helk  = &quot;Standard_DS3_v2&quot;
+size_win10 = &quot;Standard_D2as_v4&quot;
+size_dc = &quot;Standard_D2as_v4&quot;
+# Note:  Hunting ELK install options #4 requires 8 GB memory
+size_helk  = &quot;Standard_D2s_v3&quot;
 </code></pre>
                 
                   

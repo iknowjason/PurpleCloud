@@ -755,7 +755,7 @@ This will create a Domain Controller in dc.tf and install AD DS with forest name
 This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.  This will create a terraform file for the HELK server (helk.tf)</p>
 <h3 id="advanced-usage">Advanced Usage</h3>
 <p><code>--resource_group &lt;rg_name&gt;</code>:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)</p>
-<p><code>--location &lt;location&gt;</code>:  The Azure location to use (Default:  centralus)</p>
+<p><code>--location &lt;location&gt;</code>:  The Azure location to use (Default:  eastus)</p>
 <p><code>--endpoints &lt;num_of_endpoints&gt;</code>:  Number of Windows 10 Professional systems to build (Default: 0)</p>
 <p><code>--helk</code>:  Create a hunting ELK server (with Velociraptor installed) (Default:  Disabled)</p>
 <p><code>--domain_controller</code>:  Create a Domain Controller and install AD DS with Forest (Default:  Disabled)</p>
@@ -793,7 +793,8 @@ This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat
     },
 </code></pre>
 <p><strong>Network Subnets configuration:</strong>   The configuration for the subnets can be adjusted in the python list named <code>config_subnets</code>.  Some changes include changing the default subnet names or adding/removing subnets.  By default there are four subnets created.  </p>
-<p><strong>Other Details:</strong>   </p>
+<p><strong>Other Details:</strong><br />
+<em> </em><em>ranges.log:</em>*  The ranges.log file writes out important information as the range is built, such as VM details.  You can use it to track things.  We are working on adding solid terraform outputs that will be useful too. </p>
 <ul>
 <li>
 <p><strong>Logging Passwords:</strong> By default, all passwords are randomly generated.  So if you are not aware of this, it might be easy to lose track of a password.  For this reason we have added a logging feature that captures all passwords created.  The <code>ad.py</code> script will automatically log all output to a logfile called <code>ranges.log</code>.  This is for the specific purpose of being able to track the ranges created and the passwords that are auto-generated for AD users and local Administrator accounts. </p>
