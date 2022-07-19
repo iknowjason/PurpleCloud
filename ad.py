@@ -29,12 +29,10 @@ whitelist_nsg = "*"
 logging.basicConfig(format='%(asctime)s %(message)s', filename='ranges.log', level=logging.INFO)
 
 # The instance size for each system
-size_win10 = "Standard_A1"
-#size_win10 = "Standard_D2as_v4"
-size_dc    = "Standard_A1"
-#size_dc = "Standard_D2as_v4"
-size_helk  = "Standard_DS3_v2"
-#size_helk  = "Standard_D2s_v3"
+size_win10 = "Standard_D2as_v4"
+size_dc = "Standard_D2as_v4"
+# Note:  Hunting ELK install options #4 requires 8 GB memory
+size_helk  = "Standard_D2s_v3"
 
 # dc_ip - The domain controller IP address
 dc_ip = ""
@@ -230,7 +228,7 @@ else:
 # parse the Azure location if specified
 supported_azure_locations = ['westus', 'westus2', 'eastus', 'centralus', 'centraluseuap', 'southcentralus' , 'northcentralus', 'westcentralus', 'eastus2', 'eastus2euap', 'brazilsouth', 'brazilus', 'northeurope', 'westeurope', 'eastasia', 'southeastasia', 'japanwest', 'japaneast', 'koreacentral', 'koreasouth', 'southindia', 'westindia', 'centralindia', 'australiaeast', 'australiasoutheast', 'canadacentral', 'canadaeast', 'uksouth', 'ukwest', 'francecentral', 'francesouth', 'australiacentral', 'australiacentral2', 'uaecentral', 'uaenorth', 'southafricanorth', 'southafricawest', 'switzerlandnorth', 'switzerlandwest', 'germanynorth', 'germanywestcentral', 'norwayeast', 'norwaywest', 'brazilsoutheast', 'westus3', 'swedencentral', 'swedensouth'
 ]
-default_location = "centralus"
+default_location = "eastus"
 if not args.location:
     print("[+] Using default location: ", default_location)
     logging.info('[+] Using default location: %s', default_location)

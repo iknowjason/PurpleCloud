@@ -86,7 +86,7 @@ This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat
 ### Advanced Usage
 ```--resource_group <rg_name>```:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)
 
-```--location <location>```:  The Azure location to use (Default:  centralus)
+```--location <location>```:  The Azure location to use (Default:  eastus)
 
 ```--endpoints <num_of_endpoints>```:  Number of Windows 10 Professional systems to build (Default: 0)
 
