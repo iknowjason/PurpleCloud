@@ -150,7 +150,8 @@ default_ad_users = [
 
 **Network Subnets configuration:**   The configuration for the subnets can be adjusted in the python list named ```config_subnets```.  Some changes include changing the default subnet names or adding/removing subnets.  By default there are four subnets created.  
 
-**Other Details:**   
+**Other Details:**  
+* **ranges.log:**  The ranges.log file writes out important information as the range is built, such as VM details.  You can use it to track things.  We are working on adding solid terraform outputs that will be useful too. 
 
 * **Logging Passwords:** By default, all passwords are randomly generated.  So if you are not aware of this, it might be easy to lose track of a password.  For this reason we have added a logging feature that captures all passwords created.  The ```ad.py``` script will automatically log all output to a logfile called ```ranges.log```.  This is for the specific purpose of being able to track the ranges created and the passwords that are auto-generated for AD users and local Administrator accounts. 
 
