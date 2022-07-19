@@ -8,7 +8,7 @@ Generate the terraform for a custom Azure AD security lab. It uses a python libr
 Create an Active Directory on-premise environment simulated with Azure VMs. This script is used to generate a more traditional infrastructure range. It can create an Active Directory Domain Services range, generating as many AD users as you wish. It also supports many other features such as Domain Join of Windows 10 systems, in addition to a SIEM instrumented with Sysmon.
 
 ## sentinel.py
-Create an Azure Sentinel deployment configurd in a log analytics workspace.
+Create an Azure Sentinel deployment configured in a log analytics workspace.
 
 ## storage.py
 Create some Azure storage resources, including a storage account, containers, blobs, file shares with files, key vault with secrets, keys, and certificate.

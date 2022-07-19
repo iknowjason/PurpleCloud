@@ -30,8 +30,11 @@ logging.basicConfig(format='%(asctime)s %(message)s', filename='ranges.log', lev
 
 # The instance size for each system
 size_win10 = "Standard_A1"
+#size_win10 = "Standard_D2as_v4"
 size_dc    = "Standard_A1"
+#size_dc = "Standard_D2as_v4"
 size_helk  = "Standard_DS3_v2"
+#size_helk  = "Standard_D2s_v3"
 
 # dc_ip - The domain controller IP address
 dc_ip = ""
@@ -711,7 +714,7 @@ resource "azurerm_network_interface" "AZURERM_NETWORK_INTERFACE_VAR_NAME" {
   ip_configuration {
     name                          = "primary"
     subnet_id                     = azurerm_subnet.SUBNET_NAME_VARIABLE.id
-    private_ip_address_allocation = "static"
+    private_ip_address_allocation = "Static"
     private_ip_address = var.ENDPOINT_IP_VAR_NAME
     public_ip_address_id = azurerm_public_ip.AZURERM_PUBLIC_IP_VAR_NAME.id
 
@@ -1447,7 +1450,7 @@ resource "azurerm_network_interface" "dc1-nic-int" {
   ip_configuration {
     name                          = "primary"
     subnet_id                     = azurerm_subnet.AD_SUBNET_NAME-subnet.id
-    private_ip_address_allocation = "static"
+    private_ip_address_allocation = "Static"
     private_ip_address            = "DC_IP_ADDRESS" 
     public_ip_address_id          = azurerm_public_ip.dc1-external.id
   }
@@ -1583,7 +1586,7 @@ resource "azurerm_network_interface" "vh-nic-int" {
   ip_configuration {
     name                          = "primary"
     subnet_id                     = azurerm_subnet.SIEM_SUBNET_NAME-subnet.id
-    private_ip_address_allocation = "static"
+    private_ip_address_allocation = "Static"
     private_ip_address            = "VH_PRIVATE_IP" 
     public_ip_address_id          = azurerm_public_ip.vh-external.id
   }
