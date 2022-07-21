@@ -31,8 +31,8 @@ logging.basicConfig(format='%(asctime)s %(message)s', filename='ranges.log', lev
 # The instance size for each system
 size_win10 = "Standard_D2as_v4"
 size_dc = "Standard_D2as_v4"
-# Note:  Hunting ELK install options #4 requires 8 GB memory
-size_helk  = "Standard_D2s_v3"
+# Note:  Hunting ELK install options #4 requires 8 GB available memory
+size_helk  = "Standard_D4s_v3"
 
 # dc_ip - The domain controller IP address
 dc_ip = ""
