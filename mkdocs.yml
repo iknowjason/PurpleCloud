@@ -5,7 +5,12 @@ nav:
    - Home: index.md
    - Overview: overview.md
    - Installation : install.md
-   - Usage: usage.md
+   - Tool Usage:
+     - Azure AD lab: tools/aad.md
+     - Azure VMs, Active Dirctory, and SIEM: tools/ad.md
+     - Azure Sentinel lab: tools/sentinel.md
+     - Azure Storage lab: tools/storage.md
+     - Azure Managed Identity lab: tools/midentity.md
    - Cost: cost.md
    - Creds and Access: infrastructure.md
    - References : references.md
