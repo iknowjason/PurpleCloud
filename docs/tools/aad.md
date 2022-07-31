@@ -1,6 +1,4 @@
-# Usage
-
-## Azure Active Directory lab
+# Azure Active Directory lab
 
 Generating an Azure AD lab using ```azure_ad.py```.
 

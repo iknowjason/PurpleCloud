@@ -1,6 +1,4 @@
-# Usage
-
-## Azure Sentinel lab 
+# Azure Sentinel lab 
 
 ```$ python3 sentinel.py -n <NAME> -l <LOCATION> -odc -adc```
 

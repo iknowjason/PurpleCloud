@@ -1,6 +1,4 @@
-# Usage
-
-## Azure Storage lab 
+# Azure Storage lab 
 
 ```$ python3 storage.py -n <NAME> -l <LOCATION>```
 

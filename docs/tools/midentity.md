@@ -1,6 +1,4 @@
-# Usage
-
-## Azure Managed Identity lab
+# Azure Managed Identity lab
 
 ```$ python3 managed_identity.py -u <UPN_SUFFIX> -n <NAME> -l <LOCATION> -a <ADMIN_USERNAME> -p <PASSWORD> -sa -ua <USER_ASSGNED_IDENTITY>```
 

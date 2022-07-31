@@ -1,6 +1,4 @@
-# Usage
-
-## Azure VMs, Active Directory, and SIEM 
+# Azure VMs, Active Directory, and SIEM 
 
 Generating an Azure infrastructure lab using ad.py 
 
