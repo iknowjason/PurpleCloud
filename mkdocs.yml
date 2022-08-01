@@ -11,6 +11,7 @@ nav:
    - References : references.md
    - Roadmap Ideas : future.md
    - Credits : credits.md
+
 theme:
   name: material
   features:
@@ -24,13 +25,12 @@ theme:
   font:
     text: Roboto
   palette:
-    # Light mode
     - green: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
+      primary: deep purple 
       accent: indigo
       toggle:
-        icon: material/toggle-switch-off-outline
+        icon: material/brightness-7
         name: Switch to dark mode
 
     # Dark mode 
@@ -39,5 +39,5 @@ theme:
       primary: indigo 
       accent: indigo 
       toggle:
-        icon: material/toggle-switch
+        icon: material/brightness-4
         name: Switch to light mode
