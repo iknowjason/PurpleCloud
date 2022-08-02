@@ -11,6 +11,7 @@ nav:
      - Azure Sentinel lab: tools/sentinel.md
      - Azure Storage lab: tools/storage.md
      - Azure Managed Identity lab: tools/midentity.md
+     - Phishing App: tools/phishing_app.md
    - Cost: cost.md
    - Creds and Access: infrastructure.md
    - References : references.md
