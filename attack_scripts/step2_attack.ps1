@@ -3,13 +3,13 @@
 # Set the AppId of the target GA's app registration from Step 1.3
 # Set the tenantId from Step 1.3
 
-$targetObjectId = "80a392fb-887e-42e0-ba14-14b450cb3e77" 
-$azureApplicationId = "93343b59-1dfd-456d-858b-60192f0c66f3" 
-$tenantId = "1a82558d-66e0-48b0-b370-72df4caf1852" 
+$targetObjectId = "" 
+$azureApplicationId = "" 
+$tenantId = "" 
 
 # Step 2.2:  Connect with the Azure AD user assigned to Application Administrator role
-$appadmin_username = "tinahoward@rtcfingroup.com"
-$appadmin_password = "endless-stork-EgvN"
+$appadmin_username = ""
+$appadmin_password = ""
 $securepassword = ConvertTo-SecureString "$appadmin_password" -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential($appadmin_username, $securepassword)
 Connect-AzureAD -Credential $credential

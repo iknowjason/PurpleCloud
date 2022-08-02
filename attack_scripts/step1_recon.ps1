@@ -1,7 +1,7 @@
 
 # Step 1.1:  Connect with any Azure AD User and manually grab the Application Administrator
-$username = "adriannunez@rtcfingroup.com"
-$password = "endless-stork-EgvN"
+$username = ""
+$password = ""
 $securepassword = ConvertTo-SecureString "$password" -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential($username, $securepassword)
 
