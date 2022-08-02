@@ -6,7 +6,9 @@ Terraform code generator to create different Azure security labs.
 For full documentation visit:  https://www.purplecloud.network
 
 # Updates
-## 8/2/22:  Added a new Terraform Generator:  Phishing Application.  You can quickly spin up a multi-tenant Azure Ad application to be used for app consent phishing simulations.  It automatically builds typical API consent permissions such as reading email and files, but can be customized for any supported permissions you require.
+
+## 8/2/22:  Added a new Terraform Generator:  Phishing Application.  
+You can quickly spin up a multi-tenant Azure Ad application to be used for app consent phishing simulations.  It automatically builds typical API consent permissions such as reading email and files, but can be customized for any supported permissions you require.
 
 ## 7/18/22:  Added three new Terraform Generators:  Azure Sentinel, Azure Storage, Azure Managed Identity
 Create three new security labs for different use cases.  You can quickly spin up an Azure Sentinel security lab, an Azure storage account with file shares, containers, blobs, and sample files.  This also includes an Azure Key Vault with resources.  Or create an Azure managed identity security lab for offensive operations and network defenders.  See the full documentation for more details.
