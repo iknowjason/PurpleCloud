@@ -7,7 +7,7 @@ For full documentation visit:  https://www.purplecloud.network
 
 # Updates
 
-## 8/2/22:  Added a new Terraform Generator:  Phishing Application.  
+## 8/2/22:  Added a new Terraform Generator:  Phishing Application
 You can quickly spin up a multi-tenant Azure Ad application to be used for app consent phishing simulations.  It automatically builds typical API consent permissions such as reading email and files, but can be customized for any supported permissions you require.
 
 ## 7/18/22:  Added three new Terraform Generators:  Azure Sentinel, Azure Storage, Azure Managed Identity
