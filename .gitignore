@@ -7,4 +7,7 @@ azure_users.csv
 azure_emails.txt
 azure_usernames.txt
 files/bootstrap-dc.ps1
+files/Velociraptor.config.yaml
+output/*
+site/*
 .terraform
