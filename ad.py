@@ -832,6 +832,20 @@ resource "null_resource" "VCONFIG_UPLOAD" {
 depends_on = [azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME]
 }
 
+output "windows_endpoint_details_AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
+  value = <<EOS
+-------------------------
+Virtual Machine ${azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.computer_name}
+-------------------------
+Computer Name:  ${azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.computer_name}
+Private IP: ${var.ENDPOINT_IP_VAR_NAME}
+Public IP:  ${azurerm_public_ip.AZURERM_PUBLIC_IP_VAR_NAME.ip_address}
+local Admin:  ${azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.admin_username}
+local password: ${var.ADMIN_PASSWORD_VAR_NAME}
+
+EOS
+}
+
 '''
     return template
 
@@ -1556,6 +1570,23 @@ resource "azurerm_storage_blob" "users_csv" {
   storage_container_name = azurerm_storage_container.storage-container.name
   type                   = "Block"
   source                 = "ad_users.csv"
+}
+
+output "dc_ad_details" {
+  value = <<EOS
+-------------------------
+Domain Controller and AD Details
+-------------------------
+Computer Name:  ${azurerm_windows_virtual_machine.domain-controller.computer_name}
+Private IP: DC_IP_ADDRESS
+Public IP:  ${azurerm_public_ip.dc1-external.ip_address}
+local Admin:  ${azurerm_windows_virtual_machine.domain-controller.admin_username}
+local password: ADMIN_PASSWORD
+Domain:  DEFAULT_DOMAIN
+WinRM Username:  WINRM_USERNAME
+WinRM Password:  WINRM_PASSWORD
+Resource Group: "${var.resource_group_name}-${random_string.suffix.id}" 
+EOS
 }
 
 '''

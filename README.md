@@ -7,6 +7,9 @@ For full documentation visit:  https://www.purplecloud.network
 
 # Updates
 
+## 8/4/22:  New Sentinel Lab with AD + Log Shipping
+Build an Azure Sentinel lab with optional support for shipping Windows 10 Sysmon and Security logs into Sentinel Log Analytics Workspace.  Optionally build Active Directory with Domain Join.
+
 ## 8/2/22:  Added a new Terraform Generator:  Phishing Application
 You can quickly spin up a multi-tenant Azure Ad application to be used for app consent phishing simulations.  It automatically builds typical API consent permissions such as reading email and files, but can be customized for any supported permissions you require.
 
