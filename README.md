@@ -7,7 +7,7 @@ For full documentation visit:  https://www.purplecloud.network
 
 # Updates
 
-## 8/4/22:  New Sentinel Lab with AD + Log Shipping
+## 8/4/22:  Updated Sentinel Lab for Active Directory Build + Ship Sysmon and Security Logs into Sentinel! 
 Build an Azure Sentinel lab with optional support for shipping Windows 10 Sysmon and Security logs into Sentinel Log Analytics Workspace.  Optionally build Active Directory with Domain Join.
 
 ## 8/2/22:  Added a new Terraform Generator:  Phishing Application
