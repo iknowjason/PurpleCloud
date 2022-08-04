@@ -53,6 +53,8 @@ Usage Example:  Generate a single Windows 10 Endpoint with Sysmon installed
 
 ```$ python3 sentinel.py --endpoint 1```
 
+All Windows 10 Pro systems will automatically send logs to Sentinel.  (Some small, manual configuration steps are required (listed above) to get Sysmon and security logs working correctly).
+
 ### Build a Domain Controller with Forest and Users + Windows Domain Join
 
 ```$ python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join```
