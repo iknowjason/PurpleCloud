@@ -13,7 +13,7 @@
     
     
       
-        <title>Azure VMs, Active Dirctory, and SIEM - Hybrid + Identity Cyber Range</title>
+        <title>Azure VMs, Active Directory, and SIEM - Hybrid + Identity Cyber Range</title>
       
     
     
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Azure VMs, Active Dirctory, and SIEM
+              Azure VMs, Active Directory, and SIEM
             
           </span>
         </div>
@@ -465,12 +465,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Azure VMs, Active Dirctory, and SIEM
+          Azure VMs, Active Directory, and SIEM
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Azure VMs, Active Dirctory, and SIEM
+        Azure VMs, Active Directory, and SIEM
       </a>
       
         
@@ -519,6 +519,13 @@
         <li class="md-nav__item">
   <a href="#edit-script-options-in-adpy" class="md-nav__link">
     Edit script options in ad.py
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terraform-outputs" class="md-nav__link">
+    Terraform Outputs
   </a>
   
 </li>
@@ -730,6 +737,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#terraform-outputs" class="md-nav__link">
+    Terraform Outputs
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -808,15 +822,17 @@ This will add a Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat
 </code></pre>
 <p><strong>Network Subnets configuration:</strong>   The configuration for the subnets can be adjusted in the python list named <code>config_subnets</code>.  Some changes include changing the default subnet names or adding/removing subnets.  By default there are four subnets created.  </p>
 <p><strong>Other Details:</strong><br />
-<em> </em><em>ranges.log:</em>*  The ranges.log file writes out important information as the range is built, such as VM details.  You can use it to track things.  We are working on adding solid terraform outputs that will be useful too. </p>
+<em> </em><em>ranges.log:</em>*  The ranges.log file writes out important information as the range is built, such as VM details.  You can use it to track things.</p>
 <ul>
 <li>
-<p><strong>Logging Passwords:</strong> By default, all passwords are randomly generated.  So if you are not aware of this, it might be easy to lose track of a password.  For this reason we have added a logging feature that captures all passwords created.  The <code>ad.py</code> script will automatically log all output to a logfile called <code>ranges.log</code>.  This is for the specific purpose of being able to track the ranges created and the passwords that are auto-generated for AD users and local Administrator accounts. </p>
+<p><strong>Logging Passwords:</strong> By default, all passwords are randomly generated.  So if you are not aware of this, it might be easy to lose track of a password.  For this reason we have added a logging feature that captures all passwords created.  The <code>ad.py</code> script will automatically log all output to a logfile called <code>ranges.log</code>.  This is for the specific purpose of being able to track the ranges created and the passwords that are auto-generated for AD users and local Administrator accounts. You can also type <code>terraform output</code> as a secondary way to get the password and details for each virtual machine.</p>
 </li>
 <li>
 <p><strong>Azure Network Security Groups:</strong>  By default, the ad.py script will try to auto-detect your public IP address using a request to http://ifconfig.me.  Your public IP address will be used to white list the Azure NSG source prefix setting.  You can over-ride this behavior by changing the <code>override_whitelist</code> variable to False.  By default it will then use the value set in <code>whitelist_nsg</code>.  This is set to wide open ("*") and you can change this to a static value.</p>
 </li>
 </ul>
+<h3 id="terraform-outputs">Terraform Outputs</h3>
+<p>You can get the details of each Virtual Machine, including passwords, by typing <code>terraform output</code>.</p>
 
               
             </article>
