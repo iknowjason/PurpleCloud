@@ -898,6 +898,7 @@
 <h3 id="generate-a-single-windows-10-endpoint-with-sysmon-installed">Generate a single Windows 10 Endpoint with Sysmon installed</h3>
 <p>Usage Example:  Generate a single Windows 10 Endpoint with Sysmon installed</p>
 <p><code>$ python3 sentinel.py --endpoint 1</code></p>
+<p>All Windows 10 Pro systems will automatically send logs to Sentinel.  Some small manual steps are required (listed above) to get Sysmon and Security logs properly working.</p>
 <h3 id="build-a-domain-controller-with-forest-and-users-windows-domain-join">Build a Domain Controller with Forest and Users + Windows Domain Join</h3>
 <p><code>$ python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join</code></p>
 <p><strong>Description:</strong>
