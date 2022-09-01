@@ -313,8 +313,13 @@ if args.dc_enable:
         print("[-] At least one Domain Admin in default_ad_users must be enabled")
         exit()
 
-# Install sysmon, true by default
-install_sysmon = True 
+# Install sysmon on endpoints, true by default
+install_sysmon_enabled = True 
+sysmon_endpoint_config = ""
+if install_sysmon_enabled == True:
+    sysmon_endpoint_config = "true"
+else:
+    sysmon_endpoint_config = "false"
 
 # Install art, false by default
 install_art = False
@@ -326,6 +331,7 @@ tnet_file = "network_sentinel.tf"
 tnsg_file = "nsg_sentinel.tf"
 tdc_file = "dc_sentinel.tf"
 tsentinel_file = "sentinel.tf"
+tsysmon_file = "sysmon_sentinel.tf"
 
 ### NETWORK CONFIGURATION
 ### ADD ADDITIONAL NETWORKS BELOW
@@ -367,7 +373,7 @@ config_win10_endpoint = {
     "hostname_base":"win10",
     "join_domain":"false",
     "auto_logon_domain_user":"false",
-    "install_sysmon":"true",
+    "install_sysmon":sysmon_endpoint_config,
     "install_art":"true",
 }
 
@@ -696,7 +702,7 @@ locals {
 }
 
 data "template_file" "PS_TEMPLATE_VAR_NAME" {
-  template = file("${path.module}/files/bootstrap-win10-sentinel.ps1")
+  template = file("${path.module}/files/win10/bootstrap-win10-sentinel.ps1.tpl")
 
   vars  = {
     join_domain               = var.JOIN_DOMAIN_VAR_NAME ? 1 : 0
@@ -711,13 +717,17 @@ data "template_file" "PS_TEMPLATE_VAR_NAME" {
     admin_username            = var.ADMIN_USERNAME_VAR_NAME
     admin_password            = var.ADMIN_PASSWORD_VAR_NAME
     ad_domain                 = "AD_DOMAIN" 
+    storage_acct_s            = SYSMON_STORAGE_ACCOUNT
+    storage_container_s       = SYSMON_STORAGE_CONTAINER
+    sysmon_config_s           = SYSMON_CONFIG
+    sysmon_zip_s              = SYSMON_ZIP
   }
 }
 
 resource "local_file" "DEBUG_BOOTSTRAP_SCRIPT_VAR_NAME" {
   # For inspecting the rendered powershell script as it is loaded onto endpoint through custom_data extension
   content = data.template_file.PS_TEMPLATE_VAR_NAME.rendered
-  filename = "${path.module}/output/bootstrap-${var.ENDPOINT_HOSTNAME_VAR_NAME}-sentinel.ps1"
+  filename = "${path.module}/output/win10/bootstrap-${var.ENDPOINT_HOSTNAME_VAR_NAME}-sentinel.ps1"
 }
 
 resource "azurerm_windows_virtual_machine" "AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
@@ -753,11 +763,14 @@ resource "azurerm_windows_virtual_machine" "AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_
   }
 
   additional_unattend_content {
-      content      = file("${path.module}/files/FirstLogonCommands.xml")
+      content      = file("${path.module}/files/win10/FirstLogonCommands.xml")
       setting = "FirstLogonCommands"
   }
 
-  depends_on = [azurerm_network_interface.AZURERM_NETWORK_INTERFACE_VAR_NAME]
+  depends_on = [
+    azurerm_network_interface.AZURERM_NETWORK_INTERFACE_VAR_NAME,
+SYSMON_DEPENDS
+  ]
 }
 
 resource "azurerm_virtual_machine_extension" "AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
@@ -782,7 +795,7 @@ PROTECTEDSETTINGS
 }
 
 resource "local_file" "HOSTS_CFG_VAR_NAME" {
-  content = templatefile("${path.module}/files/hosts.tpl",
+  content = templatefile("${path.module}/files/win10/hosts.tpl",
     {
       ip    = azurerm_public_ip.AZURERM_PUBLIC_IP_VAR_NAME.ip_address
       auser = var.ADMIN_USERNAME_VAR_NAME
@@ -1228,7 +1241,74 @@ print("[+] Creating the sentinel terraform file: ",tsentinel_file)
 # close the file
 sentinel_text_file.close()
 
+#####
+### install_sysmon
+### If install_sysmon is true, write out a separate terraform file
+### This allows sysmon to be installed on endpoints independent of helk
+####
+
+sysmon_template = '''
+locals {
+  sysmon_config_s            = "sysmonconfig-export.xml"
+  sysmon_zip_s               = "Sysmon.zip"
+}
+
+# Create a storage account for sysmon files
+resource "azurerm_storage_account" "sysmon_sentinel" {
+  name                     = "ss${random_string.suffix.id}"
+  resource_group_name = "${var.resource_group_name}-${random_string.suffix.id}"
+  location                 = var.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+  allow_nested_items_to_be_public = true
+
+  depends_on = [azurerm_resource_group.network]
+}
+
+# Create storage container for sysmon files
+resource "azurerm_storage_container" "sysmon_sentinel" {
+  name                  = "provisioning"
+  storage_account_name  = azurerm_storage_account.sysmon_sentinel.name
+  container_access_type = "blob"
+
+  depends_on = [azurerm_resource_group.network]
+}
+
+# Upload SwiftOnSecurity Sysmon configuration xml file
+resource "azurerm_storage_blob" "sysmon_config_sentinel" {
+  name                   = local.sysmon_config_s
+  storage_account_name   = azurerm_storage_account.sysmon_sentinel.name
+  storage_container_name = azurerm_storage_container.sysmon_sentinel.name
+  type                   = "Block"
+  source                 = "${path.module}/files/velocihelk/${local.sysmon_config_s}"
+}
+
+# Upload Sysmon zip
+resource "azurerm_storage_blob" "sysmon_zip_sentinel" {
+  name                   = local.sysmon_zip_s
+  storage_account_name   = azurerm_storage_account.sysmon_sentinel.name
+  storage_container_name = azurerm_storage_container.sysmon_sentinel.name
+  type                   = "Block"
+  source                 = "${path.module}/files/velocihelk/${local.sysmon_zip_s}"
+}
+'''
+
+if install_sysmon_enabled:
+    print("[+] Sysmon enabled - Creating sysmon configuration for endpoints to use",tsysmon_file)
+    # open sysmon_sentinel.tf
+    sysmon_text_file = open(tsysmon_file, "w")
+    n = sysmon_text_file.write(sysmon_template)
+    sysmon_text_file.close()
+
+#########
 #### Beginning of build the Windows 10 Pro systems
+#########
+
+# sysmon depends_on
+sysmon_depends_string = '''
+    azurerm_storage_blob.sysmon_zip_sentinel,
+'''
+
 print("[+] Building Windows 10 Pro")
 logging.info('[+] Building the Windows 10 Pro')
 print("  [+] Number of systems to build: ",win10_count)
@@ -1251,9 +1331,8 @@ if (win10_count > 0):
     auto_logon_domain_user = config_win10_endpoint['auto_logon_domain_user']
     print("    [+] Auto Logon Domain User:", auto_logon_domain_user) 
     logging.info('[+] Auto Logon Domain User: %s', auto_logon_domain_user)
-    install_sysmon = config_win10_endpoint['install_sysmon']
-    print("    [+] Install Sysmon:", install_sysmon) 
-    logging.info('[+] Install Sysmon: %s', install_sysmon)
+    print("    [+] Install Sysmon:", config_win10_endpoint['install_sysmon']) 
+    logging.info('[+] Install Sysmon: %s', config_win10_endpoint['install_sysmon'])
     install_art = config_win10_endpoint['install_art']
     print("    [+] Install Atomic Red Team (ART):", install_art) 
     logging.info('[+] Install Atomic Red Team (ART): %s', install_art)
@@ -1285,6 +1364,27 @@ if (win10_count > 0):
         # replace the variable endpoint_ip
         new_endpoint_template = this_endpoint_template.replace("ENDPOINT_IP_VAR_NAME", "endpoint-ip-" + this_hostname)
         new_endpoint_template = new_endpoint_template.replace("ENDPOINT_IP_DEFAULT", this_ipaddr)
+
+        # replace for install_sysmon_enabled
+        if install_sysmon_enabled == True:
+            new_endpoint_template = new_endpoint_template.replace("INSTALL_SYSMON", "true")
+            # replace storage account name
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_STORAGE_ACCOUNT", 'azurerm_storage_account.sysmon_sentinel.name')
+            # replace container name
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_STORAGE_CONTAINER", 'azurerm_storage_container.sysmon_sentinel.name')
+            # replace sysmon config
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_CONFIG", 'local.sysmon_config_s')
+            # replace sysmon zip
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_ZIP", 'local.sysmon_zip_s')
+            # replace sysmon_depends for endpoint
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_DEPENDS", sysmon_depends_string)
+        else:
+            new_endpoint_template = new_endpoint_template.replace("INSTALL_SYSMON", "false")
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_STORAGE_ACCOUNT", '""')
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_STORAGE_CONTAINER", '""')
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_CONFIG", '""')
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_ZIP", '""')
+            new_endpoint_template = new_endpoint_template.replace("SYSMON_DEPENDS", "")
 
         # If auto_logon_domain_user is True, get the default ad user and password
         if auto_logon_domain_user.lower() == 'true':
@@ -1362,7 +1462,7 @@ if (win10_count > 0):
         new_endpoint_template = new_endpoint_template.replace("SIZE_WIN10", size_win10 )
 
         # replace install_sysmon if applicable
-        if install_sysmon:
+        if install_sysmon_enabled:
             new_endpoint_template = new_endpoint_template.replace("INSTALL_SYSMON", "true")
         else:
             new_endpoint_template = new_endpoint_template.replace("INSTALL_SYSMON", "false")
@@ -1457,7 +1557,7 @@ locals {
 }
 
 data "template_file" "ps_template" {
-  template = file("${path.module}/files/bootstrap-dc.ps1")
+  template = file("${path.module}/files/dc/bootstrap-dc.ps1.tpl")
 
   vars  = {
     winrm_username            = "WINRM_USERNAME" 
@@ -1474,7 +1574,7 @@ data "template_file" "ps_template" {
 resource "local_file" "debug_bootstrap_script" {
   # For inspecting the rendered powershell script as it is loaded onto endpoint through custom_data extension
   content = data.template_file.ps_template.rendered
-  filename = "${path.module}/output/bootstrap-dc1.ps1"
+  filename = "${path.module}/output/dc/bootstrap-dc1.ps1"
 }
 
 
@@ -1510,7 +1610,7 @@ resource "azurerm_windows_virtual_machine" "domain-controller" {
   }
 
   additional_unattend_content {
-      content      = file("${path.module}/files/FirstLogonCommands.xml")
+      content      = file("${path.module}/files/dc/FirstLogonCommands.xml")
       setting = "FirstLogonCommands"
   }
 
@@ -1531,15 +1631,14 @@ SETTINGS
 }
 
 resource "local_file" "hosts_cfg" {
-  content = templatefile("${path.module}/templates/hosts-dc.tpl",
+  content = templatefile("${path.module}/files/dc/hosts-dc.tpl",
     {
       ip    = azurerm_public_ip.dc1-external.ip_address
       auser = "ADMIN_USERNAME" 
       apwd  = "ADMIN_PASSWORD" 
     }
   )
-  filename = "${path.module}/hosts-dc.cfg"
-
+  filename = "${path.module}/files/dc/hosts-dc.cfg"
 }
 
 # Upload the ad_users.csv to the storage account
@@ -1610,7 +1709,7 @@ if args.dc_enable:
     dc_text_file.close()
 
     # Change the bootstrap script to import AD users
-    ad_bootstrap_template = open("files/bootstrap-dc-template.ps1")
+    ad_bootstrap_template = open("files/dc/bootstrap-dc-template.ps1")
 
     # Read the script into data
     data = ad_bootstrap_template.read()
@@ -1679,7 +1778,7 @@ if args.dc_enable:
         ad_csv.write(line)
 
     # new dc bootstrap script
-    new_text_file = open("files/bootstrap-dc.ps1", "w")
+    new_text_file = open("files/dc/bootstrap-dc.ps1", "w")
 
     n = new_text_file.write(data)
 

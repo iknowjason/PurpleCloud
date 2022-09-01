@@ -263,33 +263,39 @@ if ( $is -eq 1 ) {
   $myindex = Get-Netadapter -Name "Ethernet" | Select-Object -ExpandProperty IfIndex
   Set-DNSClientServerAddress -InterfaceIndex $myindex -ServerAddresses "8.8.8.8"
 
-  # Download Sysmon for HELK
+  # Download Sysmon
   $mtime = Get-Date
   lwrite("$mtime Download Sysmon")
-  (New-Object System.Net.WebClient).DownloadFile('https://github.com/iknowjason/BlueTools/blob/main/Sysmon.zip?raw=true', 'C:\terraform\Sysmon.zip')
+  (New-Object System.Net.WebClient).DownloadFile('https://${storage_acct_s}.blob.core.windows.net/${storage_container_s}/${sysmon_zip_s}', 'C:\terraform\Sysmon.zip')
 
   $mtime = Get-Date
-  lwrite("$mtime Download SwiftOnSecurity sysmon config for HELK")
+  lwrite("$mtime Download SwiftOnSecurity sysmon config")
   (New-Object System.Net.WebClient).DownloadFile('https://github.com/iknowjason/BlueTools/blob/main/configs-pc.zip?raw=true', 'C:\terraform\configs.zip')
+
+  # Download Sysmon config xml
+  $mtime = Get-Date
+  if (-not(Test-Path -Path "C:\terraform\sysmonconfig-export.xml" -PathType Leaf)) {
+    try {
+      lwrite("$mtime Download Sysmon config")
+      (New-Object System.Net.WebClient).DownloadFile('https://${storage_acct_s}.blob.core.windows.net/${storage_container_s}/${sysmon_config_s}', 'C:\terraform\sysmonconfig-export.xml')
+    } catch {
+      Write-Host("Error downloading and unzipping")
+    }
+  }
 
   # Expand the Sysmon zip archive
   $mtime = Get-Date
   lwrite("$mtime Expand the sysmon zip file")
   Expand-Archive -LiteralPath 'C:\terraform\Sysmon.zip' -DestinationPath 'C:\terraform\Sysmon'
 
-  # Expand the configs zip archive
-  $mtime = Get-Date
-  lwrite("$mtime Expand the configs zip file")
-  Expand-Archive -LiteralPath 'C:\terraform\configs.zip' -DestinationPath 'C:\terraform\configs'
-
   # Copy the Sysmon configuration for SwiftOnSecurity to destination Sysmon folder
   $mtime = Get-Date
   lwrite("$mtime Copy the Sysmon configuration for SwiftOnSecurity to destination Sysmon folder")
-  Copy-Item "C:\terraform\configs\configs-pc\sysmonconfig-export.xml" -Destination "C:\terraform\Sysmon"
+  Copy-Item "C:\terraform\sysmonconfig-export.xml" -Destination "C:\terraform\Sysmon"
 
-  # Install Sysmon for HELK
+  # Install Sysmon
   $mtime = Get-Date
-  lwrite("$mtime Install Sysmon for HELK")
+  lwrite("$mtime Install Sysmon for Sentinel")
   C:\terraform\Sysmon\sysmon.exe -accepteula -i C:\terraform\Sysmon\sysmonconfig-export.xml 
 
   # If Join Domain is True, set the DNS server back to dc_ip
@@ -368,81 +374,6 @@ if (Get-Module -Name "Invoke-AtomicRedTeam") {
 
 } else {
   lwrite("$mtime Install atomic red team is set to false")
-}
-
-# Check if install_agent is true - send logs to helk + enable velociraptor 
-$ia = "${install_agent}"
-$mtime = Get-Date
-if ( $ia -eq 1 ) {
-  lwrite("$mtime install_agent is set to true")
-
-  lwrite("$mtime Downloading velociraptor client")
-  # Download velociraptor client windows MSI 
-  (New-Object System.Net.WebClient).DownloadFile('https://github.com/iknowjason/BlueTools/blob/main/velociraptor-v0.5.6-windows-amd64.msi.zip?raw=true', 'C:\terraform\velociraptor-windows-msi.zip')
-
-  # Expand the Velociraptor zip archive
-  $mtime = Get-Date
-  lwrite("$mtime Expanding the velociraptor zip file")
-  Expand-Archive -LiteralPath 'C:\terraform\velociraptor-windows-msi.zip' -DestinationPath 'C:\terraform\velociraptor-windows-msi'
-
-  lwrite("$mtime Creating Program Files Velociraptor Directory")
-  New-Item "C:\Program Files\Velociraptor" -ItemType Directory
-
-  # Install the velociraptor MSI with quiet mode 
-  $mtime = Get-Date
-  lwrite("$mtime Install velociraptor with quiet mode")
-  msiexec.exe /I C:\terraform\velociraptor-windows-msi\velociraptor-v0.5.6-windows-amd64.msi /quiet
-
-  # Download winlogbeat for HELK
-  $mtime = Get-Date
-  lwrite("$mtime Download Winlogbeat for HELK")
-  (New-Object System.Net.WebClient).DownloadFile('https://github.com/iknowjason/BlueTools/blob/main/winlogbeat-7.9.2-windows-x86_64.zip?raw=true', 'C:\terraform\winlogbeat.zip')
-
-  # Download configuration zip file, which contains SwiftOnSecurity sysmon config and winlogbeat config
-  $mtime = Get-Date
-  if (-not(Test-Path -Path "C:\terraform\configs.zip" -PathType Leaf)) {
-    try {
-      lwrite("$mtime Download SwiftOnSecurity sysmon config for HELK")
-      (New-Object System.Net.WebClient).DownloadFile('https://github.com/iknowjason/BlueTools/blob/main/configs-pc.zip?raw=true', 'C:\terraform\configs.zip')
-
-      # Expand the configs zip archive
-      $mtime = Get-Date
-      lwrite("$mtime Expand the configs zip file")
-      Expand-Archive -LiteralPath 'C:\terraform\configs.zip' -DestinationPath 'C:\terraform\configs'
-    } catch {
-      Write-Host("Error downloading and unzipping")
-    }
-  }
-
-  # Expand the winlogbeat zip archive
-  $mtime = Get-Date
-  lwrite("$mtime Expand the winlogbeat zip archive")
-  Expand-Archive -LiteralPath 'C:\terraform\winlogbeat.zip' -DestinationPath 'C:\terraform\Winlogbeat'
-
-  # Copy the Winlogbeat HELK configuration to destination Winlogbeat folder
-  $mtime = Get-Date
-  lwrite("$mtime Changing winlogbeat.yml file to use the helk IP ${helk_ip}")
-  (Get-Content c:\terraform\configs\configs-pc\winlogbeat.yml) -replace "10.100.1.5", "${helk_ip}" | Set-Content C:\terraform\configs\configs-pc\winlogbeat.yml
-  lwrite("$mtime Copy the Winlogbeat HELK configuration to destination Winlogbeat folder")
-  Copy-Item "C:\terraform\configs\configs-pc\winlogbeat.yml" -Destination "C:\terraform\Winlogbeat\winlogbeat-7.9.2-windows-x86_64"
-
-  # Copy the Winlogbeat folder to C:\ProgramData
-  $mtime = Get-Date
-  lwrite("$mtime Copy the Winlogbeat folder to C:\ProgramData")
-  Copy-Item "C:\terraform\Winlogbeat\winlogbeat-7.9.2-windows-x86_64" -Destination "C:\ProgramData\Winlogbeat" -Recurse
-
-  # Install thn Winlogbeat folder
-  $mtime = Get-Date
-  lwrite("$mtime Install the Winlogbeat service using included powershell script")
-  C:\ProgramData\Winlogbeat\install-service-winlogbeat.ps1
-
-  # Start the Winlogbeat service
-  $mtime = Get-Date
-  lwrite("$mtime Start the Winlogbeat service")
-  start-service winlogbeat
-
-} else {
-  lwrite("$mtime install_agent is set to false")
 }
 
 $mtime = Get-Date
