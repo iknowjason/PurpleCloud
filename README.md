@@ -7,7 +7,7 @@ For full documentation visit:  https://www.purplecloud.network
 
 # Updates
 
-## 9/1/22:  Updated Sentinel Lab for Active Directory Build + Ship Sysmon and Security Logs into Sentinel! 
+## 9/1/22:  Removed local-exec and ansible! Customizable files!  Upgraded Sysmon and Velociraptor!
 Removed local-exec and ansible dependencies.  All post configuration management is done with user-data and bash/powershell.
 Changed all files in range (winlogbeat, sysmon, sysmon-config) to be self-contained for upload to/from a storage container
 Upgraded Sysmon to v14 and Sysmon-Config
