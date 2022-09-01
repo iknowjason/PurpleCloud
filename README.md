@@ -8,10 +8,10 @@ For full documentation visit:  https://www.purplecloud.network
 # Updates
 
 ## 9/1/22:  Removed local-exec and ansible! Customizable files!  Upgraded Sysmon and Velociraptor!
-Removed local-exec and ansible dependencies.  All post configuration management is done with user-data and bash/powershell.
-Changed all files in range (winlogbeat, sysmon, sysmon-config) to be self-contained for upload to/from a storage container
-Upgraded Sysmon to v14 and Sysmon-Config
-Upgraded Velociraptor to v6.5.2
+- Removed local-exec and ansible dependencies.  All post configuration management is done with user-data and bash/powershell.
+- Changed all files in range (winlogbeat, sysmon, sysmon-config) to be self-contained and customizable for upload to/from a storage container.
+- Upgraded Sysmon to v14 and and latest SwiftOnSecurity Sysmon-Config
+- Upgraded Velociraptor to v6.5.2
 
 ## 8/4/22:  Updated Sentinel Lab for Active Directory Build + Ship Sysmon and Security Logs into Sentinel! 
 Build an Azure Sentinel lab with optional support for shipping Windows 10 Sysmon and Security logs into Sentinel Log Analytics Workspace.  Optionally build Active Directory with Domain Join.
