@@ -5,7 +5,10 @@ Terraform code generator to create different Azure security labs.
 
 For full documentation visit:  https://www.purplecloud.network
 
-# Updates
+# Changelog
+
+## 9/2/22:  Added support for custom CSV files for loading your own AD users, groups, and OUs into AD DS!
+- Import your own CSV file with ```--csv file.csv```.  Must confirm with a specific format that will be documented soon.
 
 ## 9/1/22:  Removed local-exec and ansible! Customizable files!  Upgraded Sysmon and Velociraptor!
 - Removed local-exec and ansible dependencies.  All post configuration management is done with user-data and bash/powershell.
