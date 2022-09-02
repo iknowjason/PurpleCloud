@@ -13,6 +13,9 @@ import urllib.request
 import secrets
 import string
 import logging
+from csv import reader
+import os.path
+import linecache
 
 
 # Override whitelist means that it will try to auto-detect the public IP address and override the whitelist_nsg variable
@@ -33,6 +36,211 @@ size_dc = "Standard_D2as_v4"
 
 # dc_ip - The domain controller IP address
 dc_ip = ""
+
+####
+# Functions
+####
+def get_random_user(csv_file):
+    # get line count
+    with open(csv_file, 'r') as fp:
+        for count, line in enumerate(fp):
+            pass
+
+    random_choice = random.randint(2, count)
+
+    myline = linecache.getline(csv_file, random_choice, module_globals=None)
+    elements = myline.split(",")
+    full_name = elements[0]
+    username = elements[1].split("@")[0]
+    password = elements[2]
+    return (full_name, username, password)
+
+    csv_file.close()
+
+def get_winrm_user(csv_file):
+
+    with open(csv_file, 'r') as csv_object:
+        csv_reader = reader(csv_object)
+        header = next(csv_reader)
+
+        if header != None:
+            for row in csv_reader:
+
+                da_value = row[5]
+                ## get the first domain admin where da is set to True
+                if da_value.upper() == "TRUE":
+
+                    username = row[1].split("@")[0]
+                    password = row[2]
+                    return(username, password)
+
+    return False
+
+# Check the user supplied csv file for correctness
+def check_ad_csv(csv_file):
+
+    retval = True
+    da_set = False
+
+    if not os.path.exists(csv_file):
+        print("[-] File doesn't exist: ",csv_file)
+        print("[-] Going to exit")
+        return False
+
+    with open(csv_file, 'r') as csv_object:
+        csv_reader = reader(csv_object)
+        header = next(csv_reader)
+        # Check 1: Check the header
+        if len(header) == 6 and header[0] == 'name' and header[1] == 'upn' and header[2] == 'password' and header[3] == 'groups' and header[4] == 'oupath' and header[5] == 'domain_admin':
+            # All good - do nothing
+            pass
+        else:
+            print("    [-] Incorrect CSV header")
+            print("    [-] This is the parsed header: ",header)
+            print("    [-] Example of a good header:  name,upn,password,groups,oupath,domain_admin")
+            return False
+        example_row = "Olivia Odinsdottir,oliviaodinsdottir@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,True"
+        count = 1
+        if header != None:
+            for row in csv_reader:
+                count+=1
+                # Check 1: 6 fields in each row
+                row_length = len(row)
+                if row_length != 6:
+                    print("    [-] Error: The row must have 6 fields")
+                    print("    [-] Error: Actual fields: ", row_length)
+                    print("    [-] Error found at line ", count)
+                    print("    [-] Bad parsed row: ",row)
+                    print("    [-] Example good row: ",example_row)
+                    print("    [-] Going to exit")
+                    return False
+
+                # Check 2: No blank data fields
+                for element in row:
+                    if element == "":
+                        print("    [-] Error: Blank data field found!")
+                        print("    [-] Error found at line ", count)
+                        print("    [-] Bad parsed row: ",row)
+                        print("    [-] Example good row: ",example_row)
+                        print("    [-] Going to exit")
+                        return False
+
+                # Check 3: Check oupath to be proper
+                # Check 3: Check that AD Group is included in oupath
+                oupath_string = row[4]
+                oupath = oupath_string.split(";")
+                if len(oupath) == 3:
+                    pass
+                else:
+                    print("    [-] Error found at line ", count)
+                    print("    [-] Error:  OUPath will cause errors loading AD")
+                    print("    [-] Error:  Expected three ; delimited fields")
+                    print("    [-] Error:  Invalid: ",oupath_string)
+                    print("    [-] Error:  Valid example: OU=IT;DC=rtcfingroup;DC=com")
+                    print("    [-] Going to exit")
+                    return False
+                ad_group = row[3]
+                ou_ad_group = ""
+                oustring = oupath_string.split(";")[0]
+                if "OU=" not in oustring:
+                    print("    [-] Error in OU field")
+                    print("    [-] Error found at line ", count)
+                    print("    [-] Error: didn't find 'OU='")
+                    print("    [-] Error:  Invalid: ", oustring)
+                    print("    [-] Error:  Valid example: OU=IT")
+                    print("    [-] Going to exit")
+                    return False
+                else:
+                    ou_parsed = oustring.split("=")
+                    if len(ou_parsed) == 2:
+                       ou_ad_group = ou_parsed[1]
+                    else:
+                        print("    [-] Error in OU field")
+                        print("    [-] Error found at line ", count)
+                        print("    [-] Error:  Invalid: ", oustring)
+                        print("    [-] Error:  Valid example: OU=IT")
+                        print("    [-] Going to exit")
+                        return False
+
+                if ad_group == ou_ad_group:
+                    pass
+                else:
+                    print("    [-] Error matching AD group with oupath")
+                    print("    [-] Error found at line ", count)
+                    print("    [-] AD will not correctly build with users, groups, and OU")
+                    print("    [-] The AD group value and OU= must match for user to be correctly placed into AD Group and OU")
+                    print("    [-] AD Group: ",ad_group)
+                    print("    [-] OUPath AD group: ",ou_ad_group)
+                    print("    [-] oupath: ", oupath_string)
+                    print("    [-] Valid example:  Regina Perkins,reginaperkins@rtcfingroup.com,MyPassword012345,Marketing,OU=Marketing;DC=rtcfingroup;DC=com,False")
+                    print("    [-] To bypass this strict check, you can set retval to True in script")
+                    retval = False
+
+                # Check 4: OUPath doesn't match for AD Domain you are going to build
+                # only check if the ad_domain is set
+                if args.ad_domain:
+                    dc1_splits = oupath[1].split("=")
+                    dc1 = dc1_splits[1]
+                    dc2_splits = oupath[2].split("=")
+                    dc2 = dc2_splits[1]
+                    dc_domain = dc1 + "." + dc2
+                    if args.ad_domain == dc_domain:
+                        # we are good, they match
+                        pass
+                    else:
+                        print("    [-] Error matching oupath domain with --ad_domain value")
+                        print("    [-] AD users, groups, or OUs will not be correctly built unless this matches")
+                        print("    [-] Error found at line ", count)
+                        print("    [-] ad_domain value: ",args.ad_domain)
+                        print("    [-] domain from oupath: ",dc_domain)
+                        print("    [-] oupath value: ",oupath)
+                        print("    [-] To bypass this strict check, you can set retval to True in script")
+                        retval = False
+
+                # Check 5: At least one DA is set
+                if da_set:
+                    pass
+                else:
+                    da_value = row[5]
+                    if da_value.upper() == "TRUE":
+                        da_set = True
+
+                # Check 6: Either True or False for domain admin
+                da_value = row[5]
+                if not da_value.upper() == "TRUE" and not da_value.upper() == "FALSE":
+                    print("    [-] Error domain admin value must be True or False")
+                    print("    [-] Error found at line ", count)
+                    print("    [-] Value: ", da_value)
+                    print("    [-] Example: Olivia Odinsdottir,oliviaodinsdottir@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,True")
+                    return False
+
+                # Check 7: upn for each user matches domain
+                if args.ad_domain:
+                    upn_domain = row[1].split("@")[1]
+                    if upn_domain == args.ad_domain:
+                        pass
+                    else:
+                        print("    [-] Error: upn domain doesn't match --ad_domain value")
+                        print("    [-] Error: This will prevent users from being added to AD")
+                        print("    [-] Error found at line ", count)
+                        print("    [-] upn domain value:",upn_domain)
+                        print("    [-] --ad_domain value:", args.ad_domain)
+                        print("    [-] To bypass this strict check, you can set retval to True in script")
+                        retval = False
+
+    # check if at least one Domain Admin is set
+    if da_set:
+        pass
+    else:
+        print("    [-] Error:  At least one domain admin is required for Domain Join")
+        print("    [-] Error:  This is set in the CSV at the last field")
+        print("    [-] Error:  Set at least one user to True")
+        print("    [-] Example: Olivia Odinsdottir,oliviaodinsdottir@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,True")
+        print("    [-] To bypass this strict check, you can set retval to True in script")
+        retval = False
+
+    # final return
+    return retval
 
 ### automatically find pubblic IP address and return it if found 
 def check_public_ip_addr():
@@ -75,6 +283,9 @@ parser.add_argument('-ad', '--ad_domain', dest='ad_domain')
 
 # Add argument for Active Directory Users count 
 parser.add_argument('-au', '--ad_users', dest='user_count')
+
+# Add argument for user supplied CSV to load Active Directory
+parser.add_argument('-cs', '--csv', dest='user_csv')
 
 # Add argument for  Local Administrator 
 parser.add_argument('-u', '--admin', dest='admin_set')
@@ -171,6 +382,10 @@ if args.admin_set:
 # duplicate count for created AD users
 duplicate_count = 0
 
+if args.user_count and args.user_csv:
+    print("[-] Both --ad_users and --csv are enabled ~ Please choose one")
+    exit()
+
 # Extra AD users beyond the default in default_ad_users
 extra_users_list = [] 
 all_ad_users = []
@@ -204,6 +419,20 @@ if args.user_count:
     print("[+] Number of duplicate users filtered out: ",duplicate_count)
     logging.info('[+] Number of duplicate users filtered out: %s', duplicate_count)
 ### End of extra AD Users
+
+### Check the user supplied CSV for issues
+### Check the file that is going to load Active Directory users, groups, OUs
+if args.user_csv:
+   print("[+] User supplied CSV file for Active Directory users: ",args.user_csv)
+   print("[+] Checking the file to make sure users will load into AD")
+   # Check the user supplied AD csv file to make sure it is properly built to work
+   retval = check_ad_csv(args.user_csv)
+   if retval:
+       print("    [+] The file looks good")
+   else:
+       print("    [+] Exit due to csv file not looking good")
+       exit()
+
 
 # Parsing some of the arguments
 if not args.endpoints_count:
@@ -1392,14 +1621,25 @@ if (win10_count > 0):
             logging.info('[+] Auto Logon Domain user')
             print("      [+] Getting the default ad user and password")
             logging.info('[+] Getting the default ad user and password')
+            full_name = ""
+            username = ""
+            password = ""
 
-            user_dict = random.choice(all_ad_users)
-            full_name = user_dict['name']
-            password = user_dict['pass']
-            names = full_name.split(' ') 
-            first = names[0] 
-            last = names[1] 
-            username = first.lower() + last.lower()
+            if args.user_csv:
+                data = get_random_user(args.user_csv)
+
+                full_name = data[0]
+                username = data[1]
+                password = data[2]
+            else:
+                user_dict = random.choice(all_ad_users)
+                full_name = user_dict['name']
+                password = user_dict['pass']
+                names = full_name.split(' ') 
+                first = names[0] 
+                last = names[1] 
+                username = first.lower() + last.lower()
+
             print("      [+] Auto Logon this Win10 Pro to AD User: ", full_name)
             logging.info('[+] Auto Logon this Win10 Pro to AD User: %s', full_name)
             print("      [+] Username: ",username)
@@ -1480,10 +1720,20 @@ if (win10_count > 0):
             logging.info('[+] Setting Domain Controller fore this endpoint to join domain: %s', dc_ip)
 
             # Replace WinRM Username
-            new_endpoint_template = new_endpoint_template.replace("WINRM_USERNAME", default_winrm_username)
+            winrm_user = []
+            if args.user_csv:
+                winrm_user = get_winrm_user(args.user_csv)
+                winrm_username = winrm_user[0]
+                new_endpoint_template = new_endpoint_template.replace("WINRM_USERNAME", winrm_username)
+            else:
+                new_endpoint_template = new_endpoint_template.replace("WINRM_USERNAME", default_winrm_username)
 
             # Replace WinRM Password
-            new_endpoint_template = new_endpoint_template.replace("WINRM_PASSWORD", default_winrm_password)
+            if args.user_csv:
+                winrm_password = winrm_user[1]
+                new_endpoint_template = new_endpoint_template.replace("WINRM_PASSWORD", winrm_password)
+            else:
+                new_endpoint_template = new_endpoint_template.replace("WINRM_PASSWORD", default_winrm_password)
 
             # Replace the AD Domain 
             new_endpoint_template = new_endpoint_template.replace("AD_DOMAIN", default_domain)
@@ -1638,7 +1888,7 @@ resource "local_file" "hosts_cfg" {
       apwd  = "ADMIN_PASSWORD" 
     }
   )
-  filename = "${path.module}/files/dc/hosts-dc.cfg"
+  filename = "${path.module}/output/dc/hosts-dc.cfg"
 }
 
 # Upload the ad_users.csv to the storage account
@@ -1688,10 +1938,20 @@ if args.dc_enable:
     dc_string = dc_string.replace("DEFAULT_DOMAIN", default_domain)
 
     # replace with WinRM Username 
-    dc_string = dc_string.replace("WINRM_USERNAME", default_winrm_username)
+    winrm_user = []
+    if args.user_csv:
+        winrm_user = get_winrm_user(args.user_csv)
+        winrm_username = winrm_user[0]
+        dc_string = dc_string.replace("WINRM_USERNAME", winrm_username)
+    else:
+        dc_string = dc_string.replace("WINRM_USERNAME", default_winrm_username)
 
     # replace with WinRM Password 
-    dc_string = dc_string.replace("WINRM_PASSWORD", default_winrm_password)
+    if args.user_csv:
+        winrm_password = winrm_user[1]
+        dc_string = dc_string.replace("WINRM_PASSWORD", winrm_password)
+    else:
+        dc_string = dc_string.replace("WINRM_PASSWORD", default_winrm_password)
 
     # replace with local Admin Username 
     dc_string = dc_string.replace("ADMIN_USERNAME", default_admin_username)
@@ -1708,81 +1968,73 @@ if args.dc_enable:
     n = dc_text_file.write(dc_string)
     dc_text_file.close()
 
-    # Change the bootstrap script to import AD users
-    ad_bootstrap_template = open("files/dc/bootstrap-dc-template.ps1")
+    ## if the user supplied their own csv file for AD import
+    if args.user_csv:
+        # copy the user supplied AD csv to the file that will be uploaded
+        print("[+] Copying the user supplied csv AD file: ",args.user_csv)
+        print("[+] To a new AD csv file: ", ad_users_csv)
+        with open(args.user_csv,'r') as firstfile, open(ad_users_csv,'w') as secondfile:
+            # read content from first file
+            for line in firstfile:
+                # write content to second file
+                secondfile.write(line)
+        firstfile.close()
+        secondfile.close()
 
-    # Read the script into data
-    data = ad_bootstrap_template.read()
+    # if user didn't supply, assume auto-generated
+    else:
 
-    # define an ADUsers array
-    new_ad_users = '''
-  # The AD users collection / array
-  $ADUsers = @()
+        # Open up the ad users csv file
+        print("[+] Creating users file with %s users: %s" % (len(all_ad_users), ad_users_csv))
+        logging.info('[+] Creating users file with %s users: %s', len(all_ad_users), ad_users_csv)
 
-'''
-    # Open up the ad users csv file
-    print("[+] Creating users file with %s users: %s" % (len(all_ad_users), ad_users_csv))
-    logging.info('[+] Creating users file with %s users: %s', len(all_ad_users), ad_users_csv)
+        # open the ad users csv file
+        ad_csv = open(ad_users_csv, 'w')
 
-    # open the ad users csv file
-    ad_csv = open(ad_users_csv, 'w')
+        # Create and write the first line of csv
+        line = "name,upn,password,groups,oupath,domain_admin"
+        ad_csv.write(line + '\n')
 
-    # Create and write the first line of csv
-    line = "name,upn,password,groups,oupath,domain_admin"
-    ad_csv.write(line + '\n')
-
-    # loop through the default_ad_users
-    for user in default_ad_users:
-        full_name = user['name'].split(' ')
-        first = full_name[0]
-        last = full_name[1]
-        usernm = first.lower() + last.lower()
-        ou = user['ou']
-        password = user['password']
-        domain_admin = user['domain_admin']
-        groups = user['groups']
+        # loop through the default_ad_users
+        for user in default_ad_users:
+            full_name = user['name'].split(' ')
+            first = full_name[0]
+            last = full_name[1]
+            usernm = first.lower() + last.lower()
+            ou = user['ou']
+            password = user['password']
+            domain_admin = user['domain_admin']
+            groups = user['groups']
         
-        # Create line to write users csv
-        ou_split = default_domain.split('.')
-        if domain_admin.lower() != 'true':
-            domain_admin = "False" 
-        upn = usernm + "@" + default_domain
-        oupath = "OU=" + groups + ";" + "DC=" + ou_split[0] + ";DC=" + ou_split[1]
-        line = user['name'] + "," + upn + "," + password + "," + groups + "," + oupath + "," + domain_admin + '\n'
-        ad_csv.write(line)
+            # Create line to write users csv
+            ou_split = default_domain.split('.')
+            if domain_admin.lower() != 'true':
+                domain_admin = "False" 
+            upn = usernm + "@" + default_domain
+            oupath = "OU=" + groups + ";" + "DC=" + ou_split[0] + ";DC=" + ou_split[1]
+            line = user['name'] + "," + upn + "," + password + "," + groups + "," + oupath + "," + domain_admin + '\n'
+            ad_csv.write(line)
 
-        ad_user_string = "" 
+        # Loop through the extra_users_list
+        for user in extra_users_list:
+            full_name = user.split(' ')
+            first = full_name[0]
+            last = full_name[1]
+            usernm = first.lower() + last.lower()
+            password = default_aduser_password 
+            domain_admin = "" 
+            groups = random.choice(ad_groups)
 
-        user_line = '  $ADUsers += (@{FirstName = "%s"; LastName = "%s"; usernm = "%s"; ou = "%s"; pcred = "%s"; groups = "%s"; domain_admin = "%s"})' % (first, last, usernm, ou, password, groups, domain_admin)
+            # Create line to write users csv
+            ou_split = default_domain.split('.')
+            domain_admin = "False"
+            upn = usernm + "@" + default_domain
+            oupath = "OU=" + groups + ";" + "DC=" + ou_split[0] + ";DC=" + ou_split[1]
+            line = user + "," + upn + "," + password + "," + groups + "," + oupath + "," + domain_admin + '\n'
+            ad_csv.write(line)
 
-        ad_user_string += user_line
-        new_ad_users += ad_user_string
-        new_ad_users += '\n\n'
-
-    # Loop through the extra_users_list
-    for user in extra_users_list:
-        full_name = user.split(' ')
-        first = full_name[0]
-        last = full_name[1]
-        usernm = first.lower() + last.lower()
-        password = default_aduser_password 
-        domain_admin = "" 
-        groups = random.choice(ad_groups)
-
-        # Create line to write users csv
-        ou_split = default_domain.split('.')
-        domain_admin = "False"
-        upn = usernm + "@" + default_domain
-        oupath = "OU=" + groups + ";" + "DC=" + ou_split[0] + ";DC=" + ou_split[1]
-        line = user + "," + upn + "," + password + "," + groups + "," + oupath + "," + domain_admin + '\n'
-        ad_csv.write(line)
-
-    # new dc bootstrap script
-    new_text_file = open("files/dc/bootstrap-dc.ps1", "w")
-
-    n = new_text_file.write(data)
-
-    new_text_file.close() 
+        # close ad cvs
+        ad_csv.close()
 
 ###
 # End of dc.tf creation 
