@@ -8,7 +8,7 @@ For full documentation visit:  https://www.purplecloud.network
 # Changelog
 
 ## 9/2/22:  Added support for custom CSV files for loading your own AD users, groups, and OUs into AD DS!
-- Import your own CSV file with ```--csv file.csv```.  Must confirm with a specific format that will be documented soon.
+- Import your own CSV file with ```--csv file.csv```.  Must conform with a specific format that will be documented soon.
 - Supported for both ```sentinel.py``` and ```ad.py``` AD DS code generators.
 
 ## 9/1/22:  Removed local-exec and ansible! Customizable files!  Upgraded Sysmon and Velociraptor!
