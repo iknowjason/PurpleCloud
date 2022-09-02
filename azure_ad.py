@@ -1,6 +1,7 @@
 from faker import Faker
 import random
 import argparse
+import linecache
 ### Install Faker:  pip3 install faker
 
 # argparser stuff
@@ -313,9 +314,9 @@ resource "azuread_directory_role" "application_admin" {
 }
 
 # Assign Application administrator to a random user
-resource "azuread_directory_role_member" "assign_application_admin" {
-  role_object_id   = azuread_directory_role.application_admin.object_id
-  member_object_id = azuread_user.userAPP_ADMIN_USER_NUM.object_id
+resource "azuread_directory_role_assignment" "assign_application_admin" {
+  role_id   = azuread_directory_role.application_admin.object_id
+  principal_object_id = azuread_user.userAPP_ADMIN_USER_NUM.object_id
 }
 '''
 
@@ -330,7 +331,7 @@ print("    [+] Terraform file: ", tu_file)
 azure_ad_text_file = open(tu_file, "w")
 n = azure_ad_text_file.write(terraform_users_template)
 
-### Loop and write all users in users_list to terrfaform file
+### Loop and write all users in users_list to terraform file
 counter = 0
 for users in users_list:
     # increment the counter
@@ -360,6 +361,7 @@ for users in users_list:
     n = azure_ad_text_file.write(user_template_new)
 
 # Add the Application administrator role if enabled
+aa_number = ""
 if args.aa_enable:
     # Get the application admin template
     new_app_admin_template = application_admin_template
@@ -373,6 +375,8 @@ if args.aa_enable:
 
     # write it to users.tf string
     n = azure_ad_text_file.write(new_app_admin_template)
+
+    aa_number = user_string
 
 # Close the file
 azure_ad_text_file.close()
@@ -406,9 +410,9 @@ resource "azuread_directory_role" "pra" {
 }
 
 # Assign PRA to a random SP
-resource "azuread_directory_role_member" "assign_pra" {
-  role_object_id   = azuread_directory_role.pra.object_id
-  member_object_id = azuread_service_principal.SP_APPLICATION_NAME.object_id
+resource "azuread_directory_role_assignment" "assign_pra" {
+  role_id   = azuread_directory_role.pra.object_id
+  principal_object_id = azuread_service_principal.SP_APPLICATION_NAME.object_id
 }
 '''
 
@@ -419,10 +423,9 @@ resource "azuread_directory_role" "ga" {
 }
 
 # Assign GA to a random SP
-resource "azuread_directory_role_member" "assign_ga" {
-  role_object_id   = azuread_directory_role.ga.object_id
-  #member_object_id = azuread_service_principal.SP_Finance_Application.object_id
-  member_object_id = azuread_service_principal.SP_APPLICATION_NAME.object_id
+resource "azuread_directory_role_assignment" "assign_ga" {
+  role_id   = azuread_directory_role.ga.object_id
+  principal_object_id = azuread_service_principal.SP_APPLICATION_NAME.object_id
 }
 '''
 
@@ -617,3 +620,37 @@ if groups > 0:
 else:
     # don't create the file
     pass
+
+# output the Application Administrator if it was enabled
+if args.aa_enable:
+    # open the users.tf
+    with open(tu_file) as fp:
+        line = fp.readline()
+        cnt = 1
+
+        # create a search string based on the number that was randomly assigned to AA
+        search_str = 'resource "azuread_user" "user' + aa_number + '"'
+
+        # loop through one line at a time to find the line number
+        while line:
+            cnt += 1
+            line = fp.readline()
+
+            # check for the search string for AA in the line
+            if search_str in line:
+
+                # Found it, so mark down the line number
+                found_line = cnt
+
+    upn_line = linecache.getline(tu_file, found_line + 1).rstrip()
+    display_line = linecache.getline(tu_file, found_line + 2).rstrip()
+    upn_split = upn_line.split("=")
+    display_split = display_line.split("=")
+    upn1 = upn_split[1].lstrip()
+    upn2 = upn1.replace('"', '')
+    username = upn2.split('@')[0]
+    display1 = display_split[1].lstrip()
+    display_name = display1.replace('"', '')
+    print("[+] Azure AD User assigned into Application Administrator role")
+    print("    [+] Username:",username) 
+    print("    [+] Display Name:",display_name) 
