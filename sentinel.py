@@ -1276,7 +1276,17 @@ resource "azurerm_sentinel_data_connector_azure_active_directory" "pc" {
 def get_nsg_template():
     template = '''
 
+# Thanks to @christophetd and his Github.com/Adaz project for this little code
+data "http" "firewall_allowed" {
+  url = "http://ifconfig.me"
+}
+
+locals {
+  src_ip = chomp(data.http.firewall_allowed.response_body)
+}
+
 # This is the src_ip for white listing Azure NSGs
+# This is going to be replaced by the data http resource above
 # allow every public IP address by default
 variable "src_ip" {
   default = "SRC_PREFIX_VALUE"
@@ -1295,7 +1305,7 @@ resource "azurerm_network_security_group" "nsg1" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "3389"
-    source_address_prefix      = var.src_ip 
+    source_address_prefix      = local.src_ip 
     destination_address_prefix = "*"
   }
   security_rule {
@@ -1307,7 +1317,7 @@ resource "azurerm_network_security_group" "nsg1" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "5986"
-    source_address_prefix      = var.src_ip 
+    source_address_prefix      = local.src_ip 
     destination_address_prefix = "*"
   }
   security_rule {
@@ -1319,7 +1329,7 @@ resource "azurerm_network_security_group" "nsg1" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "5985"
-    source_address_prefix      = var.src_ip 
+    source_address_prefix      = local.src_ip 
     destination_address_prefix = "*"
   }
   security_rule {
@@ -1331,7 +1341,7 @@ resource "azurerm_network_security_group" "nsg1" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = var.src_ip 
+    source_address_prefix      = local.src_ip 
     destination_address_prefix = "*"
   }
   depends_on = [azurerm_resource_group.network]
