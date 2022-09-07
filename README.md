@@ -7,6 +7,11 @@ For full documentation visit:  https://www.purplecloud.network
 
 # Changelog
 
+## 9/6/22:  Updated Azure AD Connect on Domain Controller!
+- Customizable Azure AD Connect msi included in ```files/dc``` folder.
+- Updates AAD Connect MSI to version 2.x
+- Automatic upload/download to DC's local administrator Desktop
+
 ## 9/2/22:  Added support for custom CSV files for loading your own AD users, groups, and OUs into AD DS!
 - Import your own CSV file with ```--csv file.csv```.  Must conform with a specific format that will be documented soon.
 - Supported for both ```sentinel.py``` and ```ad.py``` AD DS code generators.
