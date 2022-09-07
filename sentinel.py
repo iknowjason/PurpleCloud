@@ -1832,6 +1832,7 @@ data "template_file" "ps_template" {
     storage_acct              = "purplecloud${random_string.suffix.id}"
     storage_container	      = var.storage_container_name
     users_file                = var.azure_users_file
+    aadconnect_file           = var.azure_aadconnect_file
   }
 }
 
