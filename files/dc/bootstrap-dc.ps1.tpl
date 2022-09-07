@@ -218,10 +218,19 @@ Register-ScheduledJob -Name ImportUsers01 -ScriptBlock { C:\Terraform\ImportUser
 $mtime = Get-Date
 lwrite ("$mtime Download Azure AD Connect msi")
 # Download the Azure AD Connect msi 
-$url = "https://github.com/iknowjason/BlueTools/blob/main/AzureADConnect.msi?raw=true"
-$path = "C:\Users\RTCAdmin\Desktop\AzureADConnect.msi"
+$path = "C:\Users\${admin_username}\Desktop\AzureADConnect.msi"
+if ( Test-Path $path ) {
+  lwrite("$mtime File already exists: $path")
+} else {
+  lwrite ("$mtime Downloading Azure AD Connect msi from staging container")
+  $uri = "https://${storage_acct}.blob.core.windows.net/${storage_container}/${aadconnect_file}"
+  lwrite ("$mtime Uri: $uri")
+  Invoke-WebRequest -Uri $uri -OutFile $path
+}
+
 $client = New-Object System.Net.WebClient
 $client.DownloadFile($url, $path)
+lwrite ("$mtime Downloaded to $path")
 
 $mtime = Get-Date
 lwrite ("$mtime End of bootstrap script")

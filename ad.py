@@ -1116,6 +1116,10 @@ variable "azure_users_file" {
   default = "ad_users.csv"
 }
 
+variable "azure_aadconnect_file" {
+  default = "AzureADConnect.msi"
+}
+
 # Random string for resources
 resource "random_string" "suffix" {
   length  = 5
@@ -1852,6 +1856,7 @@ data "template_file" "ps_template" {
     storage_acct              = "purplecloud${random_string.suffix.id}"
     storage_container	      = var.storage_container_name
     users_file                = var.azure_users_file
+    aadconnect_file           = var.azure_aadconnect_file
   }
 }
 
@@ -1897,7 +1902,11 @@ resource "azurerm_windows_virtual_machine" "domain-controller" {
       setting = "FirstLogonCommands"
   }
 
-  depends_on = [azurerm_resource_group.network]
+  depends_on = [
+    azurerm_resource_group.network,
+    azurerm_storage_blob.ad_connect_msi,
+    azurerm_storage_blob.users_csv
+  ]
 }
 
 resource "azurerm_virtual_machine_extension" "create-ad-forest" {
@@ -1926,11 +1935,20 @@ resource "local_file" "hosts_cfg" {
 
 # Upload the ad_users.csv to the storage account
 resource "azurerm_storage_blob" "users_csv" {
-  name                   = "ad_users.csv"
+  name                   = var.azure_users_file 
   storage_account_name   = azurerm_storage_account.storage-account.name
   storage_container_name = azurerm_storage_container.storage-container.name
   type                   = "Block"
-  source                 = "ad_users.csv"
+  source                 = var.azure_users_file 
+}
+
+# Upload the Azure AD Connect MSI to the storage account
+resource "azurerm_storage_blob" "ad_connect_msi" {
+  name                   = var.azure_aadconnect_file 
+  storage_account_name   = azurerm_storage_account.storage-account.name
+  storage_container_name = azurerm_storage_container.storage-container.name
+  type                   = "Block"
+  source                 = "${path.module}/files/dc/${var.azure_aadconnect_file}"
 }
 
 output "dc_ad_details" {
