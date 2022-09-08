@@ -1231,6 +1231,7 @@ data "http" "firewall_allowed" {
 
 locals {
   src_ip = chomp(data.http.firewall_allowed.response_body)
+  #src_ip = "0.0.0.0/0" 
 }
 
 # This is the src_ip for white listing Azure NSGs
