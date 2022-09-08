@@ -178,11 +178,18 @@ variable "internal_dns_name" {
 variable "mi_private_nic_ip" {
   default = "10.101.10.10"
 }
-# This is the src_ip for white listing Azure NSGs
-# allow every public IP address by default
-variable "src_ip" {
-  default = "0.0.0.0/0"
+
+# Thanks to @christophetd and his Github.com/Adaz project for this little code
+data "http" "firewall_allowed" {
+  url = "http://ifconfig.me"
 }
+
+# This is the src_ip for white listing Azure NSGs
+locals {
+  src_ip = chomp(data.http.firewall_allowed.response_body)
+  #src_ip = "0.0.0.0/0" 
+}
+
 variable "mi_admin_username" {
   default = "MIADMIN_DEFAULT"
 }
@@ -672,7 +679,7 @@ resource "azurerm_network_security_group" "managed_identity" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "3389"
-    source_address_prefix      = var.src_ip
+    source_address_prefix      = local.src_ip
     destination_address_prefix = "*"
   }
   security_rule {
@@ -684,7 +691,7 @@ resource "azurerm_network_security_group" "managed_identity" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "5986"
-    source_address_prefix      = var.src_ip
+    source_address_prefix      = local.src_ip
     destination_address_prefix = "*"
   }
   security_rule {
@@ -696,7 +703,7 @@ resource "azurerm_network_security_group" "managed_identity" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "5985"
-    source_address_prefix      = var.src_ip
+    source_address_prefix      = local.src_ip
     destination_address_prefix = "*"
   }
   depends_on = [azurerm_resource_group.pcmi]
@@ -740,7 +747,7 @@ resource "azurerm_windows_virtual_machine" "managed_identity" {
   }
 
   additional_unattend_content {
-      content      = file("${path.module}/files/FirstLogonCommands.xml")
+      content      = file("${path.module}/files/win10/FirstLogonCommands.xml")
       setting = "FirstLogonCommands"
   }
 
