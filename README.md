@@ -1,4 +1,4 @@
-![](https://badgen.net/badge/icon/azure?icon=azure&label=platform) ![](https://badgen.net/github/release/iknowjason/PurpleCloud) [![Maintained](https://img.shields.io/badge/maintained-Yes%20as%20of%20July%202022-green.svg)](https://shields.io/)
+![](https://badgen.net/badge/icon/azure?icon=azure&label=platform) ![](https://badgen.net/github/release/iknowjason/PurpleCloud) [![Maintained](https://img.shields.io/badge/maintained-Yes%20as%20of%20September%202022-green.svg)](https://shields.io/)
 
 # Documentation
 Terraform code generator to create different Azure security labs.
