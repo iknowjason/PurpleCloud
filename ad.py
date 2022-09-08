@@ -2010,8 +2010,6 @@ locals {
   vserver_config           = "server.config.yaml"
   vclient_config           = "client.config.yaml"
   winlogbeat_config        = "winlogbeat.yml"
-  #sysmon_config            = "sysmonconfig-export.xml"
-  #sysmon_zip               = "Sysmon.zip"
 }
 
 
