@@ -13,7 +13,6 @@ nav:
      - Azure Managed Identity lab: tools/midentity.md
      - Phishing App: tools/phishing_app.md
    - Cost: cost.md
-   - Creds and Access: infrastructure.md
    - References : references.md
    - Roadmap Ideas : future.md
    - Credits : credits.md

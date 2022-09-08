@@ -1,12 +1,14 @@
 # Azure Active Directory lab
 
+## Usage Examples
+
 Generating an Azure AD lab using ```azure_ad.py```.
 
 This generates terraform formatted HCL files for ```users.tf```.  If applications and groups are created, the ```apps.tf``` and ```groups.tf``` will also be created.
 
-### Generate a basic Azure AD lab
+### Example 1:  Basic Azure AD lab
 
-Usage Example:  Generate a basic Azure AD lab
+Generate a basic Azure AD lab.
 
 ```$ python3 azure_ad.py --upn rtcfingroup.com```
 
@@ -18,9 +20,9 @@ This will generate an Azure AD range with a UPN suffix of ```rtcfingroup.com``` 
 * **azure_emails.txt:** A file including just the email addresses.
 * **users.tf:** Terraform file that will build the users.
 
-### Generate an Azure AD lab with 1,000 users 
+### Example 2:  Azure AD lab with 1,000 users 
 
-Usage Example:  Generate an Azure AD lab with 1,000 users 
+Generate an Azure AD lab with 1,000 users.
 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 1000```
 
@@ -28,9 +30,9 @@ Usage Example:  Generate an Azure AD lab with 1,000 users
 Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  The password applied to all users will be displayed at the end of ```terraform apply```.  To display the passwor again, run ```terraform output```.  
 
 
-### Generate a lab with Azure applications and groups
+### Example 3:  Azure applications and groups
 
-Usage Example:  Generate a lab with Azure applications and groups
+Generate a lab with Azure applications and groups.
 
 ```$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5```
 
@@ -40,9 +42,9 @@ Same as above, except generate 500 users in Azure AD.  Create 3 Azure applicatio
 - **apps.tf:**  A terraform file with the Azure applications.
 - **groups.tf:**  A terraform file with the Azure groups.
 
-### Generate a lab for Service Principal abuse attack primitives
+### Example 4:  Service Principal abuse attack primitives
 
-Usage Example:  Generate a lab for Service Principal abuse attack primitives
+Generate a lab for Service Principal abuse attack primitives.
 
 ```$ python3 azure_ad.py -c 25 --upn rtcfingroup.com --apps 7 -aa -ga -pra```
 

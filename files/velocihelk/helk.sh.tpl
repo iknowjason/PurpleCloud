@@ -19,9 +19,6 @@ cp velociraptor /usr/sbin/.
 echo "Build velociraptor deb package" >> /tmp/helk.log
 velociraptor --config /home/helk/server.config.yaml debian server
 
-#echo "Add velociraptor administrator in config" >> /tmp/helk.log
-#sudo -u velociraptor bash -c 'velociraptor --config /home/helk/server.config.yaml user add ${vadmin_username} ${vadmin_password} --role administrator'
-
 echo "Install deb package and service" >> /tmp/helk.log
 dpkg -i /home/helk/*.deb
 

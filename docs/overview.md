@@ -2,22 +2,65 @@
 
 Identity lab supporting Azure AD and Active Directory enterprise deployment with SIEM in Azure. Easily build your own Pentest / Red Team / Cyber Range in Azure cloud. PurpleCloud was created as a platform for researching Azure Identity. This repository contains python scripts that function as Terraform code generators for different use cases.
 
-## azure_ad.py
+## Capabilities and Use Cases
+
+* **Hybrid Identity lab:**  Automatically create a simulated AD on-premise environment with configurable users plus an Azure AD environment with configurable users.  Automatically place the latest Azure AD Connect installer on the DC's desktop.  This can save security researchers a significant amount of time in building Hybrid Identity deployments.
+
+* **Detection Engineering + Purple Teaming:**  Security simulation lab to run attack and defense simulations against a realistic enterprise environment.
+
+* **Azure AD Lab:**  Security lab for learning Azure AD plus running simulations for Red and Blue teams.
+
+* **Active Directory lab:** Simulate an on-premise AD environment using Azure VMs, for learning, training, and Red/Blue team simulations.
+
+* **Sentinel lab:** Supports automated deployment of Azure Sentinel for learning, training, and attack/defense simulations.
+
+* **Azure Storage lab:** Creates a deployment with Azure storage blobs, shares, files, and key vaults with secrets, keys, and certificates.
+
+* **Phishing App lab:** Automatically deploy a multi-tenant phishing app for learning, training, and simulations of attack and defense.
+
+* **Azure AD features:** 
+    * Customizable Azure AD Domain 
+    * Automatically deploy customizable number of randomly generated Azure AD users
+    * Build up to 7 Azure AD applications
+    * Build up to 11 Azure AD Groups
+    * Auto-assign Azure AD users into groups
+    * One optional privilege escalation abuse scenario included + attack scripts
+
+* **Active Directory features:** 
+    * Domain Join Windows 10
+    * Customizable AD Domain
+    * Configurable number of windows 10 endpoints
+    * Command line parameters to randomly generate passwords or specify custom password
+    * Automatically log on Domain Users into Windows 10 endpoint with domain user creds
+    * Automatically add configurable number of AD users, groups, and OUs
+    * Import custom AD users, groups, and OUs from user supplied CSV
+    * Customizable Azure AD Connect MSI
+
+* **Detection Engineering, SIEM, DFIR:** 
+    * Sentinel:  Support for Windows 10 Sentinel automated shipping of Sysmon and Windows Event Logs to Sentinel 
+    * Velociraptor Live Response:  Velociraptor 6.5.2:  Server and endpoint instrumentation with internal PKI
+    * Hunting ELK automated server deployment and Windows 10 endpoint agent instrumentation to ship logs to server 
+    * Customizable Winlogbeat version and configuration
+    * Sysmon 14:  Fully customizable sysmon configuration and upgradeable to future Sysmon versions past v14 current support
+
+## Tools
+
+### azure_ad.py
 Generate the terraform for a custom Azure AD security lab. It uses a python library (faker) to generate as many Azure AD users as you desire, also creating AD Groups and AD Applications.  Contains a vulnerable privilege escalation scenario that can be optionally enabled.
 
-## ad.py
+### ad.py
 Create an Active Directory on-premise environment simulated with Azure VMs. This script is used to generate a more traditional infrastructure range. It can create an Active Directory Domain Services range, generating as many AD users as you wish. It also supports many other features such as Domain Join of Windows 10 systems, in addition to a SIEM instrumented with Sysmon.
 
-## sentinel.py
+### sentinel.py
 Create an Azure Sentinel deployment configured in a log analytics workspace.  Optionally configure Windows 10 to ship security and Sysmon logs to Sentinel.  Optionally configure an Active Diretory environment with Domain Join. 
 
-## storage.py
+### storage.py
 Create some Azure storage resources, including a storage account, containers, blobs, file shares with files, key vault with secrets, keys, and certificate.
 
-## managed_identity.py
+### managed_identity.py
 Create an Azure managed identity attack lab with an Azure VM, a user or system assigned identity for the VM, and some storage and key vault resources to practice with. 
 
-## phishing_app.py
+### phishing_app.py
 Create a multi-tenant Azure AD application that can be used for app consent phishing simulations.  You can specify a custom display name for the app along with custom redirect_uri, homepage_url, and logout_url.  
 
 ## Use Cases

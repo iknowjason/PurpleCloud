@@ -4,7 +4,7 @@
 ## Pre-Requisites
  
 * **Python:** Tested version:  3.8.10
-* **Terraform:**  Tested version:  1.1.2 
+* **Terraform:**  Tested version:  1.2.8 
 * **Azure tenant with subscription**
 * **Global Administrator role**
 
