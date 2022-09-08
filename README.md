@@ -1,4 +1,4 @@
-![](https://badgen.net/badge/icon/azure?icon=azure&label=platform) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/iknowjason/PurpleCloud) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/faker)
+![](https://badgen.net/badge/icon/azure?icon=azure&label=platform) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/iknowjason/PurpleCloud) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/faker) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/iknowjason/PurpleCloud)
 
 # Documentation
 Terraform code generator to create different Azure security labs.
