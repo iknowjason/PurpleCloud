@@ -7,6 +7,11 @@ For full documentation visit:  https://www.purplecloud.network
 
 # Changelog
 
+
+## 9/8/22:  Updated managed identity generator for automated white listing of source IP.
+- Fixed one issue with new directory name for Windows 10
+- Changed managed_identity.py to use new automatic white listing using http data resource of ifconfig.me
+
 ## 9/6/22:  Updated Azure AD Connect on Domain Controller.
 - Customizable Azure AD Connect msi included in ```files/dc``` folder.
 - Updates AAD Connect MSI to version 2.x
