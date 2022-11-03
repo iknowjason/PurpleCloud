@@ -5,11 +5,11 @@
 
 $targetObjectId = "" 
 $azureApplicationId = "" 
+$appadmin_username = "" 
+$appadmin_password = ""
 $tenantId = "" 
 
 # Step 2.2:  Connect with the Azure AD user assigned to Application Administrator role
-$appadmin_username = ""
-$appadmin_password = ""
 $securepassword = ConvertTo-SecureString "$appadmin_password" -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential($appadmin_username, $securepassword)
 Connect-AzureAD -Credential $credential
