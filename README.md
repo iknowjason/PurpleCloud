@@ -7,6 +7,14 @@ For full documentation visit:  https://www.purplecloud.network
 
 # Changelog
 
+## 11/3/22:  Added new terraform generators:  ADFS & AADJoin
+- Added a new Terraform Generator:  adfs.py.  This builds a Federation ADFS lab with a DC.
+- Added a new Terraform Generator:  aadjoin.py.  This builds an Azure AD Join lab with Windows 10 managed devices.
+- Moves all generators into separate sub-directories for cleaner separation of terraform resources and state, ease of use
+- Remove archive directory for older templates
+- Drops AAD connect msi on desktop of ADFS server
+- Adds PurpleSharp to always download on Windows 10 Pro: ad.py, sentinel.py
+- Updated bootstrap scripts to always expand-archive: ad.py, sentinel.py
 
 ## 9/8/22:  Updated managed identity generator for automated white listing of source IP.
 - Fixed one issue with new directory name for Windows 10
