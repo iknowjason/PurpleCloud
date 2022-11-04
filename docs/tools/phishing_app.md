@@ -4,6 +4,21 @@
 
 This generates a terraform format HCL file for ```phishing_app.tf```.
 
+**Example 1:**
+```
+python3 phishing_app.py
+```
+
+**Example 2:**
+```
+python3 phishing_app.py --name EvilApp --redirect_uri https://www.evil-app.com/get_token 
+```
+
+**Important Note:** This generator lives in the ```generators/phishing_app``` directory.  Navigate into this directory first.
+```
+cd generators/phishing_app
+```
+
 The following Graph API delegated scope permissions are automatically created for the application:
 ```
 Contacts.Read
@@ -34,3 +49,8 @@ API permissions can be customized by adding the ```id``` for the correct permiss
 
 ```--logout_url <LOGOUT_URL>```:  The logout URL used by the application.
 (Default: "https://localhost:30662/logout")
+
+## Demo
+A video demonstration of building an application consent phishing  lab with options and illustrations.
+
+[![App Consent Phishing Demo]()](https://youtu.be/o9wb6aux9Rk "application consent phishing lab")

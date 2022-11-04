@@ -4,11 +4,18 @@
 
 Create an attack and defense lab for managed identity with one Azure Virtual Machine.  An Azure VM is configured with a user assigned managed identity and optional system assigned identity.  An Azure AD user is also created.  Generates terraform format HCL files for ```managed_identity.tf```,  ```providers.tf```, and ```mi_user.tf```.
 
+**Important Note:** This generator lives in the ```generators/managed_identity``` directory.  Navigate into this directory first.
+```
+cd generators/managed_identity
+```
+
 ## Usage Examples
 
 ### Example 1:  Windows 10 Endpoint with a User Assigned Identity (Reader Role)
 
-```python3 managed_identity.py -u rtcfingroup.com -ua reader```
+```
+python3 managed_identity.py -u rtcfingroup.com -ua reader
+```
 
 **Description:**
 
@@ -30,7 +37,9 @@ This will generate terraform HCL files for a managed identity attack and defense
 
 ### Example 2:  Windows 10 Endpoint with a User Assigned Identity (Contributor Role)
 
-```python3 managed_identity.py -u rtcfingroup.com -ua contributor```
+```
+python3 managed_identity.py -u rtcfingroup.com -ua contributor
+```
 
 **Description:**
 
@@ -38,7 +47,9 @@ Same scenario as above except it will set the Contributor role (scoped to Subscr
 
 ### Example 3: Windows 10 Endpoint with a User Assigned Identity (Owner Role) + System Assigned Identity
 
-```python3 managed_identity.py -u rtcfingroup.com -n rtcfin -l eastus -a RTCAdmin -p MyPassword012345 -ua owner -sa```
+```
+python3 managed_identity.py -u rtcfingroup.com -n rtcfin -l eastus -a RTCAdmin -p MyPassword012345 -ua owner -sa
+```
 
 **Description:**
 
@@ -123,3 +134,8 @@ variable "user_role" {
   #default = "Owner"
 }
 ```
+
+## Demo
+A video demonstration of building a managed identity lab with options and illustrations.
+
+[![Managed Identity Demo]()](https://youtu.be/yXuGSi0NhLg "Managed Identity Demo")

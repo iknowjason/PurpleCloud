@@ -1,55 +1,80 @@
-# Azure VMs, Active Directory, and SIEM 
+# ADFS Federation Lab 
 
 ## Overview
 
-Generating an Azure infrastructure lab using ad.py.  This generator can create standalone Windows 10 endpoints, a full domain-joined enterprise Active Directory environment with users, or a SIEM with Velociraptor. 
+Generating an ADFS Federation lab with adfs.py.  This generator can create an enterprise ADFS server deployment with a Domain Controller.  It can also add a full domain-joined enterprise Active Directory environment with users and Windows 10 Professional endpoints.  This generator always adds a Microsoft Sentinel deployment with a Log Analytics workspace.  The ADFS server automatically installs the Azure legacy monitoring agent with Sysmon and ADFS security auditing configuration, and will ship the logs into Sentinel via the agent.  For each Windows 10 Pro system added, they will all have Sysmon installed, the legacy monitoring agent, and ship Sysmon logs to Sentinel. 
 
-**Important Note:** This generator lives in the ```generators/ad``` directory.  Navigate into this directory first.
+To summarize, the following Azure resources are always created by default with this lab:
+
+- One ADFS server joined to an AD Domain
+- One DC
+- One Sentinel deployment
+
+**Important Note:** This generator lives in the ```generators/adfs``` directory.  Navigate into this directory first.
 ```
-cd generators/ad
+cd generators/adfs
 ```
 
 ## Usage Examples
 
-### Example 1: One Windows 10 Endpoint with Sysmon installed
+### Example 1: One ADFS Server and one Domain Controller, with self-signed ADFS certificate 
 
 ```
-python3 ad.py --endpoint 1
+python3 adfds.py
 ```
 
 **Description:**
-This will generate a single Windows 10 Endpoint and generate a random, unique password with a default local Administrator account named ```RTCAdmin```.  This generates the following terraform files:
+This will generate a lab with a single ADFS server and Domain Controller.  The ADFS server will use a self-signed certificate.  Five AD users will be created with a default AD domain of ```rtc.local```.  This generates the following terraform files:
 
-- **main.tf:** Terraform file with resource group and location.
+- **adfs.tf:** Terraform file defining ADFS configuration.
 
-- **network.tf:** Terraform file with VNet and subnets. 
+- **dc_adfs.tf:** Terraform file defining the Domain Controller configuration.
 
-- **nsg.tf:** Terraform file with Network Security Groups.
+- **main_adfs.tf:** Terraform file with resource group and location.
+
+- **network_adfs.tf:** Terraform file with VNet and subnets. 
+
+- **nsg_adfs.tf:** Terraform file with Network Security Groups.
 
 - **providers.tf:** Terraform file containing terraform providers.
 
-- **sysmon.tf:** Terraform file containing sysmon configuration.
+- **sentinel_adfs.tf:** Terraform file with Network Security Groups.
 
-- **win10-1.tf:** Terraform file with Windows 10 Pro configuration.
+- **storage_adfs.tf:** Terraform file containing sysmon and all other files used for configuration.
 
+In addition to the above terraform files, a single file will be created with five AD users:  ```ad_users.csv```
 
-### Example 2: Domain Controller with Forest and Users + Windows Domain Join (Randomly Generate Users)
-
-```
-python3 ad.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join
-```
-
-**Description:**
-This will create a Domain Controller in ```dc.tf``` and install AD DS with forest name of ```rtcfingroup.com```.  This will create a custom local administrator account and password with 500 domain users.  In this example, the domain users are randomly generated using the command line flag of ```--ad_users``` for a total of 500 users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the ```domain_join``` parameter enables it for all Windows 10 Pro created.  This will also create two Windows 10 Pro terraform files (win10-1.tf, win10-2.tf) as well as a terraform file for the Domain Controller (dc.tf).
-
-### Example 3: Domain Controller with Forest and Users + Windows Domain Join (Import Custom Users from CSV)
+### Example 2: ADFS Server with DC.  The ADFS Server will import a trusted, CA signed certificate.  
 
 ```
-python3 ad.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --csv users.csv --endpoints 2  --domain_join
+python3 adfs.py --trusted_cert adfs.pfx --pfx_password password --ad_domain rtcsecurity.net 
 ```
 
 **Description:**
-Same capabilities as above, except it can import a custom list of Domain Users into active directory on the DC instance.  The script checks to make sure that users are in the correct format.  An example CSV showing five users is listed below:
+This will build an ADFS server and DC as described in example 1.  In this example, a trusted, CA signed certificate is imported.  The name of the certificate is passed in the parameter ```--trusted_cert```.  The format of the file is pfx, and the password used to protect the file is passed in the parameter ```--pfx_password```.  Finally, an AD Domain used to create AD is specified in the ```--ad_domain```. The Azure Simuland project has a great guide on how to get a trusted CA signed SSL certificate:  
+
+```
+https://github.com/Azure/SimuLand/blob/main/docs/environments/_helper-docs/getTrustedCASignedSSLCertificate.md
+```
+
+### Example 3: ADFS + DC + Adding Windows 10 Professional (Randomly generate AD users)
+
+```
+python3 adfs.py --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --endpoints 1 --domain_join --ad_users 500
+```
+
+**Description:**
+This example builds an Active Directory domain of ```rtcfingroup.com``` on the DC.  The ADFS server automatically joins to this AD domain and a self-signed certificate will be used to build ADFS.  With ```--endpoints 1```, one Windows 10 Pro system is created and it is set to join the domain with ```--domain_join```.  Finally, 500 AD users are randomly generated and added to the AD Domain, with assignment into AD Groups and OUs that are also created.
+
+
+### Example 4: ADFS + DC + Adding Windows 10 Professional (Import Custom Users from CSV)
+
+```
+python3 adfs.py --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --csv users.csv --endpoints 1 --domain_join --ad_users 500
+```
+
+**Description:**
+Same capabilities as above, except it can import a custom list of Domain Users into active directory on the DC instance.  With the ```--csv users.csv```, a file named ```users.csv``` is looked for in the working directory.  The script checks to make sure that users are in the correct format.  An example CSV showing five users is listed below:
 
 ```
 name,upn,password,groups,oupath,domain_admin
@@ -59,47 +84,6 @@ Liem Anderson,liemanderson@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingr
 John Nilsson,johnnilsson@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,False
 Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,True
 ```
-
-### Example 4: Build a Veloicraptor + Hunting ELK server and automatically export sysmon winlog beat logs 
-
-```
-python3 ad.py --helk --endpoint 1
-```
-
-**Description:**
-This will add a Velociraptor + Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.  This will create a terraform file for the HELK server (helk.tf)
-
-**Default OS and Application Credentials:**
-
-- **OS username:** helk.
-
-- **HELK Username:** admin.  Can be changed in ```local.vadmin_username```. 
-
-- **HELK Password:** Randomly generated.  Can be changed in ```local.vadmin_password```. 
-
-- **Velociraptor Username:** admin.  Can be changed in ```local.vadmin_username```. 
-
-- **Velociraptor Password:** Randomly generated.  Can be changed in ```local.vadmin_password```. 
-
-**Accessing Credentials and Application URLs:**
-
-After the range has built, type ```terraform output``` to get the credentials and URLs for HELK and Velociraptor.
-
-**Input Files for Velociraptor + HELK:**
-
-The following files are automatically uploaded to storage container and then downloaded by the HELk + Velociraptor system.  They can be fully customized to suit your needs.  All files are contained in the ```files/velocihelk``` directory:
-
-- **Sysmon.zip:** The sysmon version to be used on Windows 10 endpoints.  This version is v14.0.   
-
-- **sysmonconfig-export.xml:** The sysmon configuration to be used.  Currently uses github.com/SwiftOnSecurity. 
-
-- **velociraptor-v0.6.5-2-linux-amd64.gz:** The velociraptor linux binary that runs on the server. 
-
-- **velociraptor-v0.6.5-2-windows-amd64.msi:**  The velociraptor msi that runs on windows 10 endpoints.
-
-- **winlogbeat-7.9.2-windows-x86_64.zip:** The winlogbeat agent that runs on windows 10 endpoints and ships logs to the HELK server. 
-
-- **winlogbeat.yml.tpl:** The configuration file for winlogbeat agent that currently sends to HELK using kafka transport.
 
 ## Details
 
@@ -212,6 +196,6 @@ locals {
 You can get the details of each Virtual Machine, including passwords, by typing ```terraform output```.
 
 ## Demo
-A video demonstration of AD with options and illustrations.
+A video demonstration of building an ADFS Federation lab with options and illustrations.
 
-[![AD Demo]()](https://youtu.be/dHfdDeqViFg "AD Demo")
+[![ADFS Demo]()](https://youtu.be/MD3iQCHi-98 "ADFS Demo")

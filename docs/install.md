@@ -68,7 +68,7 @@ For building the Azure infrastructure resources, assigning the Service Principal
 
 ### Step 4: Generate Terraform  
 
-Run one of the PurpleCloud scripts to generate terraform.  See the usage section for examples.
+Run one of the PurpleCloud scripts to generate terraform.  Each generator lives in a separate directory.  See the usage section for examples.
  
 ### Step 5: Run Terraform
   

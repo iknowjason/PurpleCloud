@@ -1,7 +1,12 @@
-# Azure Sentinel lab
+# Microsoft Sentinel lab
 
 ## Overview
 This tool generates an Azure sentinel lab with optional Windows 10 Endpoints forwarding logs to the Sentinel Log Analytics workspace.  Optionally configure a Domain Controller with Domain Join.  Windows 10 Azure VMs automatically install and configure the legacy Microsoft Monitoring Agent (MMA) or Operations Management Suite (OMS) and send logs to the Log Analytics workspace.  The endpoints will install Sysmon by default. Note that some manual configuration steps are required for final logging configuration.   
+
+**Important Note:** This generator lives in the ```generators/sentinel``` directory.  Navigate into this directory first.
+```
+cd generators/sentinel
+```
 
 ## Manual Logging Configuration
 
@@ -10,6 +15,10 @@ After creating the lab there are a couple of manual setup steps required.
 ### Step 1:  Add Sysmon Channel in log analytics agents configuration
 
 Navigate into the ```log analytics workspace``` and ```agents configuration```.  Select the ```add windows event log```.  Type ```Microsoft-Windows-Sysmon/Operational``` into the Log name input field and select Apply.  The following screen shot shows how the configuration should look. 
+
+```
+Microsoft-Windows-Sysmon/Operational
+```
 
 ![](./images/sysmon.png)
 
@@ -33,11 +42,13 @@ After the Virtual Machines reboot, you can navigate into the Sentinel overview p
 
 ## Usage Examples
 
-### Example 1:  Simple Azure Sentinel lab
+### Example 1:  Simple Microsoft Sentinel lab
  
-```$ python3 sentinel.py```
+```
+python3 sentinel.py
+```
 
-This generates an Azure Sentinel lab with a Log Analytics workspace.
+This generates a Microsoft Sentinel lab with a Log Analytics workspace.
 
 This generates a terraform format HCL file for ```sentinel.tf``` and ```providers.tf```.
 
@@ -51,21 +62,27 @@ This generates a terraform format HCL file for ```sentinel.tf``` and ```provider
 
 This generates a single Windows 10 Endpoint with Sysmon installed.
 
-```$ python3 sentinel.py --endpoint 1```
+```
+python3 sentinel.py --endpoint 1
+```
 
 All Windows 10 Pro systems will automatically send logs to Sentinel.  Some small manual steps are required (listed above) to get Sysmon and Security logs properly working.
 
 ### Example 3: Domain Controller with Forest and Users + Windows Domain Join (Randomly Generate Users)
 
-```$ python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join```
+```
+python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join
+```
 
 **Description:**
 
-This will automatically create an Azure Sentinel deployment.  This will also create a Domain Controller in dc_sentinel.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.   In this example, the domain users are randomly generated using the command line flag of ```--ad_users``` for a total of 500 users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the ```domain_join``` parameter enables it for all Windows 10 Pro created.  This will also create two Windows 10 Pro terraform files (win10-1.tf, win10-2.tf) as well as a terraform file for the Domain Controller (dc_sentinel.tf).  For the two Windows 10 Pro endpoints, they will be configured with the Microsoft Monitoring Agent (MMA) to ship logs to Log Analytics Workspace with Azure Sentinel.
+This will automatically create an Microsoft Sentinel deployment.  This will also create a Domain Controller in dc_sentinel.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.   In this example, the domain users are randomly generated using the command line flag of ```--ad_users``` for a total of 500 users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the ```domain_join``` parameter enables it for all Windows 10 Pro created.  This will also create two Windows 10 Pro terraform files (win10-1.tf, win10-2.tf) as well as a terraform file for the Domain Controller (dc_sentinel.tf).  For the two Windows 10 Pro endpoints, they will be configured with the Microsoft Monitoring Agent (MMA) to ship logs to Log Analytics Workspace with Microsoft Sentinel.
 
 ### Example 4: Domain Controller with Forest and Users + Windows Domain Join (Import Custom Users from CSV)
 
-```$ python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --csv users.csv --endpoints 2  --domain_join```
+```
+python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --csv users.csv --endpoints 2  --domain_join
+```
 
 **Description:**
 Same capabilities as above, except it can import a custom list of Domain Users into active directory on the DC instance.  The script checks to make sure that users are in the correct format.  An example CSV showing five users is listed below:
@@ -185,3 +202,8 @@ locals {
 
 ### Terraform Outputs
 You can get the details of each Virtual Machine, including passwords, by typing ```terraform output```.
+
+## Demo
+A video demonstration of Sentinel with options and illustrations.
+
+[![Sentinel Demo]()](https://youtu.be/_jlqtqN4Iiw "Sentinel Demo")

@@ -1,10 +1,23 @@
 # Azure Storage lab 
 
+## Overview
+
 ```$ python3 storage.py -n <NAME> -l <LOCATION>```
+
+**Example Usage**:
+
+```
+python3 storage.py -n mystoragename -l eastus
+```
 
 Generates a terraform format HCL file for ```storage.tf``` and ```providers.tf```.
 
 This is a great generator for quickly creating a bunch of vulnerable cloud storage resources or studying the different security permission levels.  It also builds an Azure Key Vault resources.
+
+**Important Note:** This generator lives in the ```generators/storage``` directory.  Navigate into this directory first.
+```
+cd generators/storage
+```
 
 ### Resources Created
 
@@ -27,3 +40,7 @@ Specify the resource group and name of resources with ```NAME``` and the Azure l
 
 ```-l <LOCATION>```:  Specify a different location (Default: centralus)
 
+## Demo
+A video demonstration of building a storage lab with options and illustrations.
+
+[![Storage Demo]()](https://youtu.be/yIgKUjiTb7M "Storage Demo")

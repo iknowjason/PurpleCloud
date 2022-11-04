@@ -12,7 +12,7 @@ Identity lab supporting Azure AD and Active Directory enterprise deployment with
 
 * **Active Directory lab:** Simulate an on-premise AD environment using Azure VMs, for learning, training, and Red/Blue team simulations.
 
-* **Sentinel lab:** Supports automated deployment of Azure Sentinel for learning, training, and attack/defense simulations.
+* **Microsoft lab:** Supports automated deployment of Azure Microsoft for learning, training, and attack/defense simulations.
 
 * **Azure Storage lab:** Creates a deployment with Azure storage blobs, shares, files, and key vaults with secrets, keys, and certificates.
 
@@ -52,7 +52,7 @@ Generate the terraform for a custom Azure AD security lab. It uses a python libr
 Create an Active Directory on-premise environment simulated with Azure VMs. This script is used to generate a more traditional infrastructure range. It can create an Active Directory Domain Services range, generating as many AD users as you wish. It also supports many other features such as Domain Join of Windows 10 systems, in addition to a SIEM instrumented with Sysmon.
 
 ### sentinel.py
-Create an Azure Sentinel deployment configured in a log analytics workspace.  Optionally configure Windows 10 to ship security and Sysmon logs to Sentinel.  Optionally configure an Active Diretory environment with Domain Join. 
+Create a Microsoft Sentinel deployment configured in a log analytics workspace.  Optionally configure Windows 10 to ship security and Sysmon logs to Sentinel.  Optionally configure an Active Diretory environment with Domain Join. 
 
 ### storage.py
 Create some Azure storage resources, including a storage account, containers, blobs, file shares with files, key vault with secrets, keys, and certificate.
@@ -71,6 +71,6 @@ Create a multi-tenant Azure AD application that can be used for app consent phis
 * Enterprise Active Directory lab with domain joined devices
 * Malware / reverse engineering to study artifacts against domain joined devices
 * SIEM / Threat Hunting / DFIR / Live Response lab with HELK + Velociraptor [1, 2]
-* Log aggregator architecture to forward logs to a cloud native SIEM (Azure Sentinel)
+* Log aggregator architecture to forward logs to a cloud native SIEM (Microsoft Sentinel)
 * Data Science research with HELK server, Jupyter notebooks
 * Detection Engineering research with Mordor [3, 4]
