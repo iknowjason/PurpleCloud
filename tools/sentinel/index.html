@@ -13,7 +13,7 @@
     
     
       
-        <title>Microsoft Sentinel lab - Hybrid + Identity Cyber Range</title>
+        <title>Sentinel lab - Hybrid + Identity Cyber Range</title>
       
     
     
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Microsoft Sentinel lab
+              Sentinel lab
             
           </span>
         </div>
@@ -448,7 +448,7 @@
   
     <li class="md-nav__item">
       <a href="../ad/" class="md-nav__link">
-        Azure VMs, Active Directory, and SIEM
+        Active Directory, SIEM, Velociraptor
       </a>
     </li>
   
@@ -471,12 +471,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Microsoft Sentinel lab
+          Sentinel lab
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Microsoft Sentinel lab
+        Sentinel lab
       </a>
       
         
@@ -498,6 +498,19 @@
   <a href="#overview" class="md-nav__link">
     Overview
   </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-note" class="md-nav__link">
+    Important Note
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -585,6 +598,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#updating-files-automatically-used" class="md-nav__link">
+    Updating Files Automatically Used
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#advanced-command-line" class="md-nav__link">
     Advanced Command Line
   </a>
@@ -640,7 +660,7 @@
   
     <li class="md-nav__item">
       <a href="../storage/" class="md-nav__link">
-        Azure Storage lab
+        Storage lab
       </a>
     </li>
   
@@ -654,7 +674,7 @@
   
     <li class="md-nav__item">
       <a href="../midentity/" class="md-nav__link">
-        Azure Managed Identity lab
+        Managed Identity lab
       </a>
     </li>
   
@@ -682,7 +702,7 @@
   
     <li class="md-nav__item">
       <a href="../adfs/" class="md-nav__link">
-        ADFS
+        ADFS lab
       </a>
     </li>
   
@@ -800,6 +820,19 @@
     Overview
   </a>
   
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-note" class="md-nav__link">
+    Important Note
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -886,6 +919,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#updating-files-automatically-used" class="md-nav__link">
+    Updating Files Automatically Used
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#advanced-command-line" class="md-nav__link">
     Advanced Command Line
   </a>
@@ -947,7 +987,8 @@
 <h1 id="microsoft-sentinel-lab">Microsoft Sentinel lab</h1>
 <h2 id="overview">Overview</h2>
 <p>This tool generates an Azure sentinel lab with optional Windows 10 Endpoints forwarding logs to the Sentinel Log Analytics workspace.  Optionally configure a Domain Controller with Domain Join.  Windows 10 Azure VMs automatically install and configure the legacy Microsoft Monitoring Agent (MMA) or Operations Management Suite (OMS) and send logs to the Log Analytics workspace.  The endpoints will install Sysmon by default. Note that some manual configuration steps are required for final logging configuration.   </p>
-<p><strong>Important Note:</strong> This generator lives in the <code>generators/sentinel</code> directory.  Navigate into this directory first.</p>
+<h3 id="important-note">Important Note</h3>
+<p>This generator lives in the <code>generators/sentinel</code> directory.  Navigate into this directory first.</p>
 <pre><code>cd generators/sentinel
 </code></pre>
 <h2 id="manual-logging-configuration">Manual Logging Configuration</h2>
@@ -998,6 +1039,19 @@ John Nilsson,johnnilsson@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingrou
 Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,True
 </code></pre>
 <h2 id="details">Details</h2>
+<h3 id="updating-files-automatically-used">Updating Files Automatically Used</h3>
+<p>There are a few important files that are used in the range that are automatically uploaded and downloaded to resources.  They can be easily customized.</p>
+<ul>
+<li>
+<p><strong>Sysmon.zip:</strong>  This range includes Sysmon version 14.  It lives in <code>shared/Sysmon.zip</code>.  This file gets pushed to a storage container where all Windows 10 endpoints download it.  You can replace it for customizations.</p>
+</li>
+<li>
+<p><strong>AzureADConnect.msi:</strong>  This range includes version 2.x of AzureADConnect MSI installer.  It lives in <code>shared/AzureADConnect.msi</code>.  This file gets pushed to a storage container where the DC downloads it to the local Administrator desktop.  You can replace it for customizations.</p>
+</li>
+<li>
+<p><strong>sysmonconfig-export.xml:</strong>  The sysmon configuration file gets uploaded to a storage container and downloaded by all Windows 10 endpoints.  It lives in <code>files/sysmon/sysmonconfig-export.xml</code>.</p>
+</li>
+</ul>
 <h3 id="advanced-command-line">Advanced Command Line</h3>
 <p><code>--resource_group &lt;rg_name&gt;</code>:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)</p>
 <p><code>--location &lt;location&gt;</code>:  The Azure location to use (Default:  eastus)</p>
@@ -1014,16 +1068,13 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
 <p>Some notes I've gathered on AD usage and building.</p>
 <ul>
 <li>
-<p>Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in <code>files/dc/AzureADConnect.msi</code>.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop.</p>
+<p>Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in <code>shared/AzureADConnect.msi</code>.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop.</p>
 </li>
 <li>
 <p>The bootstrap script for building Active Directory is contained in <code>files/dc/bootstrap-dc.ps1.tpl</code>.  This script is used to build AD DS on the dc instance created in dc.tf.</p>
 </li>
 <li>
 <p>After terraform runs, the actual rendered dc bootstrap script (with variables) is output to <code>output/dc/bootstrap-dc1.ps1.</code>  For troubleshooting you can copy that script to the DC and run it.</p>
-</li>
-<li>
-<p>The way AD users, groups, and OUs are added:  In the CSV file, there is a field for <code>oupath</code>.  The string for the <code>OU=</code> is looked at and a new OU is created if it hasn't already.  This is the way new OUs can be added.  AD users are added to that specific OU when they are created.  For adding AD Groups, the CSV field for <code>groups</code> is examined.  The user is added into that AD group.  The <code>groups</code> and <code>OU=</code> portion of the oupath should match.  If they don't, problems could arise adding the user.</p>
 </li>
 <li>
 <p>The <code>ad_users.csv</code> file is the name of the file that the DC uses to build AD.  It is uploaded to the storage container that is created and downloaded automatically by the DC.  Look in <code>C:\terraform\ad_users.csv</code> to look at this file if needed.</p>
@@ -1111,7 +1162,7 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../ad/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Azure VMs, Active Directory, and SIEM" rel="prev">
+        <a href="../ad/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Active Directory, SIEM, Velociraptor" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -1120,20 +1171,20 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
               <span class="md-footer__direction">
                 Previous
               </span>
-              Azure VMs, Active Directory, and SIEM
+              Active Directory, SIEM, Velociraptor
             </div>
           </div>
         </a>
       
       
         
-        <a href="../storage/" class="md-footer__link md-footer__link--next" aria-label="Next: Azure Storage lab" rel="next">
+        <a href="../storage/" class="md-footer__link md-footer__link--next" aria-label="Next: Storage lab" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Azure Storage lab
+              Storage lab
             </div>
           </div>
           <div class="md-footer__button md-icon">

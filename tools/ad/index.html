@@ -13,7 +13,7 @@
     
     
       
-        <title>Azure VMs, Active Directory, and SIEM - Hybrid + Identity Cyber Range</title>
+        <title>Active Directory, SIEM, Velociraptor - Hybrid + Identity Cyber Range</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#azure-vms-active-directory-and-siem" class="md-skip">
+        <a href="#active-directory-velociraptor-and-siem-lab" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Azure VMs, Active Directory, and SIEM
+              Active Directory, SIEM, Velociraptor
             
           </span>
         </div>
@@ -457,12 +457,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Azure VMs, Active Directory, and SIEM
+          Active Directory, SIEM, Velociraptor
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Azure VMs, Active Directory, and SIEM
+        Active Directory, SIEM, Velociraptor
       </a>
       
         
@@ -484,6 +484,19 @@
   <a href="#overview" class="md-nav__link">
     Overview
   </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-note" class="md-nav__link">
+    Important Note
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -592,7 +605,7 @@
   
     <li class="md-nav__item">
       <a href="../sentinel/" class="md-nav__link">
-        Microsoft Sentinel lab
+        Sentinel lab
       </a>
     </li>
   
@@ -606,7 +619,7 @@
   
     <li class="md-nav__item">
       <a href="../storage/" class="md-nav__link">
-        Azure Storage lab
+        Storage lab
       </a>
     </li>
   
@@ -620,7 +633,7 @@
   
     <li class="md-nav__item">
       <a href="../midentity/" class="md-nav__link">
-        Azure Managed Identity lab
+        Managed Identity lab
       </a>
     </li>
   
@@ -648,7 +661,7 @@
   
     <li class="md-nav__item">
       <a href="../adfs/" class="md-nav__link">
-        ADFS
+        ADFS lab
       </a>
     </li>
   
@@ -766,6 +779,19 @@
     Overview
   </a>
   
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-note" class="md-nav__link">
+    Important Note
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -876,10 +902,11 @@
   </a>
 
 
-<h1 id="azure-vms-active-directory-and-siem">Azure VMs, Active Directory, and SIEM</h1>
+<h1 id="active-directory-velociraptor-and-siem-lab">Active Directory, Velociraptor, and SIEM Lab</h1>
 <h2 id="overview">Overview</h2>
 <p>Generating an Azure infrastructure lab using ad.py.  This generator can create standalone Windows 10 endpoints, a full domain-joined enterprise Active Directory environment with users, or a SIEM with Velociraptor. </p>
-<p><strong>Important Note:</strong> This generator lives in the <code>generators/ad</code> directory.  Navigate into this directory first.</p>
+<h3 id="important-note">Important Note</h3>
+<p>This generator lives in the <code>generators/ad</code> directory.  Navigate into this directory first.</p>
 <pre><code>cd generators/ad
 </code></pre>
 <h2 id="usage-examples">Usage Examples</h2>
@@ -951,13 +978,11 @@ This will add a Velociraptor + Hunting ELK server with one Windows 10 Endpoint. 
 <p><strong>Accessing Credentials and Application URLs:</strong></p>
 <p>After the range has built, type <code>terraform output</code> to get the credentials and URLs for HELK and Velociraptor.</p>
 <p><strong>Input Files for Velociraptor + HELK:</strong></p>
-<p>The following files are automatically uploaded to storage container and then downloaded by the HELk + Velociraptor system.  They can be fully customized to suit your needs.  All files are contained in the <code>files/velocihelk</code> directory:</p>
+<p>The following files are automatically uploaded to storage container and then downloaded by the HELk + Velociraptor system.  They can be fully customized to suit your needs.</p>
+<p><strong>Files found in <code>shared</code> directory</strong></p>
 <ul>
 <li>
-<p><strong>Sysmon.zip:</strong> The sysmon version to be used on Windows 10 endpoints.  This version is v14.0.   </p>
-</li>
-<li>
-<p><strong>sysmonconfig-export.xml:</strong> The sysmon configuration to be used.  Currently uses github.com/SwiftOnSecurity. </p>
+<p><strong>Sysmon.zip:</strong> The sysmon version to be used on Windows 10 endpoints.  This version is v14.0.  This file is in the shared directory from the default project directory:  <code>shared/Sysmon.zip</code>. </p>
 </li>
 <li>
 <p><strong>velociraptor-v0.6.5-2-linux-amd64.gz:</strong> The velociraptor linux binary that runs on the server. </p>
@@ -968,11 +993,35 @@ This will add a Velociraptor + Hunting ELK server with one Windows 10 Endpoint. 
 <li>
 <p><strong>winlogbeat-7.9.2-windows-x86_64.zip:</strong> The winlogbeat agent that runs on windows 10 endpoints and ships logs to the HELK server. </p>
 </li>
+</ul>
+<p><strong>Files found in  <code>files/velocihelk</code> directory</strong></p>
+<ul>
+<li>
+<p><strong>sysmonconfig-export.xml:</strong> The sysmon configuration to be used.  Currently uses github.com/SwiftOnSecurity. </p>
+</li>
+<li>
+<p><strong>helk.sh.tpl:</strong> The script used to help build the Hunting ELK (HELK) server. </p>
+</li>
 <li>
 <p><strong>winlogbeat.yml.tpl:</strong> The configuration file for winlogbeat agent that currently sends to HELK using kafka transport.</p>
 </li>
+<li>
+<p><strong>config.yaml.tpl:</strong> The velociraptor configuration file used to build the internal PKI.  This is used on the server and client agents. </p>
+</li>
 </ul>
 <h2 id="details">Details</h2>
+<p>There are a few important files that are used in the range that are automatically uploaded and downloaded to resources.  They can be easily customized.</p>
+<ul>
+<li>
+<p><strong>Sysmon.zip:</strong>  This range includes Sysmon version 14.  It lives in <code>shared/Sysmon.zip</code>.  This file gets pushed to a storage container where all Windows 10 endpoints download it.  You can replace it for customizations.</p>
+</li>
+<li>
+<p><strong>AzureADConnect.msi:</strong>  This range includes version 2.x of AzureADConnect MSI installer.  It lives in <code>shared/AzureADConnect.msi</code>.  This file gets pushed to a storage container where the DC downloads it to the local Administrator desktop.  You can replace it for customizations.</p>
+</li>
+<li>
+<p><strong>sysmonconfig-export.xml:</strong>  The sysmon configuration file gets uploaded to a storage container and downloaded by all Windows 10 endpoints.  It lives in <code>files/sysmon/sysmonconfig-export.xml</code>.</p>
+</li>
+</ul>
 <h3 id="advanced-command-line">Advanced Command Line</h3>
 <p><code>--resource_group &lt;rg_name&gt;</code>:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)</p>
 <p><code>--location &lt;location&gt;</code>:  The Azure location to use (Default:  eastus)</p>
@@ -990,7 +1039,7 @@ This will add a Velociraptor + Hunting ELK server with one Windows 10 Endpoint. 
 <p>Some notes I've gathered on AD usage and building.</p>
 <ul>
 <li>
-<p>Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in <code>files/dc/AzureADConnect.msi</code>.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop. </p>
+<p>Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in <code>shared/AzureADConnect.msi</code>.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop. </p>
 </li>
 <li>
 <p>The bootstrap script for building Active Directory is contained in <code>files/dc/bootstrap-dc.ps1.tpl</code>.  This script is used to build AD DS on the dc instance created in dc.tf. </p>
@@ -1103,13 +1152,13 @@ This will add a Velociraptor + Hunting ELK server with one Windows 10 Endpoint. 
       
       
         
-        <a href="../sentinel/" class="md-footer__link md-footer__link--next" aria-label="Next: Microsoft Sentinel lab" rel="next">
+        <a href="../sentinel/" class="md-footer__link md-footer__link--next" aria-label="Next: Sentinel lab" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Microsoft Sentinel lab
+              Sentinel lab
             </div>
           </div>
           <div class="md-footer__button md-icon">

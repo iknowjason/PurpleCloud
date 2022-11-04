@@ -447,6 +447,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#adfspy" class="md-nav__link">
+    adfs.py
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aadjoinpy" class="md-nav__link">
+    aadjoin.py
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -549,7 +563,7 @@
   
     <li class="md-nav__item">
       <a href="../tools/ad/" class="md-nav__link">
-        Azure VMs, Active Directory, and SIEM
+        Active Directory, SIEM, Velociraptor
       </a>
     </li>
   
@@ -563,7 +577,7 @@
   
     <li class="md-nav__item">
       <a href="../tools/sentinel/" class="md-nav__link">
-        Microsoft Sentinel lab
+        Sentinel lab
       </a>
     </li>
   
@@ -577,7 +591,7 @@
   
     <li class="md-nav__item">
       <a href="../tools/storage/" class="md-nav__link">
-        Azure Storage lab
+        Storage lab
       </a>
     </li>
   
@@ -591,7 +605,7 @@
   
     <li class="md-nav__item">
       <a href="../tools/midentity/" class="md-nav__link">
-        Azure Managed Identity lab
+        Managed Identity lab
       </a>
     </li>
   
@@ -619,7 +633,7 @@
   
     <li class="md-nav__item">
       <a href="../tools/adfs/" class="md-nav__link">
-        ADFS
+        ADFS lab
       </a>
     </li>
   
@@ -789,6 +803,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#adfspy" class="md-nav__link">
+    adfs.py
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aadjoinpy" class="md-nav__link">
+    aadjoin.py
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -837,13 +865,19 @@
 <p><strong>Active Directory lab:</strong> Simulate an on-premise AD environment using Azure VMs, for learning, training, and Red/Blue team simulations.</p>
 </li>
 <li>
-<p><strong>Microsoft lab:</strong> Supports automated deployment of Azure Microsoft for learning, training, and attack/defense simulations.</p>
+<p><strong>Sentinel lab:</strong> Supports automated deployment of Microsoft Sentinel for learning, training, and attack/defense simulations.</p>
 </li>
 <li>
 <p><strong>Azure Storage lab:</strong> Creates a deployment with Azure storage blobs, shares, files, and key vaults with secrets, keys, and certificates.</p>
 </li>
 <li>
 <p><strong>Phishing App lab:</strong> Automatically deploy a multi-tenant phishing app for learning, training, and simulations of attack and defense.</p>
+</li>
+<li>
+<p><strong>ADFS Federation lab:</strong> Automatically deploy an ADFS server joined to an AD domain with a DC and optional users and Windows 10 systems.</p>
+</li>
+<li>
+<p><strong>AAD Join:</strong> Creates Windows 10 systems joined to Azure AD, with customizable roles and Azure AD users.</p>
 </li>
 <li>
 <p><strong>Azure AD features:</strong> </p>
@@ -893,10 +927,15 @@
 <p>Create an Azure managed identity attack lab with an Azure VM, a user or system assigned identity for the VM, and some storage and key vault resources to practice with. </p>
 <h3 id="phishing_apppy">phishing_app.py</h3>
 <p>Create a multi-tenant Azure AD application that can be used for app consent phishing simulations.  You can specify a custom display name for the app along with custom redirect_uri, homepage_url, and logout_url.  </p>
+<h3 id="adfspy">adfs.py</h3>
+<p>Creates an ADFS deployment for Hybrid Federation security research.  The ADFS server can be built with a self-signed certificate or import a trusted, CA signed certificate.  Builds a Domain Controller with optional, additional AD users and Windows 10 Professional systems. </p>
+<h3 id="aadjoinpy">aadjoin.py</h3>
+<p>Creates an Azure AD Join security research lab.  Virtual Machines are joined to Azure AD with Azure AD users that can login over RDP.  An optional User Assigned Identity can be added.</p>
 <h2 id="use-cases">Use Cases</h2>
 <ul>
 <li>Research and pentest lab for Azure AD</li>
 <li>Security testing of Hybrid Join and Azure AD Joined devices</li>
+<li>Federation ADFS lab security research</li>
 <li>EDR Testing lab</li>
 <li>PoC / Product Security Lab</li>
 <li>Enterprise Active Directory lab with domain joined devices</li>
@@ -904,7 +943,7 @@
 <li>SIEM / Threat Hunting / DFIR / Live Response lab with HELK + Velociraptor [1, 2]</li>
 <li>Log aggregator architecture to forward logs to a cloud native SIEM (Microsoft Sentinel)</li>
 <li>Data Science research with HELK server, Jupyter notebooks</li>
-<li>Detection Engineering research with Mordor [3, 4]</li>
+<li>Detection Engineering research with Mordor</li>
 </ul>
 
 

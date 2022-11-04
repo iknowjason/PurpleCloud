@@ -13,7 +13,7 @@
     
     
       
-        <title>Azure Managed Identity lab - Hybrid + Identity Cyber Range</title>
+        <title>Managed Identity lab - Hybrid + Identity Cyber Range</title>
       
     
     
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Azure Managed Identity lab
+              Managed Identity lab
             
           </span>
         </div>
@@ -448,7 +448,7 @@
   
     <li class="md-nav__item">
       <a href="../ad/" class="md-nav__link">
-        Azure VMs, Active Directory, and SIEM
+        Active Directory, SIEM, Velociraptor
       </a>
     </li>
   
@@ -462,7 +462,7 @@
   
     <li class="md-nav__item">
       <a href="../sentinel/" class="md-nav__link">
-        Microsoft Sentinel lab
+        Sentinel lab
       </a>
     </li>
   
@@ -476,7 +476,7 @@
   
     <li class="md-nav__item">
       <a href="../storage/" class="md-nav__link">
-        Azure Storage lab
+        Storage lab
       </a>
     </li>
   
@@ -499,12 +499,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Azure Managed Identity lab
+          Managed Identity lab
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Azure Managed Identity lab
+        Managed Identity lab
       </a>
       
         
@@ -526,6 +526,19 @@
   <a href="#overview" class="md-nav__link">
     Overview
   </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-note" class="md-nav__link">
+    Important Note
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -634,7 +647,7 @@
   
     <li class="md-nav__item">
       <a href="../adfs/" class="md-nav__link">
-        ADFS
+        ADFS lab
       </a>
     </li>
   
@@ -752,6 +765,19 @@
     Overview
   </a>
   
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#important-note" class="md-nav__link">
+    Important Note
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -851,7 +877,8 @@
 <h1 id="azure-managed-identity-lab">Azure Managed Identity lab</h1>
 <h2 id="overview">Overview</h2>
 <p>Create an attack and defense lab for managed identity with one Azure Virtual Machine.  An Azure VM is configured with a user assigned managed identity and optional system assigned identity.  An Azure AD user is also created.  Generates terraform format HCL files for <code>managed_identity.tf</code>,  <code>providers.tf</code>, and <code>mi_user.tf</code>.</p>
-<p><strong>Important Note:</strong> This generator lives in the <code>generators/managed_identity</code> directory.  Navigate into this directory first.</p>
+<h3 id="important-note">Important Note</h3>
+<p>This generator lives in the <code>generators/managed_identity</code> directory.  Navigate into this directory first.</p>
 <pre><code>cd generators/managed_identity
 </code></pre>
 <h2 id="usage-examples">Usage Examples</h2>
@@ -961,7 +988,7 @@ variable &quot;user_role&quot; {
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../storage/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Azure Storage lab" rel="prev">
+        <a href="../storage/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Storage lab" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -970,7 +997,7 @@ variable &quot;user_role&quot; {
               <span class="md-footer__direction">
                 Previous
               </span>
-              Azure Storage lab
+              Storage lab
             </div>
           </div>
         </a>

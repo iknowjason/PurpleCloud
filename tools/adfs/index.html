@@ -13,7 +13,7 @@
     
     
       
-        <title>ADFS - Hybrid + Identity Cyber Range</title>
+        <title>ADFS lab - Hybrid + Identity Cyber Range</title>
       
     
     
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ADFS
+              ADFS lab
             
           </span>
         </div>
@@ -448,7 +448,7 @@
   
     <li class="md-nav__item">
       <a href="../ad/" class="md-nav__link">
-        Azure VMs, Active Directory, and SIEM
+        Active Directory, SIEM, Velociraptor
       </a>
     </li>
   
@@ -462,7 +462,7 @@
   
     <li class="md-nav__item">
       <a href="../sentinel/" class="md-nav__link">
-        Microsoft Sentinel lab
+        Sentinel lab
       </a>
     </li>
   
@@ -476,7 +476,7 @@
   
     <li class="md-nav__item">
       <a href="../storage/" class="md-nav__link">
-        Azure Storage lab
+        Storage lab
       </a>
     </li>
   
@@ -490,7 +490,7 @@
   
     <li class="md-nav__item">
       <a href="../midentity/" class="md-nav__link">
-        Azure Managed Identity lab
+        Managed Identity lab
       </a>
     </li>
   
@@ -527,12 +527,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          ADFS
+          ADFS lab
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        ADFS
+        ADFS lab
       </a>
       
         
@@ -554,6 +554,26 @@
   <a href="#overview" class="md-nav__link">
     Overview
   </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-resources" class="md-nav__link">
+    Default Resources
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-note" class="md-nav__link">
+    Important Note
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -607,8 +627,22 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#updating-files-automatically-used" class="md-nav__link">
+    Updating Files Automatically Used
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#advanced-command-line" class="md-nav__link">
     Advanced Command Line
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customizing-adfs" class="md-nav__link">
+    Customizing ADFS
   </a>
   
 </li>
@@ -621,8 +655,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#edit-script-options-in-adpy" class="md-nav__link">
-    Edit script options in ad.py
+  <a href="#edit-script-options-in-adfspy" class="md-nav__link">
+    Edit script options in adfs.py
   </a>
   
 </li>
@@ -766,6 +800,26 @@
     Overview
   </a>
   
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-resources" class="md-nav__link">
+    Default Resources
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#important-note" class="md-nav__link">
+    Important Note
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -818,8 +872,22 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#updating-files-automatically-used" class="md-nav__link">
+    Updating Files Automatically Used
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#advanced-command-line" class="md-nav__link">
     Advanced Command Line
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customizing-adfs" class="md-nav__link">
+    Customizing ADFS
   </a>
   
 </li>
@@ -832,8 +900,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#edit-script-options-in-adpy" class="md-nav__link">
-    Edit script options in ad.py
+  <a href="#edit-script-options-in-adfspy" class="md-nav__link">
+    Edit script options in adfs.py
   </a>
   
 </li>
@@ -879,13 +947,15 @@
 <h1 id="adfs-federation-lab">ADFS Federation Lab</h1>
 <h2 id="overview">Overview</h2>
 <p>Generating an ADFS Federation lab with adfs.py.  This generator can create an enterprise ADFS server deployment with a Domain Controller.  It can also add a full domain-joined enterprise Active Directory environment with users and Windows 10 Professional endpoints.  This generator always adds a Microsoft Sentinel deployment with a Log Analytics workspace.  The ADFS server automatically installs the Azure legacy monitoring agent with Sysmon and ADFS security auditing configuration, and will ship the logs into Sentinel via the agent.  For each Windows 10 Pro system added, they will all have Sysmon installed, the legacy monitoring agent, and ship Sysmon logs to Sentinel. </p>
+<h3 id="default-resources">Default Resources</h3>
 <p>To summarize, the following Azure resources are always created by default with this lab:</p>
 <ul>
 <li>One ADFS server joined to an AD Domain</li>
 <li>One DC</li>
 <li>One Sentinel deployment</li>
 </ul>
-<p><strong>Important Note:</strong> This generator lives in the <code>generators/adfs</code> directory.  Navigate into this directory first.</p>
+<h3 id="important-note">Important Note</h3>
+<p>This generator lives in the <code>generators/adfs</code> directory.  Navigate into this directory first.</p>
 <pre><code>cd generators/adfs
 </code></pre>
 <h2 id="usage-examples">Usage Examples</h2>
@@ -946,24 +1016,52 @@ John Nilsson,johnnilsson@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingrou
 Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,True
 </code></pre>
 <h2 id="details">Details</h2>
+<h3 id="updating-files-automatically-used">Updating Files Automatically Used</h3>
+<p>There are a few important files that are used in the range that are automatically uploaded and downloaded to resources.  They can be easily customized.</p>
+<ul>
+<li>
+<p><strong>Sysmon.zip:</strong>  This range includes Sysmon version 14.  It lives in <code>shared/Sysmon.zip</code>.  This file gets pushed to a storage container where the ADFS server and all Windows 10 endpoints download it.  You can replace it for customizations.</p>
+</li>
+<li>
+<p><strong>AzureADConnect.msi:</strong>  This range includes version 2.x of AzureADConnect MSI installer.  It lives in <code>shared/AzureADConnect.msi</code>.  This file gets pushed to a storage container where the ADFS server and DC both download it to the local Administrator desktop.  You can replace it for customizations.</p>
+</li>
+<li>
+<p><strong>sysmonconfig-export.xml:</strong>  The sysmon configuration file gets uploaded to a storage container and downloaded by the ADFS server and all Windows 10 endpoints.  It lives in <code>files/sysmon/sysmonconfig-export.xml</code>.</p>
+</li>
+</ul>
 <h3 id="advanced-command-line">Advanced Command Line</h3>
-<p><code>--resource_group &lt;rg_name&gt;</code>:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)</p>
-<p><code>--location &lt;location&gt;</code>:  The Azure location to use (Default:  eastus)</p>
-<p><code>--endpoints &lt;num_of_endpoints&gt;</code>:  Number of Windows 10 Professional systems to build (Default: 0)</p>
-<p><code>--helk</code>:  Create a hunting ELK server (with Velociraptor installed) (Default:  Disabled)</p>
-<p><code>--domain_controller</code>:  Create a Domain Controller and install AD DS with Forest (Default:  Disabled)</p>
-<p><code>--ad_domain &lt;domain&gt;</code>:  The name of the AD Domain to provision (Default:  rtc.local)</p>
-<p><code>--ad_users &lt;num_of_domain_users&gt;</code>:  The number of AD users to automatically build (Default:  Disabled)</p>
-<p><code>--csv &lt;csv_file&gt;</code>:  A custom CSV file to use that will load domain users on the DC's AD DS  (Default:  Disabled)</p>
-<p><code>--admin &lt;admin_username&gt;</code>:  The Local Administrator account (Default:  RTCAdmin)</p>
-<p><code>--password &lt;password&gt;</code>:  The local Administrator password and default AD user password (Default:  auto generate a strong password) </p>
-<p><code>--domain_join</code>:  Join the Windows 10 Pro systems to the AD Domain (Default:  false)</p>
-<p><code>--auto_logon</code>:  Automatically logon the domain user with their credentials upon system start (Default:  false)</p>
+<p><code>--endpoints &lt;num_of_endpoints&gt;</code>: Number of Windows 10 Professional systems to build (Default: 0)</p>
+<p><code>--resource_group &lt;rg_name&gt;</code>: Name of the Azure resource group to automatically create  (Default:  PurpleCloud)</p>
+<p><code>--location &lt;location&gt;</code>: The Azure location to use (Default:  eastus)</p>
+<p><code>--ad_domain &lt;domain&gt;</code>: The name of the AD Domain to provision (Default:  rtc.local)</p>
+<p><code>--ad_users &lt;num_of_domain_users&gt;</code>: The number of AD users to automatically build (Default:  Disabled)</p>
+<p><code>--csv &lt;csv_file&gt;</code>: A custom CSV file to use that will load domain users on the DC's AD DS  (Default:  Disabled)</p>
+<p><code>--admin &lt;admin_username&gt;</code>: The Local Administrator account (Default:  RTCAdmin)</p>
+<p><code>--password &lt;password&gt;</code>: The local Administrator password and default AD user password (Default:  auto generate a strong password) </p>
+<p><code>--domain_join</code>: Join the Windows 10 Pro systems to the AD Domain (Default:  false)</p>
+<p><code>--auto_logon</code>: Automatically logon the domain user with their credentials upon system start (Default:  false)</p>
+<p><code>--data_connector_office</code>: Enable the Sentinel Data Connector for Office (Default:  false)</p>
+<p><code>--data_connector_aad</code>: Enable the Sentinel Data Connector for Azure AD (Default:  false)</p>
+<p><code>--trusted_cert &lt;file.pfx&gt;</code>: Import at trusted, CA signed certificate into ADFS (Default:  disabled, self-signed)</p>
+<p><code>--pfx_password &lt;password&gt;</code>: The password used to import the pfx file (Default:  disabled, self-signed)</p>
+<h3 id="customizing-adfs">Customizing ADFS</h3>
+<p>The ADFS server can be easily customized using powershell bootstrap scripts.  The location of these scripts is <code>files/adfs</code>.  What the files do:</p>
+<ul>
+<li>
+<p><strong>bootstrap-adfs.ps1.tpl:</strong> This is the main script that installs symon.  It downloads the <code>install_adfs.ps1</code> script from the storage container and the <code>domain_join.ps1</code> script from the storage container.  If the domain_join setting is true, it will set up a powershell scheduled job to launch the domain_join.ps1 script. </p>
+</li>
+<li>
+<p><strong>domain_join.ps1.tpl:</strong> This joins the system to the AD domain.  It runs as a Powershell Scheduled Job and should de-register after domain join is detected as true. </p>
+</li>
+<li>
+<p><strong>install_adfs.ps1.tpl:</strong> Installs the ADFS componentns and services.  It will by default generate a self-signed certificate.  If the trusted, CA signed certificate option is enabled, it will download the certificate from the storage container.  Finally, it configures ADFS Security auditing log configuration. </p>
+</li>
+</ul>
 <h3 id="how-ad-builds-on-the-dc">How AD Builds on the DC</h3>
 <p>Some notes I've gathered on AD usage and building.</p>
 <ul>
 <li>
-<p>Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in <code>files/dc/AzureADConnect.msi</code>.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop. </p>
+<p>Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in <code>shared/AzureADConnect.msi</code>.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop. </p>
 </li>
 <li>
 <p>The bootstrap script for building Active Directory is contained in <code>files/dc/bootstrap-dc.ps1.tpl</code>.  This script is used to build AD DS on the dc instance created in dc.tf. </p>
@@ -984,7 +1082,7 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
 <p>For auto_logon domain users:  An AD domain user is randomly selected for logging on that Windows 10 Pro endpoint.  To customize which domain user is used, you can manually edit the windows 10 terraform file (i.e., win10-1.tf).</p>
 </li>
 </ul>
-<h3 id="edit-script-options-in-adpy">Edit script options in ad.py</h3>
+<h3 id="edit-script-options-in-adfspy">Edit script options in adfs.py</h3>
 <p><strong>Windows 10 Pro configuration:</strong>   The Windows 10 Pro default configuration can be adjusted to meet your needs.</p>
 <p>These are located in the <code>config_win10_endpoints</code> dictionary:</p>
 <p><code>hostname_base:</code>  The base Windows 10 hostname (Default: win10)</p>
@@ -1014,14 +1112,21 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
 <p><strong>Network Subnets configuration:</strong>   The configuration for the subnets can be adjusted in the python list named <code>config_subnets</code>.  Some changes include changing the default subnet names or adding/removing subnets.  By default there are four subnets created.  </p>
 <p><strong>Other Details:</strong>  </p>
 <ul>
-<li>
-<p><strong>ranges.log:</strong>  The ranges.log file writes out important information as the range is built, such as VM details.  You can use it to track things.</p>
-</li>
+<li><strong>ranges.log:</strong>  The ranges.log file writes out important information as the range is built, such as VM details.  You can use it to track things.  The ranges.log will output some important information such as your ADFS endpoint for signon, as shown below:</li>
+</ul>
+<pre><code>[+] Creating the adfs terraform file:  adfs.tf
+  [+] ADFS Server Information:
+  [+] Server Hostname:  adfs
+  [+] FQDN:  adfs.rtc.local
+  [+] Signon Endpoint:  https://adfs.rtc.local/adfs/ls/idpinitiatedsignon.aspx
+  [+] Building with Self-Signed certificate
+</code></pre>
+<ul>
 <li>
 <p><strong>Logging Passwords:</strong> By default, all passwords are randomly generated.  So if you are not aware of this, it might be easy to lose track of a password.  For this reason we have added a logging feature that captures all passwords created.  The <code>ad.py</code> script will automatically log all output to a logfile called <code>ranges.log</code>.  This is for the specific purpose of being able to track the ranges created and the passwords that are auto-generated for AD users and local Administrator accounts. You can also type <code>terraform output</code> as a secondary way to get the password and details for each virtual machine.</p>
 </li>
 <li>
-<p><strong>Azure Network Security Groups:</strong>  By default, the <code>ad.py</code> script will try to auto-detect your public IP address using a request to http://ifconfig.me.  Your public IP address will be used to white list the Azure NSG source prefix setting.  A second terraform resource is then used to manage and update any changes to your public IP address.  You can hard code a different IP address in the following section of the ad.py script or the terraform nsg.tf file.  If you change locations and your IP address changes, simply type <code>terraform apply</code> and the NSG white-listed public IP address should update through terraform.</p>
+<p><strong>Azure Network Security Groups:</strong>  By default, a terraform data http resource will auto-detect your public IP address using a request to http://ifconfig.me.  Your public IP address will be used to white list the Azure NSG source prefix setting.  If you change locations and your IP address changes, simply type <code>terraform apply</code> and the NSG white-listed public IP address should update through terraform.</p>
 </li>
 </ul>
 <pre><code>locals {
@@ -1029,11 +1134,8 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
   #src_ip = &quot;0.0.0.0/0&quot;
 }
 </code></pre>
-<ul>
-<li><strong>Outputs:</strong> After the terraform resources are applied and build, you can type <code>terraform output</code> to get some important information such as the public IP address of VMs in addition to credentials for OS and applications. </li>
-</ul>
 <h3 id="terraform-outputs">Terraform Outputs</h3>
-<p>You can get the details of each Virtual Machine, including passwords, by typing <code>terraform output</code>.</p>
+<p>You can get the details of each Virtual Machine, including passwords, by typing <code>terraform output</code>.  The terraform outputs will also show the ADFS endpoint for signon.  You can RDP into the machine and test it locally with a browser.  You can also access the endpoint over the public Internet when importing a trusted, CA signed certificate.</p>
 <h2 id="demo">Demo</h2>
 <p>A video demonstration of building an ADFS Federation lab with options and illustrations.</p>
 <p><a href="https://youtu.be/MD3iQCHi-98" title="ADFS Demo"><img alt="ADFS Demo" src="" /></a></p>
