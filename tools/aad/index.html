@@ -409,6 +409,10 @@
         
           
         
+          
+        
+          
+        
       
       
         <label class="md-nav__link" for="__nav_4">
@@ -503,6 +507,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -533,7 +544,7 @@
   
     <li class="md-nav__item">
       <a href="../sentinel/" class="md-nav__link">
-        Azure Sentinel lab
+        Microsoft Sentinel lab
       </a>
     </li>
   
@@ -576,6 +587,34 @@
     <li class="md-nav__item">
       <a href="../phishing_app/" class="md-nav__link">
         Phishing App
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adfs/" class="md-nav__link">
+        ADFS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aadjoin/" class="md-nav__link">
+        AAD Join
       </a>
     </li>
   
@@ -715,6 +754,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -738,9 +784,13 @@
 <h2 id="usage-examples">Usage Examples</h2>
 <p>Generating an Azure AD lab using <code>azure_ad.py</code>.</p>
 <p>This generates terraform formatted HCL files for <code>users.tf</code>.  If applications and groups are created, the <code>apps.tf</code> and <code>groups.tf</code> will also be created.</p>
+<p><strong>Important Note:</strong> This generator lives in the <code>generators/azure_ad</code> directory.  Navigate into this directory first.</p>
+<pre><code>cd generators/azure_ad
+</code></pre>
 <h3 id="example-1-basic-azure-ad-lab">Example 1:  Basic Azure AD lab</h3>
 <p>Generate a basic Azure AD lab.</p>
-<p><code>$ python3 azure_ad.py --upn rtcfingroup.com</code></p>
+<pre><code>python3 azure_ad.py --upn rtcfingroup.com
+</code></pre>
 <p><strong>Description:</strong> 
 This will generate an Azure AD range with a UPN suffix of <code>rtcfingroup.com</code> with 100 users. It will output three files.   The Azure AD password for all users will be automatically generated and output after terraform apply.</p>
 <ul>
@@ -751,12 +801,14 @@ This will generate an Azure AD range with a UPN suffix of <code>rtcfingroup.com<
 </ul>
 <h3 id="example-2-azure-ad-lab-with-1000-users">Example 2:  Azure AD lab with 1,000 users</h3>
 <p>Generate an Azure AD lab with 1,000 users.</p>
-<p><code>$ python3 azure_ad.py --upn rtcfingroup.com --count 1000</code></p>
+<pre><code>python3 azure_ad.py --upn rtcfingroup.com --count 1000
+</code></pre>
 <p><strong>Description:</strong> 
 Same as above, except generate 1,000 users in Azure AD.  Running terraform apply will generate a random password shared by all users.  The password applied to all users will be displayed at the end of <code>terraform apply</code>.  To display the passwor again, run <code>terraform output</code>.  </p>
 <h3 id="example-3-azure-applications-and-groups">Example 3:  Azure applications and groups</h3>
 <p>Generate a lab with Azure applications and groups.</p>
-<p><code>$ python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5</code></p>
+<pre><code>python3 azure_ad.py --upn rtcfingroup.com --count 500 --apps 3 --groups 5
+</code></pre>
 <p><strong>Description:</strong>
 Same as above, except generate 500 users in Azure AD.  Create 3 Azure applications and 5 groups.  Automatically put the 500 users into separate groups. </p>
 <ul>
@@ -768,6 +820,9 @@ Same as above, except generate 500 users in Azure AD.  Create 3 Azure applicatio
 <p><code>$ python3 azure_ad.py -c 25 --upn rtcfingroup.com --apps 7 -aa -ga -pra</code></p>
 <p><strong>Description:</strong> 
 This will generate an Azure AD range with a UPN suffix of <code>rtcfingroup.com</code> with 25 users. It will add some service principal abuse attack primitives to some random resources.  First, the <code>--apps 7</code> will add 7 Azure AD applications (App Registrations) with associated Service Principals (Enterprise Applications).  The <code>-aa</code> flag will assign an Application Administrator role randomly to one of the 25 Azure AD users.  The <code>-ga</code> flag will assign the Global Administrator role randomly to one of the 7 application SPs.  Finally, the <code>-pra</code> flag will assign the Privileged role administrator role randomly to one of the other 7 application SPs.</p>
+<h2 id="demo">Demo</h2>
+<p>A video demonstration of Azure AD with options and illustrations.</p>
+<p><a href="https://youtu.be/kNcqSWdTD9s" title="Azure AD Demo"><img alt="Azure AD Demo" src="" /></a> </p>
 
 
 

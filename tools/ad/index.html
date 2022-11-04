@@ -409,6 +409,10 @@
         
           
         
+          
+        
+          
+        
       
       
         <label class="md-nav__link" for="__nav_4">
@@ -565,6 +569,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -581,7 +592,7 @@
   
     <li class="md-nav__item">
       <a href="../sentinel/" class="md-nav__link">
-        Azure Sentinel lab
+        Microsoft Sentinel lab
       </a>
     </li>
   
@@ -624,6 +635,34 @@
     <li class="md-nav__item">
       <a href="../phishing_app/" class="md-nav__link">
         Phishing App
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adfs/" class="md-nav__link">
+        ADFS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aadjoin/" class="md-nav__link">
+        AAD Join
       </a>
     </li>
   
@@ -811,6 +850,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -833,9 +879,13 @@
 <h1 id="azure-vms-active-directory-and-siem">Azure VMs, Active Directory, and SIEM</h1>
 <h2 id="overview">Overview</h2>
 <p>Generating an Azure infrastructure lab using ad.py.  This generator can create standalone Windows 10 endpoints, a full domain-joined enterprise Active Directory environment with users, or a SIEM with Velociraptor. </p>
+<p><strong>Important Note:</strong> This generator lives in the <code>generators/ad</code> directory.  Navigate into this directory first.</p>
+<pre><code>cd generators/ad
+</code></pre>
 <h2 id="usage-examples">Usage Examples</h2>
 <h3 id="example-1-one-windows-10-endpoint-with-sysmon-installed">Example 1: One Windows 10 Endpoint with Sysmon installed</h3>
-<p><code>$ python3 ad.py --endpoint 1</code></p>
+<pre><code>python3 ad.py --endpoint 1
+</code></pre>
 <p><strong>Description:</strong>
 This will generate a single Windows 10 Endpoint and generate a random, unique password with a default local Administrator account named <code>RTCAdmin</code>.  This generates the following terraform files:</p>
 <ul>
@@ -859,11 +909,13 @@ This will generate a single Windows 10 Endpoint and generate a random, unique pa
 </li>
 </ul>
 <h3 id="example-2-domain-controller-with-forest-and-users-windows-domain-join-randomly-generate-users">Example 2: Domain Controller with Forest and Users + Windows Domain Join (Randomly Generate Users)</h3>
-<p><code>$ python3 ad.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join</code></p>
+<pre><code>python3 ad.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join
+</code></pre>
 <p><strong>Description:</strong>
 This will create a Domain Controller in <code>dc.tf</code> and install AD DS with forest name of <code>rtcfingroup.com</code>.  This will create a custom local administrator account and password with 500 domain users.  In this example, the domain users are randomly generated using the command line flag of <code>--ad_users</code> for a total of 500 users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the <code>domain_join</code> parameter enables it for all Windows 10 Pro created.  This will also create two Windows 10 Pro terraform files (win10-1.tf, win10-2.tf) as well as a terraform file for the Domain Controller (dc.tf).</p>
 <h3 id="example-3-domain-controller-with-forest-and-users-windows-domain-join-import-custom-users-from-csv">Example 3: Domain Controller with Forest and Users + Windows Domain Join (Import Custom Users from CSV)</h3>
-<p><code>$ python3 ad.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --csv users.csv --endpoints 2  --domain_join</code></p>
+<pre><code>python3 ad.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --csv users.csv --endpoints 2  --domain_join
+</code></pre>
 <p><strong>Description:</strong>
 Same capabilities as above, except it can import a custom list of Domain Users into active directory on the DC instance.  The script checks to make sure that users are in the correct format.  An example CSV showing five users is listed below:</p>
 <pre><code>name,upn,password,groups,oupath,domain_admin
@@ -874,7 +926,8 @@ John Nilsson,johnnilsson@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingrou
 Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,True
 </code></pre>
 <h3 id="example-4-build-a-veloicraptor-hunting-elk-server-and-automatically-export-sysmon-winlog-beat-logs">Example 4: Build a Veloicraptor + Hunting ELK server and automatically export sysmon winlog beat logs</h3>
-<p><code>$ python3 ad.py --helk --endpoint 1</code></p>
+<pre><code>python3 ad.py --helk --endpoint 1
+</code></pre>
 <p><strong>Description:</strong>
 This will add a Velociraptor + Hunting ELK server with one Windows 10 Endpoint.  The winlogbeat agent will be installed on Windows 10 Pro and the logs will be sent to the HELK server.  Velociraptor will be installed on the HELK server and the Velociraptor agent on Windows 10 Pro.  The endpoint will automatically register to the Velociraptor server running on HELK.  This will create a terraform file for the HELK server (helk.tf)</p>
 <p><strong>Default OS and Application Credentials:</strong></p>
@@ -1008,6 +1061,9 @@ This will add a Velociraptor + Hunting ELK server with one Windows 10 Endpoint. 
 </ul>
 <h3 id="terraform-outputs">Terraform Outputs</h3>
 <p>You can get the details of each Virtual Machine, including passwords, by typing <code>terraform output</code>.</p>
+<h2 id="demo">Demo</h2>
+<p>A video demonstration of AD with options and illustrations.</p>
+<p><a href="https://youtu.be/dHfdDeqViFg" title="AD Demo"><img alt="AD Demo" src="" /></a></p>
 
 
 
@@ -1047,13 +1103,13 @@ This will add a Velociraptor + Hunting ELK server with one Windows 10 Endpoint. 
       
       
         
-        <a href="../sentinel/" class="md-footer__link md-footer__link--next" aria-label="Next: Azure Sentinel lab" rel="next">
+        <a href="../sentinel/" class="md-footer__link md-footer__link--next" aria-label="Next: Microsoft Sentinel lab" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Azure Sentinel lab
+              Microsoft Sentinel lab
             </div>
           </div>
           <div class="md-footer__button md-icon">

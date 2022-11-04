@@ -13,7 +13,7 @@
     
     
       
-        <title>Azure Storage lab - Hybrid + Identity Cyber Range</title>
+        <title>ADFS - Hybrid + Identity Cyber Range</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#azure-storage-lab" class="md-skip">
+        <a href="#adfs-federation-lab" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Azure Storage lab
+              ADFS
             
           </span>
         </div>
@@ -473,79 +473,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Azure Storage lab
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../storage/" class="md-nav__link">
         Azure Storage lab
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    Overview
-  </a>
-  
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#resources-created" class="md-nav__link">
-    Resources Created
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#options" class="md-nav__link">
-    Options
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#demo" class="md-nav__link">
-    Demo
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -583,11 +515,141 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../adfs/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          ADFS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         ADFS
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-examples" class="md-nav__link">
+    Usage Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1-one-adfs-server-and-one-domain-controller-with-self-signed-adfs-certificate" class="md-nav__link">
+    Example 1: One ADFS Server and one Domain Controller, with self-signed ADFS certificate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2-adfs-server-with-dc-the-adfs-server-will-import-a-trusted-ca-signed-certificate" class="md-nav__link">
+    Example 2: ADFS Server with DC.  The ADFS Server will import a trusted, CA signed certificate.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-adfs-dc-adding-windows-10-professional-randomly-generate-ad-users" class="md-nav__link">
+    Example 3: ADFS + DC + Adding Windows 10 Professional (Randomly generate AD users)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-4-adfs-dc-adding-windows-10-professional-import-custom-users-from-csv" class="md-nav__link">
+    Example 4: ADFS + DC + Adding Windows 10 Professional (Import Custom Users from CSV)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#details" class="md-nav__link">
+    Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#advanced-command-line" class="md-nav__link">
+    Advanced Command Line
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-ad-builds-on-the-dc" class="md-nav__link">
+    How AD Builds on the DC
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#edit-script-options-in-adpy" class="md-nav__link">
+    Edit script options in ad.py
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terraform-outputs" class="md-nav__link">
+    Terraform Outputs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -704,19 +766,81 @@
     Overview
   </a>
   
-    <nav class="md-nav" aria-label="Overview">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-examples" class="md-nav__link">
+    Usage Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage Examples">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#resources-created" class="md-nav__link">
-    Resources Created
+  <a href="#example-1-one-adfs-server-and-one-domain-controller-with-self-signed-adfs-certificate" class="md-nav__link">
+    Example 1: One ADFS Server and one Domain Controller, with self-signed ADFS certificate
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#options" class="md-nav__link">
-    Options
+  <a href="#example-2-adfs-server-with-dc-the-adfs-server-will-import-a-trusted-ca-signed-certificate" class="md-nav__link">
+    Example 2: ADFS Server with DC.  The ADFS Server will import a trusted, CA signed certificate.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-3-adfs-dc-adding-windows-10-professional-randomly-generate-ad-users" class="md-nav__link">
+    Example 3: ADFS + DC + Adding Windows 10 Professional (Randomly generate AD users)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-4-adfs-dc-adding-windows-10-professional-import-custom-users-from-csv" class="md-nav__link">
+    Example 4: ADFS + DC + Adding Windows 10 Professional (Import Custom Users from CSV)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#details" class="md-nav__link">
+    Details
+  </a>
+  
+    <nav class="md-nav" aria-label="Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#advanced-command-line" class="md-nav__link">
+    Advanced Command Line
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-ad-builds-on-the-dc" class="md-nav__link">
+    How AD Builds on the DC
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#edit-script-options-in-adpy" class="md-nav__link">
+    Edit script options in ad.py
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terraform-outputs" class="md-nav__link">
+    Terraform Outputs
   </a>
   
 </li>
@@ -746,43 +870,173 @@
               
                 
 
-  <a href="https://github.com/iknowjason/PurpleCloud/edit/master/docs/tools/storage.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/iknowjason/PurpleCloud/edit/master/docs/tools/adfs.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-<h1 id="azure-storage-lab">Azure Storage lab</h1>
+<h1 id="adfs-federation-lab">ADFS Federation Lab</h1>
 <h2 id="overview">Overview</h2>
-<p><code>$ python3 storage.py -n &lt;NAME&gt; -l &lt;LOCATION&gt;</code></p>
-<p><strong>Example Usage</strong>:</p>
-<pre><code>python3 storage.py -n mystoragename -l eastus
-</code></pre>
-<p>Generates a terraform format HCL file for <code>storage.tf</code> and <code>providers.tf</code>.</p>
-<p>This is a great generator for quickly creating a bunch of vulnerable cloud storage resources or studying the different security permission levels.  It also builds an Azure Key Vault resources.</p>
-<p><strong>Important Note:</strong> This generator lives in the <code>generators/storage</code> directory.  Navigate into this directory first.</p>
-<pre><code>cd generators/storage
-</code></pre>
-<h3 id="resources-created">Resources Created</h3>
+<p>Generating an ADFS Federation lab with adfs.py.  This generator can create an enterprise ADFS server deployment with a Domain Controller.  It can also add a full domain-joined enterprise Active Directory environment with users and Windows 10 Professional endpoints.  This generator always adds a Microsoft Sentinel deployment with a Log Analytics workspace.  The ADFS server automatically installs the Azure legacy monitoring agent with Sysmon and ADFS security auditing configuration, and will ship the logs into Sentinel via the agent.  For each Windows 10 Pro system added, they will all have Sysmon installed, the legacy monitoring agent, and ship Sysmon logs to Sentinel. </p>
+<p>To summarize, the following Azure resources are always created by default with this lab:</p>
 <ul>
-<li>Azure Storage Account (1)</li>
-<li>Azure Containers (3)
-The containers have three different access levels (Blob, Container, Private)</li>
-<li>Azure Blobs (3).  All three are uploaded to all three containers.</li>
-<li>Azure Shares (2)</li>
-<li>Two files are uploaded to the two shares</li>
-<li>Azure Key Vault</li>
-<li>Secrets (3)</li>
-<li>Private Keys (1)</li>
-<li>Certificates (1) </li>
+<li>One ADFS server joined to an AD Domain</li>
+<li>One DC</li>
+<li>One Sentinel deployment</li>
 </ul>
-<h3 id="options">Options</h3>
-<p>Specify the resource group and name of resources with <code>NAME</code> and the Azure location wit <code>LOCATION</code>.</p>
-<p><code>-n &lt;NAME&gt;</code>:  Specify a resource group name and name for other resources (Default: purplecloud-sentinel)</p>
-<p><code>-l &lt;LOCATION&gt;</code>:  Specify a different location (Default: centralus)</p>
+<p><strong>Important Note:</strong> This generator lives in the <code>generators/adfs</code> directory.  Navigate into this directory first.</p>
+<pre><code>cd generators/adfs
+</code></pre>
+<h2 id="usage-examples">Usage Examples</h2>
+<h3 id="example-1-one-adfs-server-and-one-domain-controller-with-self-signed-adfs-certificate">Example 1: One ADFS Server and one Domain Controller, with self-signed ADFS certificate</h3>
+<pre><code>python3 adfds.py
+</code></pre>
+<p><strong>Description:</strong>
+This will generate a lab with a single ADFS server and Domain Controller.  The ADFS server will use a self-signed certificate.  Five AD users will be created with a default AD domain of <code>rtc.local</code>.  This generates the following terraform files:</p>
+<ul>
+<li>
+<p><strong>adfs.tf:</strong> Terraform file defining ADFS configuration.</p>
+</li>
+<li>
+<p><strong>dc_adfs.tf:</strong> Terraform file defining the Domain Controller configuration.</p>
+</li>
+<li>
+<p><strong>main_adfs.tf:</strong> Terraform file with resource group and location.</p>
+</li>
+<li>
+<p><strong>network_adfs.tf:</strong> Terraform file with VNet and subnets. </p>
+</li>
+<li>
+<p><strong>nsg_adfs.tf:</strong> Terraform file with Network Security Groups.</p>
+</li>
+<li>
+<p><strong>providers.tf:</strong> Terraform file containing terraform providers.</p>
+</li>
+<li>
+<p><strong>sentinel_adfs.tf:</strong> Terraform file with Network Security Groups.</p>
+</li>
+<li>
+<p><strong>storage_adfs.tf:</strong> Terraform file containing sysmon and all other files used for configuration.</p>
+</li>
+</ul>
+<p>In addition to the above terraform files, a single file will be created with five AD users:  <code>ad_users.csv</code></p>
+<h3 id="example-2-adfs-server-with-dc-the-adfs-server-will-import-a-trusted-ca-signed-certificate">Example 2: ADFS Server with DC.  The ADFS Server will import a trusted, CA signed certificate.</h3>
+<pre><code>python3 adfs.py --trusted_cert adfs.pfx --pfx_password password --ad_domain rtcsecurity.net 
+</code></pre>
+<p><strong>Description:</strong>
+This will build an ADFS server and DC as described in example 1.  In this example, a trusted, CA signed certificate is imported.  The name of the certificate is passed in the parameter <code>--trusted_cert</code>.  The format of the file is pfx, and the password used to protect the file is passed in the parameter <code>--pfx_password</code>.  Finally, an AD Domain used to create AD is specified in the <code>--ad_domain</code>. The Azure Simuland project has a great guide on how to get a trusted CA signed SSL certificate:  </p>
+<pre><code>https://github.com/Azure/SimuLand/blob/main/docs/environments/_helper-docs/getTrustedCASignedSSLCertificate.md
+</code></pre>
+<h3 id="example-3-adfs-dc-adding-windows-10-professional-randomly-generate-ad-users">Example 3: ADFS + DC + Adding Windows 10 Professional (Randomly generate AD users)</h3>
+<pre><code>python3 adfs.py --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --endpoints 1 --domain_join --ad_users 500
+</code></pre>
+<p><strong>Description:</strong>
+This example builds an Active Directory domain of <code>rtcfingroup.com</code> on the DC.  The ADFS server automatically joins to this AD domain and a self-signed certificate will be used to build ADFS.  With <code>--endpoints 1</code>, one Windows 10 Pro system is created and it is set to join the domain with <code>--domain_join</code>.  Finally, 500 AD users are randomly generated and added to the AD Domain, with assignment into AD Groups and OUs that are also created.</p>
+<h3 id="example-4-adfs-dc-adding-windows-10-professional-import-custom-users-from-csv">Example 4: ADFS + DC + Adding Windows 10 Professional (Import Custom Users from CSV)</h3>
+<pre><code>python3 adfs.py --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --csv users.csv --endpoints 1 --domain_join --ad_users 500
+</code></pre>
+<p><strong>Description:</strong>
+Same capabilities as above, except it can import a custom list of Domain Users into active directory on the DC instance.  With the <code>--csv users.csv</code>, a file named <code>users.csv</code> is looked for in the working directory.  The script checks to make sure that users are in the correct format.  An example CSV showing five users is listed below:</p>
+<pre><code>name,upn,password,groups,oupath,domain_admin
+Lars Borgerson,larsborgerson@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,False
+Olivia Odinsdottir,oliviaodinsdottir@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,True
+Liem Anderson,liemanderson@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,False
+John Nilsson,johnnilsson@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,False
+Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcfingroup;DC=com,True
+</code></pre>
+<h2 id="details">Details</h2>
+<h3 id="advanced-command-line">Advanced Command Line</h3>
+<p><code>--resource_group &lt;rg_name&gt;</code>:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)</p>
+<p><code>--location &lt;location&gt;</code>:  The Azure location to use (Default:  eastus)</p>
+<p><code>--endpoints &lt;num_of_endpoints&gt;</code>:  Number of Windows 10 Professional systems to build (Default: 0)</p>
+<p><code>--helk</code>:  Create a hunting ELK server (with Velociraptor installed) (Default:  Disabled)</p>
+<p><code>--domain_controller</code>:  Create a Domain Controller and install AD DS with Forest (Default:  Disabled)</p>
+<p><code>--ad_domain &lt;domain&gt;</code>:  The name of the AD Domain to provision (Default:  rtc.local)</p>
+<p><code>--ad_users &lt;num_of_domain_users&gt;</code>:  The number of AD users to automatically build (Default:  Disabled)</p>
+<p><code>--csv &lt;csv_file&gt;</code>:  A custom CSV file to use that will load domain users on the DC's AD DS  (Default:  Disabled)</p>
+<p><code>--admin &lt;admin_username&gt;</code>:  The Local Administrator account (Default:  RTCAdmin)</p>
+<p><code>--password &lt;password&gt;</code>:  The local Administrator password and default AD user password (Default:  auto generate a strong password) </p>
+<p><code>--domain_join</code>:  Join the Windows 10 Pro systems to the AD Domain (Default:  false)</p>
+<p><code>--auto_logon</code>:  Automatically logon the domain user with their credentials upon system start (Default:  false)</p>
+<h3 id="how-ad-builds-on-the-dc">How AD Builds on the DC</h3>
+<p>Some notes I've gathered on AD usage and building.</p>
+<ul>
+<li>
+<p>Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in <code>files/dc/AzureADConnect.msi</code>.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop. </p>
+</li>
+<li>
+<p>The bootstrap script for building Active Directory is contained in <code>files/dc/bootstrap-dc.ps1.tpl</code>.  This script is used to build AD DS on the dc instance created in dc.tf. </p>
+</li>
+<li>
+<p>After terraform runs, the actual rendered dc bootstrap script (with variables) is output to <code>output/dc/bootstrap-dc1.ps1.</code>  For troubleshooting you can copy that script to the DC and run it.</p>
+</li>
+<li>
+<p>The way AD users, groups, and OUs are added:  In the CSV file, there is a field for <code>oupath</code>.  The string for the <code>OU=</code> is looked at and a new OU is created if it hasn't already.  This is the way new OUs can be added.  AD users are added to that specific OU when they are created.  For adding AD Groups, the CSV field for <code>groups</code> is examined.  The user is added into that AD group.  The <code>groups</code> and <code>OU=</code> portion of the oupath should match.  If they don't, problems could arise adding the user.    </p>
+</li>
+<li>
+<p>The <code>ad_users.csv</code> file is the name of the file that the DC uses to build AD.  It is uploaded to the storage container that is created and downloaded automatically by the DC.  Look in <code>C:\terraform\ad_users.csv</code> to look at this file if needed.</p>
+</li>
+<li>
+<p>When using the <code>--csv &lt;file1&gt;</code> to specify your own AD users CSV, how this works:  That file is copied to <code>ad_users.csv</code> and it is uploaded to the storage container, and downloaded to the DC.  Same as above, it is copied into C:\terraform\ad_users.csv where the bootstrap script parses it. </p>
+</li>
+<li>
+<p>For auto_logon domain users:  An AD domain user is randomly selected for logging on that Windows 10 Pro endpoint.  To customize which domain user is used, you can manually edit the windows 10 terraform file (i.e., win10-1.tf).</p>
+</li>
+</ul>
+<h3 id="edit-script-options-in-adpy">Edit script options in ad.py</h3>
+<p><strong>Windows 10 Pro configuration:</strong>   The Windows 10 Pro default configuration can be adjusted to meet your needs.</p>
+<p>These are located in the <code>config_win10_endpoints</code> dictionary:</p>
+<p><code>hostname_base:</code>  The base Windows 10 hostname (Default: win10)</p>
+<p><code>join_domain:</code>  Whether to join the Windows 10 Pro to the AD Domain.  This is disabled by default.  So if you add a DC and want to join the Windows 10 Pro systems to the AD Domain, you can set this to true.  Or you can use the command line parameter <code>--domain-join</code>.</p>
+<p><code>auto_logon_domain_users:</code>  Configure the endpoint (via registry) to automatically log in the domain user.  This will randomly select an AD user.  Disabled by default and requires domain join and DC.</p>
+<p><code>install_sysmon:</code>  Automatically install Sysmon with Swift on Security configuration (Default:  Enabled)</p>
+<p><code>install_art:</code>  Install Atomic Red Team (art).  (Default:  Enabled) </p>
+<pre><code>config_win10_endpoint = {
+    &quot;hostname_base&quot;:&quot;win10&quot;,
+    &quot;join_domain&quot;:&quot;false&quot;,
+    &quot;auto_logon_domain_user&quot;:&quot;false&quot;,
+    &quot;install_sysmon&quot;:sysmon_endpoint_config,
+    &quot;install_art&quot;:&quot;true&quot;,
+}
+</code></pre>
+<p><strong>Default AD Users:</strong>   There is a python dictionary specifying the default AD users.  This can be changed to suit your needs.  These are the first five users automaticaly created.  After the first five, users are randomly generated to meet the <code>--ad_users &lt;number&gt;</code> amount.</p>
+<p>Here is the default_ad_users list along with the first user, that can be searched for in the file:</p>
+<pre><code>default_ad_users = [
+    {
+        &quot;name&quot;:&quot;Lars Borgerson&quot;,
+        &quot;ou&quot;: &quot;CN=users,DC=rtc,DC=local&quot;,
+        &quot;password&quot;: get_password(),
+        &quot;domain_admin&quot;:&quot;&quot;,
+        &quot;groups&quot;:&quot;IT&quot;
+    },
+</code></pre>
+<p><strong>Network Subnets configuration:</strong>   The configuration for the subnets can be adjusted in the python list named <code>config_subnets</code>.  Some changes include changing the default subnet names or adding/removing subnets.  By default there are four subnets created.  </p>
+<p><strong>Other Details:</strong>  </p>
+<ul>
+<li>
+<p><strong>ranges.log:</strong>  The ranges.log file writes out important information as the range is built, such as VM details.  You can use it to track things.</p>
+</li>
+<li>
+<p><strong>Logging Passwords:</strong> By default, all passwords are randomly generated.  So if you are not aware of this, it might be easy to lose track of a password.  For this reason we have added a logging feature that captures all passwords created.  The <code>ad.py</code> script will automatically log all output to a logfile called <code>ranges.log</code>.  This is for the specific purpose of being able to track the ranges created and the passwords that are auto-generated for AD users and local Administrator accounts. You can also type <code>terraform output</code> as a secondary way to get the password and details for each virtual machine.</p>
+</li>
+<li>
+<p><strong>Azure Network Security Groups:</strong>  By default, the <code>ad.py</code> script will try to auto-detect your public IP address using a request to http://ifconfig.me.  Your public IP address will be used to white list the Azure NSG source prefix setting.  A second terraform resource is then used to manage and update any changes to your public IP address.  You can hard code a different IP address in the following section of the ad.py script or the terraform nsg.tf file.  If you change locations and your IP address changes, simply type <code>terraform apply</code> and the NSG white-listed public IP address should update through terraform.</p>
+</li>
+</ul>
+<pre><code>locals {
+  src_ip = chomp(data.http.firewall_allowed.response_body)
+  #src_ip = &quot;0.0.0.0/0&quot;
+}
+</code></pre>
+<ul>
+<li><strong>Outputs:</strong> After the terraform resources are applied and build, you can type <code>terraform output</code> to get some important information such as the public IP address of VMs in addition to credentials for OS and applications. </li>
+</ul>
+<h3 id="terraform-outputs">Terraform Outputs</h3>
+<p>You can get the details of each Virtual Machine, including passwords, by typing <code>terraform output</code>.</p>
 <h2 id="demo">Demo</h2>
-<p>A video demonstration of building a storage lab with options and illustrations.</p>
-<p><a href="https://youtu.be/yIgKUjiTb7M" title="Storage Demo"><img alt="Storage Demo" src="" /></a></p>
+<p>A video demonstration of building an ADFS Federation lab with options and illustrations.</p>
+<p><a href="https://youtu.be/MD3iQCHi-98" title="ADFS Demo"><img alt="ADFS Demo" src="" /></a></p>
 
 
 
@@ -806,7 +1060,7 @@ The containers have three different access levels (Blob, Container, Private)</li
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../sentinel/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Microsoft Sentinel lab" rel="prev">
+        <a href="../phishing_app/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Phishing App" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -815,20 +1069,20 @@ The containers have three different access levels (Blob, Container, Private)</li
               <span class="md-footer__direction">
                 Previous
               </span>
-              Microsoft Sentinel lab
+              Phishing App
             </div>
           </div>
         </a>
       
       
         
-        <a href="../midentity/" class="md-footer__link md-footer__link--next" aria-label="Next: Azure Managed Identity lab" rel="next">
+        <a href="../aadjoin/" class="md-footer__link md-footer__link--next" aria-label="Next: AAD Join" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Azure Managed Identity lab
+              AAD Join
             </div>
           </div>
           <div class="md-footer__button md-icon">

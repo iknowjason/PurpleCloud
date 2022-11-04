@@ -13,7 +13,7 @@
     
     
       
-        <title>Azure Sentinel lab - Hybrid + Identity Cyber Range</title>
+        <title>Microsoft Sentinel lab - Hybrid + Identity Cyber Range</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#azure-sentinel-lab" class="md-skip">
+        <a href="#microsoft-sentinel-lab" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Azure Sentinel lab
+              Microsoft Sentinel lab
             
           </span>
         </div>
@@ -409,6 +409,10 @@
         
           
         
+          
+        
+          
+        
       
       
         <label class="md-nav__link" for="__nav_4">
@@ -467,12 +471,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Azure Sentinel lab
+          Microsoft Sentinel lab
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Azure Sentinel lab
+        Microsoft Sentinel lab
       </a>
       
         
@@ -540,8 +544,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#example-1-simple-azure-sentinel-lab" class="md-nav__link">
-    Example 1:  Simple Azure Sentinel lab
+  <a href="#example-1-simple-microsoft-sentinel-lab" class="md-nav__link">
+    Example 1:  Simple Microsoft Sentinel lab
   </a>
   
 </li>
@@ -613,6 +617,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -658,6 +669,34 @@
     <li class="md-nav__item">
       <a href="../phishing_app/" class="md-nav__link">
         Phishing App
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adfs/" class="md-nav__link">
+        ADFS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aadjoin/" class="md-nav__link">
+        AAD Join
       </a>
     </li>
   
@@ -806,8 +845,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#example-1-simple-azure-sentinel-lab" class="md-nav__link">
-    Example 1:  Simple Azure Sentinel lab
+  <a href="#example-1-simple-microsoft-sentinel-lab" class="md-nav__link">
+    Example 1:  Simple Microsoft Sentinel lab
   </a>
   
 </li>
@@ -879,6 +918,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -898,13 +944,18 @@
   </a>
 
 
-<h1 id="azure-sentinel-lab">Azure Sentinel lab</h1>
+<h1 id="microsoft-sentinel-lab">Microsoft Sentinel lab</h1>
 <h2 id="overview">Overview</h2>
 <p>This tool generates an Azure sentinel lab with optional Windows 10 Endpoints forwarding logs to the Sentinel Log Analytics workspace.  Optionally configure a Domain Controller with Domain Join.  Windows 10 Azure VMs automatically install and configure the legacy Microsoft Monitoring Agent (MMA) or Operations Management Suite (OMS) and send logs to the Log Analytics workspace.  The endpoints will install Sysmon by default. Note that some manual configuration steps are required for final logging configuration.   </p>
+<p><strong>Important Note:</strong> This generator lives in the <code>generators/sentinel</code> directory.  Navigate into this directory first.</p>
+<pre><code>cd generators/sentinel
+</code></pre>
 <h2 id="manual-logging-configuration">Manual Logging Configuration</h2>
 <p>After creating the lab there are a couple of manual setup steps required. </p>
 <h3 id="step-1-add-sysmon-channel-in-log-analytics-agents-configuration">Step 1:  Add Sysmon Channel in log analytics agents configuration</h3>
 <p>Navigate into the <code>log analytics workspace</code> and <code>agents configuration</code>.  Select the <code>add windows event log</code>.  Type <code>Microsoft-Windows-Sysmon/Operational</code> into the Log name input field and select Apply.  The following screen shot shows how the configuration should look. </p>
+<pre><code>Microsoft-Windows-Sysmon/Operational
+</code></pre>
 <p><img alt="" src="../images/sysmon.png" /></p>
 <h3 id="step-2-enable-the-sentinel-data-connector-security-events-via-legacy-agent">Step 2:  Enable the Sentinel Data Connector - "Security Events via Legacy Agent"</h3>
 <p>Navigate into Sentinel.  Find <code>Data connectors</code> under <code>Configuration</code>.  In the search field or by scrolling below, find the connector named <code>Security Events via Legacy Agent</code>.  Select <code>open the connector page</code> in the lower right hand corner.  Select <code>Common</code> under <code>which events to stream</code> and <code>Apply changes.</code>  Verify that the connector shows a green highlight and shows connected, as shown below.</p>
@@ -916,23 +967,27 @@
 <p>After the Virtual Machines reboot, you can navigate into the Sentinel overview page and start to see new Sysmon and Windows security event logs in the Overview.  The <code>Sysmon</code> logs will show under <code>EVENT</code> table while the security event logs will show under the <code>SECURITYEVENT</code> table.</p>
 <p><img alt="" src="../images/logs.png" /></p>
 <h2 id="usage-examples">Usage Examples</h2>
-<h3 id="example-1-simple-azure-sentinel-lab">Example 1:  Simple Azure Sentinel lab</h3>
-<p><code>$ python3 sentinel.py</code></p>
-<p>This generates an Azure Sentinel lab with a Log Analytics workspace.</p>
+<h3 id="example-1-simple-microsoft-sentinel-lab">Example 1:  Simple Microsoft Sentinel lab</h3>
+<pre><code>python3 sentinel.py
+</code></pre>
+<p>This generates a Microsoft Sentinel lab with a Log Analytics workspace.</p>
 <p>This generates a terraform format HCL file for <code>sentinel.tf</code> and <code>providers.tf</code>.</p>
 <p><code>-l &lt;LOCATION&gt;</code>:  Specify a different location (Default: eastus)</p>
 <p><code>-odc</code>:  Optionally enables the Office 365 data connector for Sentinel.</p>
 <p><code>-adc</code>:  Optionally enables the Azure AD data connector for Sentinel.</p>
 <h3 id="example-2-one-windows-10-endpoint-with-sysmon-installed">Example 2:  One Windows 10 Endpoint with Sysmon installed</h3>
 <p>This generates a single Windows 10 Endpoint with Sysmon installed.</p>
-<p><code>$ python3 sentinel.py --endpoint 1</code></p>
+<pre><code>python3 sentinel.py --endpoint 1
+</code></pre>
 <p>All Windows 10 Pro systems will automatically send logs to Sentinel.  Some small manual steps are required (listed above) to get Sysmon and Security logs properly working.</p>
 <h3 id="example-3-domain-controller-with-forest-and-users-windows-domain-join-randomly-generate-users">Example 3: Domain Controller with Forest and Users + Windows Domain Join (Randomly Generate Users)</h3>
-<p><code>$ python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join</code></p>
+<pre><code>python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --ad_users 500 --endpoints 2  --domain_join
+</code></pre>
 <p><strong>Description:</strong></p>
-<p>This will automatically create an Azure Sentinel deployment.  This will also create a Domain Controller in dc_sentinel.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.   In this example, the domain users are randomly generated using the command line flag of <code>--ad_users</code> for a total of 500 users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the <code>domain_join</code> parameter enables it for all Windows 10 Pro created.  This will also create two Windows 10 Pro terraform files (win10-1.tf, win10-2.tf) as well as a terraform file for the Domain Controller (dc_sentinel.tf).  For the two Windows 10 Pro endpoints, they will be configured with the Microsoft Monitoring Agent (MMA) to ship logs to Log Analytics Workspace with Azure Sentinel.</p>
+<p>This will automatically create an Microsoft Sentinel deployment.  This will also create a Domain Controller in dc_sentinel.tf and install AD DS with forest name of rtcfingroup.com.  This will create a custom local administrator account and password with 500 domain users.   In this example, the domain users are randomly generated using the command line flag of <code>--ad_users</code> for a total of 500 users.  The domain users will be written to ad_users.csv and will have the password specified in --password.  Note that domain join is disabled by default for Windows 10 Pro but the <code>domain_join</code> parameter enables it for all Windows 10 Pro created.  This will also create two Windows 10 Pro terraform files (win10-1.tf, win10-2.tf) as well as a terraform file for the Domain Controller (dc_sentinel.tf).  For the two Windows 10 Pro endpoints, they will be configured with the Microsoft Monitoring Agent (MMA) to ship logs to Log Analytics Workspace with Microsoft Sentinel.</p>
 <h3 id="example-4-domain-controller-with-forest-and-users-windows-domain-join-import-custom-users-from-csv">Example 4: Domain Controller with Forest and Users + Windows Domain Join (Import Custom Users from CSV)</h3>
-<p><code>$ python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --csv users.csv --endpoints 2  --domain_join</code></p>
+<pre><code>python3 sentinel.py --domain_controller --ad_domain rtcfingroup.com --admin RTCAdmin --password MyPassword012345 --csv users.csv --endpoints 2  --domain_join
+</code></pre>
 <p><strong>Description:</strong>
 Same capabilities as above, except it can import a custom list of Domain Users into active directory on the DC instance.  The script checks to make sure that users are in the correct format.  An example CSV showing five users is listed below:</p>
 <pre><code>name,upn,password,groups,oupath,domain_admin
@@ -1030,6 +1085,9 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
 </ul>
 <h3 id="terraform-outputs">Terraform Outputs</h3>
 <p>You can get the details of each Virtual Machine, including passwords, by typing <code>terraform output</code>.</p>
+<h2 id="demo">Demo</h2>
+<p>A video demonstration of Sentinel with options and illustrations.</p>
+<p><a href="https://youtu.be/_jlqtqN4Iiw" title="Sentinel Demo"><img alt="Sentinel Demo" src="" /></a></p>
 
 
 

@@ -409,6 +409,10 @@
         
           
         
+          
+        
+          
+        
       
       
         <label class="md-nav__link" for="__nav_4">
@@ -458,7 +462,7 @@
   
     <li class="md-nav__item">
       <a href="../sentinel/" class="md-nav__link">
-        Azure Sentinel lab
+        Microsoft Sentinel lab
       </a>
     </li>
   
@@ -539,10 +543,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adfs/" class="md-nav__link">
+        ADFS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aadjoin/" class="md-nav__link">
+        AAD Join
+      </a>
     </li>
   
 
@@ -647,6 +686,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#demo" class="md-nav__link">
+    Demo
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -669,6 +715,15 @@
 <h1 id="phishing-application">Phishing Application</h1>
 <p><code>$ python3 phishing_app.py --name &lt;DISPLAY_NAME&gt; --redirect_uri &lt;REDIRECT_URI&gt;</code></p>
 <p>This generates a terraform format HCL file for <code>phishing_app.tf</code>.</p>
+<p><strong>Example 1:</strong></p>
+<pre><code>python3 phishing_app.py
+</code></pre>
+<p><strong>Example 2:</strong></p>
+<pre><code>python3 phishing_app.py --name EvilApp --redirect_uri https://www.evil-app.com/get_token 
+</code></pre>
+<p><strong>Important Note:</strong> This generator lives in the <code>generators/phishing_app</code> directory.  Navigate into this directory first.</p>
+<pre><code>cd generators/phishing_app
+</code></pre>
 <p>The following Graph API delegated scope permissions are automatically created for the application:</p>
 <pre><code>Contacts.Read
 Mail.Read
@@ -692,6 +747,9 @@ User.Read
 (Default: "https://localhost:30662")</p>
 <p><code>--logout_url &lt;LOGOUT_URL&gt;</code>:  The logout URL used by the application.
 (Default: "https://localhost:30662/logout")</p>
+<h2 id="demo">Demo</h2>
+<p>A video demonstration of building an application consent phishing  lab with options and illustrations.</p>
+<p><a href="https://youtu.be/o9wb6aux9Rk" title="application consent phishing lab"><img alt="App Consent Phishing Demo" src="" /></a></p>
 
 
 
@@ -731,13 +789,13 @@ User.Read
       
       
         
-        <a href="../../cost/" class="md-footer__link md-footer__link--next" aria-label="Next: Cost" rel="next">
+        <a href="../adfs/" class="md-footer__link md-footer__link--next" aria-label="Next: ADFS" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Cost
+              ADFS
             </div>
           </div>
           <div class="md-footer__button md-icon">
