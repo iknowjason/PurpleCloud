@@ -3,7 +3,8 @@
 ## Overview
 This tool generates an Azure sentinel lab with optional Windows 10 Endpoints forwarding logs to the Sentinel Log Analytics workspace.  Optionally configure a Domain Controller with Domain Join.  Windows 10 Azure VMs automatically install and configure the legacy Microsoft Monitoring Agent (MMA) or Operations Management Suite (OMS) and send logs to the Log Analytics workspace.  The endpoints will install Sysmon by default. Note that some manual configuration steps are required for final logging configuration.   
 
-**Important Note:** This generator lives in the ```generators/sentinel``` directory.  Navigate into this directory first.
+### Important Note
+This generator lives in the ```generators/sentinel``` directory.  Navigate into this directory first.
 ```
 cd generators/sentinel
 ```
@@ -98,6 +99,16 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
 
 ## Details
 
+### Updating Files Automatically Used
+
+There are a few important files that are used in the range that are automatically uploaded and downloaded to resources.  They can be easily customized.
+
+* **Sysmon.zip:**  This range includes Sysmon version 14.  It lives in ```shared/Sysmon.zip```.  This file gets pushed to a storage container where all Windows 10 endpoints download it.  You can replace it for customizations.
+
+* **AzureADConnect.msi:**  This range includes version 2.x of AzureADConnect MSI installer.  It lives in ```shared/AzureADConnect.msi```.  This file gets pushed to a storage container where the DC downloads it to the local Administrator desktop.  You can replace it for customizations.
+
+* **sysmonconfig-export.xml:**  The sysmon configuration file gets uploaded to a storage container and downloaded by all Windows 10 endpoints.  It lives in ```files/sysmon/sysmonconfig-export.xml```.
+
 ### Advanced Command Line
  
 ```--resource_group <rg_name>```:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)
@@ -126,13 +137,12 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
 
 Some notes I've gathered on AD usage and building.
 
-* Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in ```files/dc/AzureADConnect.msi```.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop.
+* Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in ```shared/AzureADConnect.msi```.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop.
 
 * The bootstrap script for building Active Directory is contained in ```files/dc/bootstrap-dc.ps1.tpl```.  This script is used to build AD DS on the dc instance created in dc.tf.
 
 * After terraform runs, the actual rendered dc bootstrap script (with variables) is output to ```output/dc/bootstrap-dc1.ps1.```  For troubleshooting you can copy that script to the DC and run it.
 
-* The way AD users, groups, and OUs are added:  In the CSV file, there is a field for ```oupath```.  The string for the ```OU=``` is looked at and a new OU is created if it hasn't already.  This is the way new OUs can be added.  AD users are added to that specific OU when they are created.  For adding AD Groups, the CSV field for ```groups``` is examined.  The user is added into that AD group.  The ```groups``` and ```OU=``` portion of the oupath should match.  If they don't, problems could arise adding the user.
 
 * The ```ad_users.csv``` file is the name of the file that the DC uses to build AD.  It is uploaded to the storage container that is created and downloaded automatically by the DC.  Look in ```C:\terraform\ad_users.csv``` to look at this file if needed.
 

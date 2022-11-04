@@ -14,7 +14,8 @@ python3 phishing_app.py
 python3 phishing_app.py --name EvilApp --redirect_uri https://www.evil-app.com/get_token 
 ```
 
-**Important Note:** This generator lives in the ```generators/phishing_app``` directory.  Navigate into this directory first.
+### Important Note
+This generator lives in the ```generators/phishing_app``` directory.  Navigate into this directory first.
 ```
 cd generators/phishing_app
 ```

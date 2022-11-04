@@ -12,11 +12,15 @@ Identity lab supporting Azure AD and Active Directory enterprise deployment with
 
 * **Active Directory lab:** Simulate an on-premise AD environment using Azure VMs, for learning, training, and Red/Blue team simulations.
 
-* **Microsoft lab:** Supports automated deployment of Azure Microsoft for learning, training, and attack/defense simulations.
+* **Sentinel lab:** Supports automated deployment of Microsoft Sentinel for learning, training, and attack/defense simulations.
 
 * **Azure Storage lab:** Creates a deployment with Azure storage blobs, shares, files, and key vaults with secrets, keys, and certificates.
 
 * **Phishing App lab:** Automatically deploy a multi-tenant phishing app for learning, training, and simulations of attack and defense.
+
+* **ADFS Federation lab:** Automatically deploy an ADFS server joined to an AD domain with a DC and optional users and Windows 10 systems.
+
+* **AAD Join:** Creates Windows 10 systems joined to Azure AD, with customizable roles and Azure AD users.
 
 * **Azure AD features:** 
     * Customizable Azure AD Domain 
@@ -63,9 +67,16 @@ Create an Azure managed identity attack lab with an Azure VM, a user or system a
 ### phishing_app.py
 Create a multi-tenant Azure AD application that can be used for app consent phishing simulations.  You can specify a custom display name for the app along with custom redirect_uri, homepage_url, and logout_url.  
 
+### adfs.py
+Creates an ADFS deployment for Hybrid Federation security research.  The ADFS server can be built with a self-signed certificate or import a trusted, CA signed certificate.  Builds a Domain Controller with optional, additional AD users and Windows 10 Professional systems. 
+
+### aadjoin.py
+Creates an Azure AD Join security research lab.  Virtual Machines are joined to Azure AD with Azure AD users that can login over RDP.  An optional User Assigned Identity can be added.
+
 ## Use Cases
 * Research and pentest lab for Azure AD
 * Security testing of Hybrid Join and Azure AD Joined devices
+* Federation ADFS lab security research
 * EDR Testing lab
 * PoC / Product Security Lab
 * Enterprise Active Directory lab with domain joined devices
@@ -73,4 +84,4 @@ Create a multi-tenant Azure AD application that can be used for app consent phis
 * SIEM / Threat Hunting / DFIR / Live Response lab with HELK + Velociraptor [1, 2]
 * Log aggregator architecture to forward logs to a cloud native SIEM (Microsoft Sentinel)
 * Data Science research with HELK server, Jupyter notebooks
-* Detection Engineering research with Mordor [3, 4]
+* Detection Engineering research with Mordor

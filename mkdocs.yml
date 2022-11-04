@@ -7,12 +7,12 @@ nav:
    - Installation : install.md
    - Tool Usage:
      - Azure AD lab: tools/aad.md
-     - Azure VMs, Active Directory, and SIEM: tools/ad.md
-     - Microsoft Sentinel lab: tools/sentinel.md
-     - Azure Storage lab: tools/storage.md
-     - Azure Managed Identity lab: tools/midentity.md
+     - Active Directory, SIEM, Velociraptor: tools/ad.md
+     - Sentinel lab: tools/sentinel.md
+     - Storage lab: tools/storage.md
+     - Managed Identity lab: tools/midentity.md
      - Phishing App: tools/phishing_app.md
-     - ADFS: tools/adfs.md
+     - ADFS lab: tools/adfs.md
      - AAD Join: tools/aadjoin.md
    - Cost: cost.md
    - References : references.md

@@ -1,10 +1,11 @@
-# Azure VMs, Active Directory, and SIEM 
+# Active Directory, Velociraptor, and SIEM Lab 
 
 ## Overview
 
 Generating an Azure infrastructure lab using ad.py.  This generator can create standalone Windows 10 endpoints, a full domain-joined enterprise Active Directory environment with users, or a SIEM with Velociraptor. 
 
-**Important Note:** This generator lives in the ```generators/ad``` directory.  Navigate into this directory first.
+### Important Note
+This generator lives in the ```generators/ad``` directory.  Navigate into this directory first.
 ```
 cd generators/ad
 ```
@@ -87,11 +88,11 @@ After the range has built, type ```terraform output``` to get the credentials an
 
 **Input Files for Velociraptor + HELK:**
 
-The following files are automatically uploaded to storage container and then downloaded by the HELk + Velociraptor system.  They can be fully customized to suit your needs.  All files are contained in the ```files/velocihelk``` directory:
+The following files are automatically uploaded to storage container and then downloaded by the HELk + Velociraptor system.  They can be fully customized to suit your needs.
 
-- **Sysmon.zip:** The sysmon version to be used on Windows 10 endpoints.  This version is v14.0.   
+**Files found in ```shared``` directory**
 
-- **sysmonconfig-export.xml:** The sysmon configuration to be used.  Currently uses github.com/SwiftOnSecurity. 
+- **Sysmon.zip:** The sysmon version to be used on Windows 10 endpoints.  This version is v14.0.  This file is in the shared directory from the default project directory:  ```shared/Sysmon.zip```. 
 
 - **velociraptor-v0.6.5-2-linux-amd64.gz:** The velociraptor linux binary that runs on the server. 
 
@@ -99,9 +100,25 @@ The following files are automatically uploaded to storage container and then dow
 
 - **winlogbeat-7.9.2-windows-x86_64.zip:** The winlogbeat agent that runs on windows 10 endpoints and ships logs to the HELK server. 
 
+**Files found in  ```files/velocihelk``` directory**
+
+- **sysmonconfig-export.xml:** The sysmon configuration to be used.  Currently uses github.com/SwiftOnSecurity. 
+
+- **helk.sh.tpl:** The script used to help build the Hunting ELK (HELK) server. 
+
 - **winlogbeat.yml.tpl:** The configuration file for winlogbeat agent that currently sends to HELK using kafka transport.
 
+- **config.yaml.tpl:** The velociraptor configuration file used to build the internal PKI.  This is used on the server and client agents. 
+
 ## Details
+
+There are a few important files that are used in the range that are automatically uploaded and downloaded to resources.  They can be easily customized.
+
+* **Sysmon.zip:**  This range includes Sysmon version 14.  It lives in ```shared/Sysmon.zip```.  This file gets pushed to a storage container where all Windows 10 endpoints download it.  You can replace it for customizations.
+
+* **AzureADConnect.msi:**  This range includes version 2.x of AzureADConnect MSI installer.  It lives in ```shared/AzureADConnect.msi```.  This file gets pushed to a storage container where the DC downloads it to the local Administrator desktop.  You can replace it for customizations.
+
+* **sysmonconfig-export.xml:**  The sysmon configuration file gets uploaded to a storage container and downloaded by all Windows 10 endpoints.  It lives in ```files/sysmon/sysmonconfig-export.xml```.
 
 ### Advanced Command Line
 
@@ -134,7 +151,7 @@ The following files are automatically uploaded to storage container and then dow
 
 Some notes I've gathered on AD usage and building.
 
-* Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in ```files/dc/AzureADConnect.msi```.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop. 
+* Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in ```shared/AzureADConnect.msi```.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop. 
 
 * The bootstrap script for building Active Directory is contained in ```files/dc/bootstrap-dc.ps1.tpl```.  This script is used to build AD DS on the dc instance created in dc.tf. 
 

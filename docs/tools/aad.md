@@ -1,16 +1,19 @@
 # Azure Active Directory lab
 
-## Usage Examples
+## Overview
 
 Generating an Azure AD lab using ```azure_ad.py```.
 
 This generates terraform formatted HCL files for ```users.tf```.  If applications and groups are created, the ```apps.tf``` and ```groups.tf``` will also be created.
 
-**Important Note:** This generator lives in the ```generators/azure_ad``` directory.  Navigate into this directory first.
+### Important Note
+This generator lives in the ```generators/azure_ad``` directory.  Navigate into this directory first.
 
 ```
 cd generators/azure_ad
 ```
+
+## Usage Examples
 
 ### Example 1:  Basic Azure AD lab
 

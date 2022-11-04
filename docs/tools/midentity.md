@@ -4,7 +4,8 @@
 
 Create an attack and defense lab for managed identity with one Azure Virtual Machine.  An Azure VM is configured with a user assigned managed identity and optional system assigned identity.  An Azure AD user is also created.  Generates terraform format HCL files for ```managed_identity.tf```,  ```providers.tf```, and ```mi_user.tf```.
 
-**Important Note:** This generator lives in the ```generators/managed_identity``` directory.  Navigate into this directory first.
+### Important Note
+This generator lives in the ```generators/managed_identity``` directory.  Navigate into this directory first.
 ```
 cd generators/managed_identity
 ```

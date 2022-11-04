@@ -4,13 +4,17 @@
 
 Generating an ADFS Federation lab with adfs.py.  This generator can create an enterprise ADFS server deployment with a Domain Controller.  It can also add a full domain-joined enterprise Active Directory environment with users and Windows 10 Professional endpoints.  This generator always adds a Microsoft Sentinel deployment with a Log Analytics workspace.  The ADFS server automatically installs the Azure legacy monitoring agent with Sysmon and ADFS security auditing configuration, and will ship the logs into Sentinel via the agent.  For each Windows 10 Pro system added, they will all have Sysmon installed, the legacy monitoring agent, and ship Sysmon logs to Sentinel. 
 
+### Default Resources
+
 To summarize, the following Azure resources are always created by default with this lab:
 
 - One ADFS server joined to an AD Domain
 - One DC
 - One Sentinel deployment
 
-**Important Note:** This generator lives in the ```generators/adfs``` directory.  Navigate into this directory first.
+### Important Note 
+
+This generator lives in the ```generators/adfs``` directory.  Navigate into this directory first.
 ```
 cd generators/adfs
 ```
@@ -87,38 +91,62 @@ Jason Lindqvist,jasonlindqvist@rtcfingroup.com,MyPassword012345,IT,OU=IT;DC=rtcf
 
 ## Details
 
+### Updating Files Automatically Used
+
+There are a few important files that are used in the range that are automatically uploaded and downloaded to resources.  They can be easily customized.
+
+* **Sysmon.zip:**  This range includes Sysmon version 14.  It lives in ```shared/Sysmon.zip```.  This file gets pushed to a storage container where the ADFS server and all Windows 10 endpoints download it.  You can replace it for customizations.
+
+* **AzureADConnect.msi:**  This range includes version 2.x of AzureADConnect MSI installer.  It lives in ```shared/AzureADConnect.msi```.  This file gets pushed to a storage container where the ADFS server and DC both download it to the local Administrator desktop.  You can replace it for customizations.
+
+* **sysmonconfig-export.xml:**  The sysmon configuration file gets uploaded to a storage container and downloaded by the ADFS server and all Windows 10 endpoints.  It lives in ```files/sysmon/sysmonconfig-export.xml```.
+
+
 ### Advanced Command Line
 
-```--resource_group <rg_name>```:  Name of the Azure resource group to automatically create  (Default:  PurpleCloud)
+```--endpoints <num_of_endpoints>```: Number of Windows 10 Professional systems to build (Default: 0)
 
-```--location <location>```:  The Azure location to use (Default:  eastus)
+```--resource_group <rg_name>```: Name of the Azure resource group to automatically create  (Default:  PurpleCloud)
 
-```--endpoints <num_of_endpoints>```:  Number of Windows 10 Professional systems to build (Default: 0)
+```--location <location>```: The Azure location to use (Default:  eastus)
 
-```--helk```:  Create a hunting ELK server (with Velociraptor installed) (Default:  Disabled)
+```--ad_domain <domain>```: The name of the AD Domain to provision (Default:  rtc.local)
 
-```--domain_controller```:  Create a Domain Controller and install AD DS with Forest (Default:  Disabled)
+```--ad_users <num_of_domain_users>```: The number of AD users to automatically build (Default:  Disabled)
 
-```--ad_domain <domain>```:  The name of the AD Domain to provision (Default:  rtc.local)
+```--csv <csv_file>```: A custom CSV file to use that will load domain users on the DC's AD DS  (Default:  Disabled)
 
-```--ad_users <num_of_domain_users>```:  The number of AD users to automatically build (Default:  Disabled)
+```--admin <admin_username>```: The Local Administrator account (Default:  RTCAdmin)
 
-```--csv <csv_file>```:  A custom CSV file to use that will load domain users on the DC's AD DS  (Default:  Disabled)
+```--password <password>```: The local Administrator password and default AD user password (Default:  auto generate a strong password) 
 
-```--admin <admin_username>```:  The Local Administrator account (Default:  RTCAdmin)
+```--domain_join```: Join the Windows 10 Pro systems to the AD Domain (Default:  false)
 
-```--password <password>```:  The local Administrator password and default AD user password (Default:  auto generate a strong password) 
+```--auto_logon```: Automatically logon the domain user with their credentials upon system start (Default:  false)
 
-```--domain_join```:  Join the Windows 10 Pro systems to the AD Domain (Default:  false)
+```--data_connector_office```: Enable the Sentinel Data Connector for Office (Default:  false)
 
-```--auto_logon```:  Automatically logon the domain user with their credentials upon system start (Default:  false)
+```--data_connector_aad```: Enable the Sentinel Data Connector for Azure AD (Default:  false)
 
+```--trusted_cert <file.pfx>```: Import at trusted, CA signed certificate into ADFS (Default:  disabled, self-signed)
+
+```--pfx_password <password>```: The password used to import the pfx file (Default:  disabled, self-signed)
+
+
+### Customizing ADFS
+The ADFS server can be easily customized using powershell bootstrap scripts.  The location of these scripts is ```files/adfs```.  What the files do:
+
+* **bootstrap-adfs.ps1.tpl:** This is the main script that installs symon.  It downloads the ```install_adfs.ps1``` script from the storage container and the ```domain_join.ps1``` script from the storage container.  If the domain_join setting is true, it will set up a powershell scheduled job to launch the domain_join.ps1 script. 
+
+* **domain_join.ps1.tpl:** This joins the system to the AD domain.  It runs as a Powershell Scheduled Job and should de-register after domain join is detected as true. 
+
+* **install_adfs.ps1.tpl:** Installs the ADFS componentns and services.  It will by default generate a self-signed certificate.  If the trusted, CA signed certificate option is enabled, it will download the certificate from the storage container.  Finally, it configures ADFS Security auditing log configuration. 
 
 ### How AD Builds on the DC
 
 Some notes I've gathered on AD usage and building.
 
-* Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in ```files/dc/AzureADConnect.msi```.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop. 
+* Azure AD Connect:  The Azure AD connect MSI is included in ths repo.  It can be upgraded by replacing the file in ```shared/AzureADConnect.msi```.  The current version is 2.x of AD Connect.  The file is uploaded to the storage container and then downloaded to the local Administrator's desktop. 
 
 * The bootstrap script for building Active Directory is contained in ```files/dc/bootstrap-dc.ps1.tpl```.  This script is used to build AD DS on the dc instance created in dc.tf. 
 
@@ -133,7 +161,7 @@ Some notes I've gathered on AD usage and building.
 * For auto_logon domain users:  An AD domain user is randomly selected for logging on that Windows 10 Pro endpoint.  To customize which domain user is used, you can manually edit the windows 10 terraform file (i.e., win10-1.tf).
 
 
-### Edit script options in ad.py 
+### Edit script options in adfs.py 
 
 **Windows 10 Pro configuration:**   The Windows 10 Pro default configuration can be adjusted to meet your needs.
 
@@ -177,11 +205,19 @@ default_ad_users = [
 
 **Other Details:**  
 
-* **ranges.log:**  The ranges.log file writes out important information as the range is built, such as VM details.  You can use it to track things.
+* **ranges.log:**  The ranges.log file writes out important information as the range is built, such as VM details.  You can use it to track things.  The ranges.log will output some important information such as your ADFS endpoint for signon, as shown below:
+```
+[+] Creating the adfs terraform file:  adfs.tf
+  [+] ADFS Server Information:
+  [+] Server Hostname:  adfs
+  [+] FQDN:  adfs.rtc.local
+  [+] Signon Endpoint:  https://adfs.rtc.local/adfs/ls/idpinitiatedsignon.aspx
+  [+] Building with Self-Signed certificate
+```
 
 * **Logging Passwords:** By default, all passwords are randomly generated.  So if you are not aware of this, it might be easy to lose track of a password.  For this reason we have added a logging feature that captures all passwords created.  The ```ad.py``` script will automatically log all output to a logfile called ```ranges.log```.  This is for the specific purpose of being able to track the ranges created and the passwords that are auto-generated for AD users and local Administrator accounts. You can also type ```terraform output``` as a secondary way to get the password and details for each virtual machine.
 
-* **Azure Network Security Groups:**  By default, the ```ad.py``` script will try to auto-detect your public IP address using a request to http://ifconfig.me.  Your public IP address will be used to white list the Azure NSG source prefix setting.  A second terraform resource is then used to manage and update any changes to your public IP address.  You can hard code a different IP address in the following section of the ad.py script or the terraform nsg.tf file.  If you change locations and your IP address changes, simply type ```terraform apply``` and the NSG white-listed public IP address should update through terraform.
+* **Azure Network Security Groups:**  By default, a terraform data http resource will auto-detect your public IP address using a request to http://ifconfig.me.  Your public IP address will be used to white list the Azure NSG source prefix setting.  If you change locations and your IP address changes, simply type ```terraform apply``` and the NSG white-listed public IP address should update through terraform.
 
 ```
 locals {
@@ -190,10 +226,8 @@ locals {
 }
 ```
 
-* **Outputs:** After the terraform resources are applied and build, you can type ```terraform output``` to get some important information such as the public IP address of VMs in addition to credentials for OS and applications. 
-
 ### Terraform Outputs
-You can get the details of each Virtual Machine, including passwords, by typing ```terraform output```.
+You can get the details of each Virtual Machine, including passwords, by typing ```terraform output```.  The terraform outputs will also show the ADFS endpoint for signon.  You can RDP into the machine and test it locally with a browser.  You can also access the endpoint over the public Internet when importing a trusted, CA signed certificate.
 
 ## Demo
 A video demonstration of building an ADFS Federation lab with options and illustrations.
