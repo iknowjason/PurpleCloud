@@ -859,7 +859,8 @@ Same as above, except generate 500 users in Azure AD.  Create 3 Azure applicatio
 </ul>
 <h3 id="example-4-service-principal-abuse-attack-primitives">Example 4:  Service Principal abuse attack primitives</h3>
 <p>Generate a lab for Service Principal abuse attack primitives.</p>
-<p><code>$ python3 azure_ad.py -c 25 --upn rtcfingroup.com --apps 7 -aa -ga -pra</code></p>
+<pre><code>python3 azure_ad.py -c 25 --upn rtcfingroup.com --apps 7 -aa -ga -pra
+</code></pre>
 <p><strong>Description:</strong> 
 This will generate an Azure AD range with a UPN suffix of <code>rtcfingroup.com</code> with 25 users. It will add some service principal abuse attack primitives to some random resources.  First, the <code>--apps 7</code> will add 7 Azure AD applications (App Registrations) with associated Service Principals (Enterprise Applications).  The <code>-aa</code> flag will assign an Application Administrator role randomly to one of the 25 Azure AD users.  The <code>-ga</code> flag will assign the Global Administrator role randomly to one of the 7 application SPs.  Finally, the <code>-pra</code> flag will assign the Privileged role administrator role randomly to one of the other 7 application SPs.</p>
 <h2 id="demo">Demo</h2>
