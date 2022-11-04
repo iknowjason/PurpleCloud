@@ -18,7 +18,9 @@ Clone this repository
 
 Install the python faker using pip.  This is a dependency of some python scripts to generate users.  Faker is required for the following three scripts:  azure_ad.py, ad.py, managed_identity.py.
 
-```$ pip3 install faker```
+```
+pip3 install faker
+```
 
 ### Step 3: Environment Setup
 
@@ -46,17 +48,23 @@ export ARM_CLIENT_SECRET="YOUR_SERVICE_PRINCIPAL_VALUES"
 
 Here are some references for creating a Service Principal to use with Azure.
 
-* Creating a Service Principal
+* Microsoft Reference Docs:  Creating a Service Principal
 
+```
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
+```
 
-* Configuring a Service Principal to manage Azure Active Directory
+* Microsoft Reference Docs:  Configuring a Service Principal to manage Azure Active Directory
 
+```
 https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/guides/service_principal_configuration
+```
 
-* Microsoft docs:  Creating a Service Principal in Cloud Shell with Bash
+* Microsoft Reference Docs:  Creating a Service Principal in Cloud Shell with Bash
 
+```
 https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell-bash?tabs=bash
+```
 
 These are the settings that have worked best.  For Azure AD, set up the Service Principal as Global Administrator and assign the following Graph API permissions:
 
@@ -75,13 +83,14 @@ Run one of the PurpleCloud scripts to generate terraform.  Each generator lives 
 Run terraform 
 ```
 terraform init
-terraform plan run.plan
+terraform plan -out=run.plan
 terraform apply run.plan
 ```
 
 ## Destroying the Range
 
 Destroy the range resources when you are finished:
+
 ```
 terraform destroy
 ```
