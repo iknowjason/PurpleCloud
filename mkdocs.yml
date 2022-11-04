@@ -7,7 +7,7 @@ nav:
    - Installation : install.md
    - Tool Usage:
      - Azure AD lab: tools/aad.md
-     - Active Directory, SIEM, Velociraptor: tools/ad.md
+     - Active Directory, Velociraptor, SIEM: tools/ad.md
      - Sentinel lab: tools/sentinel.md
      - Storage lab: tools/storage.md
      - Managed Identity lab: tools/midentity.md
