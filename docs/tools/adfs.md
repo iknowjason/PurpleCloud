@@ -140,7 +140,7 @@ The ADFS server can be easily customized using powershell bootstrap scripts.  Th
 
 * **domain_join.ps1.tpl:** This joins the system to the AD domain.  It runs as a Powershell Scheduled Job and should de-register after domain join is detected as true. 
 
-* **install_adfs.ps1.tpl:** Installs the ADFS componentns and services.  It will by default generate a self-signed certificate.  If the trusted, CA signed certificate option is enabled, it will download the certificate from the storage container.  Finally, it configures ADFS Security auditing log configuration. 
+* **install_adfs.ps1.tpl:** Installs the ADFS components and services.  It will by default generate a self-signed certificate.  If the trusted, CA signed certificate option is enabled, it will download the certificate from the storage container.  Finally, it configures ADFS Security auditing log configuration. 
 
 ### How AD Builds on the DC
 
