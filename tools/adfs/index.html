@@ -578,6 +578,40 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#manual-logging-configuration" class="md-nav__link">
+    Manual Logging Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Manual Logging Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-add-sysmon-channel-in-log-analytics-agents-configuration" class="md-nav__link">
+    Step 1:  Add Sysmon Channel in log analytics agents configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-enable-the-sentinel-data-connector-security-events-via-legacy-agent" class="md-nav__link">
+    Step 2:  Enable the Sentinel Data Connector - "Security Events via Legacy Agent"
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-reboot-virtual-machines-and-verify-connected-in-agents-management" class="md-nav__link">
+    Step 3:  Reboot Virtual Machines and Verify connected in Agents Management
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage-examples" class="md-nav__link">
     Usage Examples
   </a>
@@ -823,6 +857,40 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#manual-logging-configuration" class="md-nav__link">
+    Manual Logging Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Manual Logging Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-add-sysmon-channel-in-log-analytics-agents-configuration" class="md-nav__link">
+    Step 1:  Add Sysmon Channel in log analytics agents configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-enable-the-sentinel-data-connector-security-events-via-legacy-agent" class="md-nav__link">
+    Step 2:  Enable the Sentinel Data Connector - "Security Events via Legacy Agent"
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-reboot-virtual-machines-and-verify-connected-in-agents-management" class="md-nav__link">
+    Step 3:  Reboot Virtual Machines and Verify connected in Agents Management
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage-examples" class="md-nav__link">
     Usage Examples
   </a>
@@ -958,6 +1026,20 @@
 <p>This generator lives in the <code>generators/adfs</code> directory.  Navigate into this directory first.</p>
 <pre><code>cd generators/adfs
 </code></pre>
+<h2 id="manual-logging-configuration">Manual Logging Configuration</h2>
+<p>To properly view the Sysmon and Windows event logs for security within Sentinel, it is necessary to take a few steps to configure the ADFS server and each Windows 10 system.  After terraform runs, follow these steps to view logs in Sentinel.</p>
+<h3 id="step-1-add-sysmon-channel-in-log-analytics-agents-configuration">Step 1:  Add Sysmon Channel in log analytics agents configuration</h3>
+<p>Navigate into the <code>log analytics workspace</code> and <code>agents configuration</code>.  Select the <code>add windows event log</code>.  Type <code>Microsoft-Windows-Sysmon/Operational</code> into the Log name input field and select Apply.  The following screen shot shows how the configuration should look.</p>
+<pre><code>Microsoft-Windows-Sysmon/Operational
+</code></pre>
+<p><img alt="" src="../images/sysmon.png" /></p>
+<h3 id="step-2-enable-the-sentinel-data-connector-security-events-via-legacy-agent">Step 2:  Enable the Sentinel Data Connector - "Security Events via Legacy Agent"</h3>
+<p>Navigate into Sentinel.  Find <code>Data connectors</code> under <code>Configuration</code>.  In the search field or by scrolling below, find the connector named <code>Security Events via Legacy Agent</code>.  Select <code>open the connector page</code> in the lower right hand corner.  Select <code>Common</code> under <code>which events to stream</code> and <code>Apply changes.</code>  Verify that the connector shows a green highlight and shows connected, as shown below.</p>
+<p><img alt="" src="../images/connector.png" /></p>
+<h3 id="step-3-reboot-virtual-machines-and-verify-connected-in-agents-management">Step 3:  Reboot Virtual Machines and Verify connected in Agents Management</h3>
+<p>Verify that ADFS and all Windows 10 Virtual machines show as connected.  Verify this by navigating into the <code>Log Analytics workspace</code> and looking under <code>Agents management</code> under <code>settings</code>.  Reboot each of the Azure Virtual Machines and then look to verify that they all list a connected status.  It should look like the following screen shot shown below.</p>
+<p><img alt="" src="../images/connected.png" /></p>
+<p>After the Virtual Machines reboot, you can navigate into the Sentinel overview page and start to see new Sysmon and Windows security event logs in the Overview.  The <code>Sysmon</code> logs will show under <code>EVENT</code> table while the security event logs will show under the <code>SECURITYEVENT</code> table.</p>
 <h2 id="usage-examples">Usage Examples</h2>
 <h3 id="example-1-one-adfs-server-and-one-domain-controller-with-self-signed-adfs-certificate">Example 1: One ADFS Server and one Domain Controller, with self-signed ADFS certificate</h3>
 <pre><code>python3 adfds.py
