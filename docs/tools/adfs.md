@@ -18,6 +18,32 @@ This generator lives in the ```generators/adfs``` directory.  Navigate into this
 ```
 cd generators/adfs
 ```
+## Manual Logging Configuration
+
+To properly view the Sysmon and Windows event logs for security within Sentinel, it is necessary to take a few steps to configure the ADFS server and each Windows 10 system.  After terraform runs, follow these steps to view logs in Sentinel.
+
+### Step 1:  Add Sysmon Channel in log analytics agents configuration
+
+Navigate into the ```log analytics workspace``` and ```agents configuration```.  Select the ```add windows event log```.  Type ```Microsoft-Windows-Sysmon/Operational``` into the Log name input field and select Apply.  The following screen shot shows how the configuration should look.
+
+```
+Microsoft-Windows-Sysmon/Operational
+```
+
+![](./images/sysmon.png)
+
+### Step 2:  Enable the Sentinel Data Connector - "Security Events via Legacy Agent"
+Navigate into Sentinel.  Find ```Data connectors``` under ```Configuration```.  In the search field or by scrolling below, find the connector named ```Security Events via Legacy Agent```.  Select ```open the connector page``` in the lower right hand corner.  Select ```Common``` under ```which events to stream``` and ```Apply changes.```  Verify that the connector shows a green highlight and shows connected, as shown below.
+
+![](./images/connector.png)
+
+### Step 3:  Reboot Virtual Machines and Verify connected in Agents Management
+
+Verify that ADFS and all Windows 10 Virtual machines show as connected.  Verify this by navigating into the ```Log Analytics workspace``` and looking under ```Agents management``` under ```settings```.  Reboot each of the Azure Virtual Machines and then look to verify that they all list a connected status.  It should look like the following screen shot shown below.
+
+![](./images/connected.png)
+
+After the Virtual Machines reboot, you can navigate into the Sentinel overview page and start to see new Sysmon and Windows security event logs in the Overview.  The ```Sysmon``` logs will show under ```EVENT``` table while the security event logs will show under the ```SECURITYEVENT``` table.
 
 ## Usage Examples
 
