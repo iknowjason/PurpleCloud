@@ -50,7 +50,7 @@ After the Virtual Machines reboot, you can navigate into the Sentinel overview p
 ### Example 1: One ADFS Server and one Domain Controller, with self-signed ADFS certificate 
 
 ```
-python3 adfds.py
+python3 adfs.py
 ```
 
 **Description:**
