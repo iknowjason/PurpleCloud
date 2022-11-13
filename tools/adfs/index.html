@@ -1042,7 +1042,7 @@
 <p>After the Virtual Machines reboot, you can navigate into the Sentinel overview page and start to see new Sysmon and Windows security event logs in the Overview.  The <code>Sysmon</code> logs will show under <code>EVENT</code> table while the security event logs will show under the <code>SECURITYEVENT</code> table.</p>
 <h2 id="usage-examples">Usage Examples</h2>
 <h3 id="example-1-one-adfs-server-and-one-domain-controller-with-self-signed-adfs-certificate">Example 1: One ADFS Server and one Domain Controller, with self-signed ADFS certificate</h3>
-<pre><code>python3 adfds.py
+<pre><code>python3 adfs.py
 </code></pre>
 <p><strong>Description:</strong>
 This will generate a lab with a single ADFS server and Domain Controller.  The ADFS server will use a self-signed certificate.  Five AD users will be created with a default AD domain of <code>rtc.local</code>.  This generates the following terraform files:</p>
