@@ -714,7 +714,7 @@ resource "azurerm_windows_virtual_machine" "managed_identity" {
   name                          = local.mi_friendly_name 
   resource_group_name           = azurerm_resource_group.pcmi.name 
   location                      = var.mi_location
-  size                       = "Standard_A1"
+  size                       = "Standard_A1_v2"
   computer_name  = local.micomputername
   admin_username = var.mi_admin_username
   admin_password = local.micreds 
