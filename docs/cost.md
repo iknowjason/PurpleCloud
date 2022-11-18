@@ -12,11 +12,15 @@ By default, both the Windows 10 Pro and Domain Controller are using a ```Standar
 
 Reference the Azure "Windows Virtual Machine Pricing" for the most up to date pricing:
 
+```
 https://azure.microsoft.com/en-us/pricing/details/virtual-machines/windows/
+```
 
 Reference the Azure "Linux Virtual Machines Pricing" for the most up to date pricing on the Linux VM:
 
+```
 https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux/
+```
 
 Here are the defaults I've researched for this range.  Each Windows and Linux VM should approximately accrue the following with range defaults:
 ### Table:  Azure Accrued Costs per VM with Windows License Included

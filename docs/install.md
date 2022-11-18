@@ -9,10 +9,21 @@
 * **Global Administrator role**
 
 ## Important Security Information:  Security Groups
-Some people might be concerned about publicly exposing these cloud resources.  The ```ad.py``` script will auto-detect your source IP address and white list only that IP address.  The ```managed_identity.py``` script has a variable called src_ip which you can manually edit for your source IP address.  
+Some people might be concerned about publicly exposing these cloud resources.  The following scripts are built to use terraform that will auto-detect your source IP address and white list only that IP address.  If you change locations, you can simply run ```terraform apply``` and the Azure NSG firewall rules will change your allowed IP address using terraform.  Here are the scripts supporting this and these are all of the scripts that create Azure VMs and expose RDP (only from the white listed IP):  aadjoin.py, ad.py, adfs.py, managed_identity.py, sentinel.py. 
 
 ### Step 1: Clone
 Clone this repository
+
+```
+git clone https://github.com/iknowjason/PurpleCloud.git 
+```
+
+**Important Note on Large File Support:** This repository has a ```shared``` directory that uses some larger files (i.e., Sysmon, Azure AD Connect, Velociraptor, Winlogbeat).  If you wish to use the large files in this repository and download them with the git client, please make sure your git client supports **git-lfs** (large file support).  If you don't want to install the git-lfs extension but you still want to download the large files, you can simply download the zip file with your browser.  It will include the large files.   
+
+On Ubuntu linux, just run this to install git-lfs extension:
+```
+apt-get install git-lfs
+```
 
 ### Step 2: Install python faker 
 
