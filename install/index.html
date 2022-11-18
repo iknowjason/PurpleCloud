@@ -284,6 +284,18 @@
 
 
   <li class="md-tabs__item">
+    <a href="../conferences/" class="md-tabs__link">
+      Conferences
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
     <a href="../credits/" class="md-tabs__link">
       Credits
     </a>
@@ -712,6 +724,21 @@
   
   
     <li class="md-nav__item">
+      <a href="../conferences/" class="md-nav__link">
+        Conferences
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../credits/" class="md-nav__link">
         Credits
       </a>
@@ -856,9 +883,15 @@
 <li><strong>Global Administrator role</strong></li>
 </ul>
 <h2 id="important-security-information-security-groups">Important Security Information:  Security Groups</h2>
-<p>Some people might be concerned about publicly exposing these cloud resources.  The <code>ad.py</code> script will auto-detect your source IP address and white list only that IP address.  The <code>managed_identity.py</code> script has a variable called src_ip which you can manually edit for your source IP address.  </p>
+<p>Some people might be concerned about publicly exposing these cloud resources.  The following scripts are built to use terraform that will auto-detect your source IP address and white list only that IP address.  If you change locations, you can simply run <code>terraform apply</code> and the Azure NSG firewall rules will change your allowed IP address using terraform.  Here are the scripts supporting this and these are all of the scripts that create Azure VMs and expose RDP (only from the white listed IP):  aadjoin.py, ad.py, adfs.py, managed_identity.py, sentinel.py. </p>
 <h3 id="step-1-clone">Step 1: Clone</h3>
 <p>Clone this repository</p>
+<pre><code>git clone https://github.com/iknowjason/PurpleCloud.git 
+</code></pre>
+<p><strong>Important Note on Large File Support:</strong> This repository has a <code>shared</code> directory that uses some larger files (i.e., Sysmon, Azure AD Connect, Velociraptor, Winlogbeat).  If you wish to use the large files in this repository and download them with the git client, please make sure your git client supports <strong>git-lfs</strong> (large file support).  If you don't want to install the git-lfs extension but you still want to download the large files, you can simply download the zip file with your browser.  It will include the large files.   </p>
+<p>On Ubuntu linux, just run this to install git-lfs extension:</p>
+<pre><code>apt-get install git-lfs
+</code></pre>
 <h3 id="step-2-install-python-faker">Step 2: Install python faker</h3>
 <p>Install the python faker using pip.  This is a dependency of some python scripts to generate users.  Faker is required for the following three scripts:  azure_ad.py, ad.py, managed_identity.py.</p>
 <pre><code>pip3 install faker
