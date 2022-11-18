@@ -366,7 +366,7 @@ resource "random_pet" "rp_string" {
 # Random String for Azure AD users (Second part of password)
 resource "random_string" "my_password" {
   length  = 5
-  special = true 
+  special = false 
   upper   = true
 }
 
