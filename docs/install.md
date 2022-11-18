@@ -27,7 +27,7 @@ apt-get install git-lfs
 
 ### Step 2: Install python faker 
 
-Install the python faker using pip.  This is a dependency of some python scripts to generate users.  Faker is required for the following three scripts:  azure_ad.py, ad.py, managed_identity.py.
+Install the python faker using pip.  This is a dependency of some python scripts to generate users.  Faker is required for the following scripts:  azure_ad.py, ad.py, managed_identity.py, sentinel.py, adfs.py, and aadjoin.py.
 
 ```
 pip3 install faker
