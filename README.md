@@ -6,6 +6,9 @@ Terraform code generator to create different Azure security labs.
 For full documentation visit:  https://www.purplecloud.network
 
 # Changelog
+## 11/18/22:  Updated managed_identity.py and aadjoin.py
+- On managed_identity.py, changed the default VM size to ```A1v2``` to provide better cost.
+- On aadjoin.py, changed the default Azure AD password to remove special characters.
 
 ## 11/3/22:  Added new terraform generators:  ADFS & AADJoin
 - Added a new Terraform Generator:  adfs.py.  This builds a Federation ADFS lab with a DC.
