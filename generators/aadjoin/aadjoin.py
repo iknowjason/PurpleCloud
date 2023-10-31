@@ -820,7 +820,7 @@ resource "azurerm_windows_virtual_machine" "AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
     offer     = "Windows-10"
-    sku       = "19h1-pro"
+    sku       = "win10-22h2-pro-g2"
     version   = "latest"
   }
 

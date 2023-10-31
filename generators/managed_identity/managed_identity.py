@@ -732,7 +732,7 @@ resource "azurerm_windows_virtual_machine" "managed_identity" {
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
     offer     = "Windows-10"
-    sku       = "19h1-pro"
+    sku       = "win10-22h2-pro-g2"
     version   = "latest"
   }
 
