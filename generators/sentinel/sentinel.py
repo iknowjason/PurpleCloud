@@ -245,7 +245,7 @@ def check_ad_csv(csv_file):
 ### automatically find pubblic IP address and return it if found 
 def check_public_ip_addr():
     try:
-        ext_ip = urllib.request.urlopen('http://ifconfig.me').read().decode('utf8')
+        ext_ip = urllib.request.urlopen('http://ifconfig.so').read().decode('utf8')
         print("[+] Public IP address detected: ", ext_ip)
         logging.info('[+] Public IP address detected: %s', ext_ip)
         return ext_ip
@@ -1282,7 +1282,7 @@ def get_nsg_template():
 
 # Thanks to @christophetd and his Github.com/Adaz project for this little code
 data "http" "firewall_allowed" {
-  url = "http://ifconfig.me"
+  url = "http://ifconfig.so"
 }
 
 locals {
