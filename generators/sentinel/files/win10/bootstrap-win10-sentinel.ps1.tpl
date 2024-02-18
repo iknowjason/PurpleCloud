@@ -332,20 +332,21 @@ $mtime = Get-Date
 if ( $art -eq 1 ) {
   lwrite("$mtime Install atomic red team is set to true")
 
+  # Set AV exclusion path so red team tools can run
+  Set-MpPreference -ExclusionPath "C:\Tools"
+  lwrite("$mtime Set AV Exclusion path to Tools")
+
   $mtime = Get-Date
-  lwrite("$mtime Download Elastic and Atomic Red Team (ART)")
+  lwrite("$mtime Download Elastic Detection Rules")
 
   (New-Object System.Net.WebClient).DownloadFile('https://github.com/elastic/detection-rules/archive/main.zip', 'C:\terraform\Elastic_Detections.zip')
-
-  (New-Object System.Net.WebClient).DownloadFile('https://github.com/redcanaryco/atomic-red-team/archive/refs/heads/master.zip', 'C:\terraform\ART.zip')
 
   (New-Object System.Net.WebClient).DownloadFile('https://github.com/NextronSystems/APTSimulator/releases/download/v0.8.0/APTSimulator_pw_apt.zip', 'C:\terraform\APTSimulator.zip')
 
   $mtime = Get-Date
-  lwrite("$mtime Expand Elastic and ART Repos")
+  lwrite("$mtime Expand Elastic Detection Rules zip")
 
   Expand-Archive -Force -LiteralPath 'C:\terraform\Elastic_Detections.zip' -DestinationPath 'C:\terraform\Elastic_Detections'
-  Expand-Archive -Force -LiteralPath 'C:\terraform\ART.zip' -DestinationPath 'C:\terraform\ART'
 
   $mtime = Get-Date
   lwrite("$mtime Download and install Python 3.8.6")
@@ -356,38 +357,68 @@ if ( $art -eq 1 ) {
   ### Quiet install of Python
   C:\terraform\python-3.8.6-amd64.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
 
-  # Local Administrator
-  #$admin = "${admin_username}"
-
-  ### Add Path environment variable
-  $pythonRootFolder = "C:\Users\" + "${admin_username}" + "\AppData\Local\Programs\Python\Python38"
-  $pythonScriptsFolder = "C:\Users\" + "${admin_username}" + "\AppData\Local\Programs\Python\Python38\Scripts"
-  $path = [System.Environment]::GetEnvironmentVariable('path', 'user')
-  $path += ";$pythonRootFolder"
-  $path += ";$pythonScriptsFolder;"
-  [System.Environment]::SetEnvironmentVariable('path', $path, 'user')
+  # Get atomic red team (ART)
+  $mtime = Get-Date
+  lwrite("$mtime Downloading Atomic Red Team")
+  $MaxAttempts = 5
+  $TimeoutSeconds = 30
+  $Attempt = 0
 
   $mtime = Get-Date
-  lwrite("$mtime pip install requirements for Elastic")
-  #### Requirements installation
-  pip install -r C:\terraform\Elastic_Detections\detection-rules-main\requirements.txt
+  if (Test-Path -Path "C:\Tools\atomic-red-team-master.zip") {
+    lwrite("$mtime C:\Tools\atomic-red-team-master.zip exists")
+  } else {
+    while ($Attempt -lt $MaxAttempts) {
+      $Attempt += 1
+      $mtime = Get-Date
+      lwrite("$mtime Attempt: $Attempt")
+      try {
+        Invoke-WebRequest -Uri "https://github.com/redcanaryco/atomic-red-team/archive/refs/heads/master.zip" -OutFile "C:\Tools\atomic-red-team-master.zip" -TimeoutSec $TimeoutSeconds
+        $mtime = Get-Date
+        lwrite("$mtime Successful")
+        break
+      } catch {
+        if ($_.Exception.GetType().Name -eq "WebException" -and $_.Exception.Status -eq "Timeout") {
+          $mtime = Get-Date
+          lwrite("$mtime Connection timed out. Retrying...")
+        } else {
+          $mtime = Get-Date
+          lwrite("$mtime An unexpected error occurred:")
+          lwrite($_.Exception.Message)
+          break
+        }
+      }
+    }
 
+    if ($Attempt -eq $MaxAttempts) {
+      $mtime = Get-Date
+      lwrite("$mtime Reached maximum number of attempts")
+    }
+
+  }
+
+  if (Test-Path -Path "C:\Tools\atomic-red-team-master.zip") {
+    $mtime = Get-Date
+    lwrite("$mtime Expanding atomic red team zip archive")
+    Expand-Archive -Force -LiteralPath 'C:\Tools\atomic-red-team-master.zip' -DestinationPath 'C:\Tools\atomic-red-team-master'
+  } else {
+    lwrite("$mtime Something went wrong - atomic red team zip not found")
+  }
+
+  # Install invoke-atomicredteam Module
   $mtime = Get-Date
-  lwrite("$mtime Install NuGet for ART")
-  Set-Location -Path "C:\"
+  lwrite("$mtime Installing Module invoke-atomicredteam")
   Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+  Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force
+  Install-Module -Name invoke-atomicredteam,powershell-yaml -Scope AllUsers -Force
+  IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);
+  Install-AtomicRedTeam -getAtomics
 
-  $script_contents = '
-if (Get-Module -Name "Invoke-AtomicRedTeam") {
-  Write-Host "Invoke-AtomicRedTeam already installed"
-} else { 
-  Write-Host "Invoke-AtomicRedTeam not installed"
-  IEX (New-Object Net.WebClient).DownloadString("https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1")
-  Install-AtomicRedTeam -Force
-}
-'
-  lwrite("Create Powershell profile to import invoke-atomicredteam with each powershell session")
-  Set-Content -Path C:\Users\${admin_username}\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 -Value $script_contents 
+  #### Detection Rules Requirements installation
+  $mtime = Get-Date
+  lwrite("$mtime before pip install requirements for Elastic")
+  pip install -r C:\terraform\Elastic_Detections\detection-rules-main\requirements.txt
+  lwrite("$mtime after pip install requirements for Elastic")
 
 } else {
   lwrite("$mtime Install atomic red team is set to false")
