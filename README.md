@@ -6,6 +6,10 @@ Terraform code generator to create different Azure security labs.
 For full documentation visit:  https://www.purplecloud.network
 
 # Changelog
+## 2/18/24:  Updated Atomic Red Team (ART) installation 
+- On sentinel.py, ad.py:  Updated ART installation to latest method for easy Invoke-Atomics
+- On sentinel.py, ad.py:  Fixed installation bug for Elastic Detection Rules
+
 ## 11/18/22:  Updated managed_identity.py and aadjoin.py
 - On managed_identity.py, changed the default VM size to ```A1v2``` to provide better cost.
 - On aadjoin.py, changed the default Azure AD password to remove special characters.
