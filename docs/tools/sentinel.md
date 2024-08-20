@@ -1,7 +1,7 @@
 # Microsoft Sentinel lab
 
 ## Overview
-This tool generates an Azure sentinel lab with optional Windows 10 Endpoints forwarding logs to the Sentinel Log Analytics workspace.  Optionally configure a Domain Controller with Domain Join.  Windows 10 Azure VMs automatically install and configure the legacy Microsoft Monitoring Agent (MMA) or Operations Management Suite (OMS) and send logs to the Log Analytics workspace.  The endpoints will install Sysmon by default. Note that some manual configuration steps are required for final logging configuration.   
+This tool generates an Azure sentinel lab with optional Windows 10 Endpoints forwarding logs to the Sentinel Log Analytics workspace.  Optionally configure a Domain Controller with Domain Join.  Windows 10 and Domain Controller machines will automatically install and configure the latest Azure Monitor Agent (AMA) and ship Sysmon and Windows event logs to the Log Analytics Workspace.  The endpoints and DC will install Sysmon by default. The default terraform configuration included will also add a diagnostic setting that sends Entra ID Sign In, Audit, Enriched O365 Audit logs, and Graph Audit logs to the Log Analytics Workspace that is created.   
 
 ### Important Note
 This generator lives in the ```generators/sentinel``` directory.  Navigate into this directory first.
@@ -9,37 +9,94 @@ This generator lives in the ```generators/sentinel``` directory.  Navigate into 
 cd generators/sentinel
 ```
 
-## Manual Logging Configuration
+## Updated Monitoring Agent and KQL Queries
+The latest Azure Monitor Agent (AMA) has been added to this lab for automated deployment via terraform and powershell.  This agent automatically deploys on all Windows 10 and the Domain Controller.  It also ships Windows Security event logs and Sysmon logs to the Log Analytics Workspace.
 
-After creating the lab there are a couple of manual setup steps required. 
+After the VMs are built, you can navigate into the Log Analytics Workspace and verify the **Agents** are active and deployed, as shown in the image below:
+It should show the number of ```Windows computers connected``` matching the equivalent number you built with terraform.
 
-### Step 1:  Add Sysmon Channel in log analytics agents configuration
+![](./images/law1.png)
 
-Navigate into the ```log analytics workspace``` and ```agents configuration```.  Select the ```add windows event log```.  Type ```Microsoft-Windows-Sysmon/Operational``` into the Log name input field and select Apply.  The following screen shot shows how the configuration should look. 
+A data collection rule is created for each VM and can be customized in terraform by looking at the ```azurerm_monitor_data_collection_rule``` resource.  By default, an xpath configuration is built that sends both sysmon and windows security event logs.
 
+To view the logs, navigate to the ```log analytics workspace``` and click on the **Logs** option.  You then have a workspace for KQL queries.  Here are two examples below which can query Sysmon and Security event logs.
+![](./images/law2.png)
+
+**Example KQL Query 1:  For all Sysmon logs**
+
+```commandline
+Event
+| where TimeGenerated > ago(24h)
+| where Source == "Microsoft-Windows-Sysmon"
+| extend EventDataXml = parse_xml(EventData).DataItem.EventData.Data
+| mv-expand bagexpansion=array EventDataXml
+| extend EventKey = tostring(EventDataXml['@Name']), EventValue = tostring(EventDataXml['#text'])
+| extend Username = iff(EventKey == "User", EventValue, "")
+| project TimeGenerated, Computer, EventID, RenderedDescription, Username, EventKey, EventValue
+| summarize EventDetails=make_bag(pack(EventKey, EventValue)), Username=any(Username) by TimeGenerated, Computer, EventID, RenderedDescription
+| order by TimeGenerated desc
 ```
-Microsoft-Windows-Sysmon/Operational
+
+**Example KQL Query 2:  For all Windows Security event logs**
+
+```commandline
+Event
+| where TimeGenerated > ago(24h)
+| where EventLog == "Security"
+| extend EventDataXml = parse_xml(EventData).DataItem.EventData.Data
+| mv-expand bagexpansion=array EventDataXml
+| extend EventKey = tostring(EventDataXml['@Name']), EventValue = tostring(EventDataXml['#text'])
+| extend Username = iff(EventKey == "TargetUserName" or EventKey == "SubjectUserName", EventValue, "")
+| project TimeGenerated, Computer, EventID, RenderedDescription, Username, EventKey, EventValue
+| summarize EventDetails=make_bag(pack(EventKey, EventValue)), Username=any(Username) by TimeGenerated, Computer, EventID, RenderedDescription
+| order by TimeGenerated desc
 ```
 
-![](./images/sysmon.png)
+### Entra ID Diagnostic Setting Logs
+
+By default, a diagnostic setting is created that sends Entra ID Sign In, Audit, Enriched O365 Audit logs, and MS Graph Activity logs to the Log Analytics Workspace.  This is done by the ```azurerm_monitor_aad_diagnostic_setting``` resource found in sentinel.tf.  
+
+Adding this diagnostic setting requires special privileges for your terraform Service Principal to have authorized to read and write changes to aadiam resources (Azure Diagnostic Settings).  You must add a special role to your SP.  You can let terraform run and it will show an error.  You can simply comment out this resource temporarily.
+1. Ensure that owner permissions are added for the SP
+2. Ensure that SP has Global Administrator permissions
+3. Get the ```object_id``` of your terraform service principal.  You can get this from the Azure portal or by looking at the error returned by terraform.
+4. Run this command while logged in as global admin with **az login**, changing the ```SP_OBJECT_ID``` to be your terraform Service Principal's ```object_id```.  The ```--role ID``` is for owner role which you should have added for your SP in step 1.
+```commandline
+az role assignment create --assignee-principal-type  ServicePrincipal --assignee-object-id <SP_OBJECT_ID> --scope "/providers/Microsoft.aadiam" --role b24988ac-6180-42a0-ab88-20f7382dd24c
+```
+
+![](./images/aaddiagnostic1.png)
+
+With the power of IaC automation with terraform, you can ensure that azure audit and sign in logs are sent to your LAW.  Here are some example KQL queries for getting these logs:
+
+**Example KQL Query 3:  Azure Sign-in logs**
+```commandline
+SigninLogs
+| where TimeGenerated >= ago(7d)
+| project TimeGenerated, UserPrincipalName, AppDisplayName, ResourceDisplayName, IPAddress, Status
+| order by TimeGenerated desc
+```
+
+**Example KQL Query 4:  Azure Audit logs**
+```commandline
+AuditLogs
+| where TimeGenerated >= ago(7d)
+| project TimeGenerated, OperationName, TargetResources, InitiatedBy, ResultReason
+| order by TimeGenerated desc
+```
+
+**Example KQL Query 5:  Microsoft Graph Activity logs**
+```commandline
+MicrosoftGraphActivityLogs
+```
+
+**Example KQL Query 6:  Office 365 Enriched Audit logs**
+```commandline
+EnrichedMicrosoft365AuditLogs
+```
 
 
-### Step 2:  Enable the Sentinel Data Connector - "Security Events via Legacy Agent"
-Navigate into Sentinel.  Find ```Data connectors``` under ```Configuration```.  In the search field or by scrolling below, find the connector named ```Security Events via Legacy Agent```.  Select ```open the connector page``` in the lower right hand corner.  Select ```Common``` under ```which events to stream``` and ```Apply changes.```  Verify that the connector shows a green highlight and shows connected, as shown below.
 
-![](./images/connector.png)
-
-### Step 3:  Reboot Virtual Machines and Verify connected in Agents Management
-
-Verify that all Windows 10 Virtual machines show as connected.  Verify this by navigating into the ```Log Analytics workspace``` and looking under ```Agents management``` under ```settings```.  Reboot each of the Azure Virtual Machines and then look to verify that they all list a connected status.  It should look like the following screen shot shown below.
-  
-![](./images/connected.png)
-
-Note: When configuring ```Domain Join``` with Active Directory, the Azure Windows 10 Professional machines will automatically reboot after joining the domain, so no manual reboot is necessary.  
-
-After the Virtual Machines reboot, you can navigate into the Sentinel overview page and start to see new Sysmon and Windows security event logs in the Overview.  The ```Sysmon``` logs will show under ```EVENT``` table while the security event logs will show under the ```SECURITYEVENT``` table.
-
-![](./images/logs.png)
 
 ## Usage Examples
 
@@ -61,13 +118,13 @@ This generates a terraform format HCL file for ```sentinel.tf``` and ```provider
 
 ### Example 2:  One Windows 10 Endpoint with Sysmon installed
 
-This generates a single Windows 10 Endpoint with Sysmon installed.
+This generates a single Windows 10 Endpoint with Sysmon and Atomic Red Team (ART) installed.
 
 ```
 python3 sentinel.py --endpoint 1
 ```
 
-All Windows 10 Pro systems will automatically send logs to Sentinel.  Some small manual steps are required (listed above) to get Sysmon and Security logs properly working.
+All Windows 10 Pro systems will automatically send logs to Sentinel.
 
 ### Example 3: Domain Controller with Forest and Users + Windows Domain Join (Randomly Generate Users)
 
@@ -143,7 +200,6 @@ Some notes I've gathered on AD usage and building.
 
 * After terraform runs, the actual rendered dc bootstrap script (with variables) is output to ```output/dc/bootstrap-dc1.ps1.```  For troubleshooting you can copy that script to the DC and run it.
 
-
 * The ```ad_users.csv``` file is the name of the file that the DC uses to build AD.  It is uploaded to the storage container that is created and downloaded automatically by the DC.  Look in ```C:\terraform\ad_users.csv``` to look at this file if needed.
 
 * When using the ```--csv <file1>``` to specify your own AD users CSV, how this works:  That file is copied to ```ad_users.csv``` and it is uploaded to the storage container, and downloaded to the DC.  Same as above, it is copied into C:\terraform\ad_users.csv where the bootstrap script parses it.
@@ -154,7 +210,7 @@ Some notes I've gathered on AD usage and building.
 
 **Windows 10 Pro configuration:**   The Windows 10 Pro default configuration can be adjusted to meet your needs.
 
-These are located in the ```config_win10_endpoints``` dictionary:
+These are located in the ```config_win10_endpoints``` dictionary in ```sentinel.py```:
 
 ```hostname_base:```  The base Windows 10 hostname (Default: win10)
 
@@ -199,12 +255,12 @@ default_ad_users = [
 
 * **Logging Passwords:** By default, all passwords are randomly generated.  So if you are not aware of this, it might be easy to lose track of a password.  For this reason we have added a logging feature that captures all passwords created.  The ```ad.py``` script will automatically log all output to a logfile called ```ranges.log```.  This is for the specific purpose of being able to track the ranges created and the passwords that are auto-generated for AD users and local Administrator accounts. You can also type ```terraform output``` as a secondary way to get the password and details for each virtual machine.
 
-* **Azure Network Security Groups:**  By default, the ```ad.py``` script will try to auto-detect your public IP address using a request to http://ifconfig.me.  Your public IP address will be used to white list the Azure NSG source prefix setting.  A second terraform resource is then used to manage and update any changes to your public IP address.  You can hard code a different IP address in the following section of the ad.py script or the terraform nsg.tf file.  If you change locations and your IP address changes, simply type ```terraform apply``` and the NSG white-listed public IP address should update through terraform.
+* **Azure Network Security Groups:**  By default when you run terraform apply, the security group is wide open to the public Internet allowing ```0.0.0.0/0```. To lock this down: your public IPv4 address can be determined via a query to ifconfig.so and the terraform.tfstate is updated automatically. If your location changes, simply run terraform apply to update the security groups with your new public IPv4 address. If ifconfig.me returns a public IPv6 address, your terraform will break. In that case you'll have to customize the white list. To change the white list for custom rules, update this variable in ```nsg_sentinel.tf```:  
 
 ```
 locals {
-  src_ip = chomp(data.http.firewall_allowed.response_body)
-  #src_ip = "0.0.0.0/0"
+  #src_ip = chomp(data.http.firewall_allowed.response_body)
+  src_ip = "0.0.0.0/0"
 }
 ```
 
