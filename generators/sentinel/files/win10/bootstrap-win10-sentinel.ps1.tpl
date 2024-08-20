@@ -3,7 +3,7 @@
 # VM Extension
 
 # Set logfile and function for writing logfile
-$logfile = "C:\Terraform\user_data.log"
+$logfile = "C:\Terraform\bootstrap_log.log"
 Function lwrite {
     Param ([string]$logstring)
     Add-Content $logfile -value $logstring
@@ -58,23 +58,6 @@ Enable-PSRemoting -SkipNetworkProfileCheck -Force
 # Set Trusted Hosts * for WinRM HTTPS
 Set-Item -Force wsman:\localhost\client\trustedhosts *
 
-###
-# Always download PurpleSharp
-###
-if (Test-Path -Path "C:\tools") {
-  lwrite("$mtime C:\tools exists")
-} else {
-  lwrite("$mtime Creating C:\tools")
-  New-Item -Path "C:\tools" -ItemType Directory
-}
-# Test for PurpleSharp and download if necessary
-if (Test-Path -Path "C:\tools\PurpleSharp.exe") {
-  lwrite("$mtime C:\tools\PurpleSharp.exe exists")
-} else {
-  lwrite("$mtime Downloading PurpleSharp to C:\tools\PurpleSharp.exe")
-  Invoke-WebRequest -Uri "https://github.com/mvelazc0/PurpleSharp/releases/download/v1.3/PurpleSharp_x64.exe" -OutFile "C:\tools\PurpleSharp.exe"
-}
-
 # Set the DNS to be the domain controller only if domain joined 
 if ( $jd -eq 1 ) {
   $myindex = Get-Netadapter -Name "Ethernet" | Select-Object -ExpandProperty IfIndex
@@ -85,7 +68,7 @@ if ( $jd -eq 1 ) {
 # Beginning of script contents
 $script_contents = '
 $mydomain = "${ad_domain}"
-$logfile = "C:\Terraform\user_data.log"
+$logfile = "C:\Terraform\domain_join_log.log"
 Function lwrite {
     Param ([string]$logstring)
     Add-Content $logfile -value $logstring
@@ -157,12 +140,13 @@ if ((gwmi win32_computersystem).partofdomain -eq $true) {
 
     #Unregister the scheduled task
     $mtime = Get-Date
-    lwrite("$mtime Unregister the scheduled task WinlogonUser01")
-    Unregister-ScheduledTask -TaskName WinlogonUser01 -Confirm:$false
+    lwrite("$mtime Unregister the scheduled task DomainJoin01")
+    Unregister-ScheduledTask -TaskName DomainJoin01 -Confirm:$false
 
     $mtime = Get-Date
-    lwrite ("$mtime Removing ps scripts in C:\terraform")
-    Remove-Item C:\Terraform\*.ps1
+    #Uncomment below if you want to clean up everything
+    #lwrite ("$mtime Removing ps scripts in C:\terraform")
+    #Remove-Item C:\Terraform\*.ps1
     Restart-Computer
   }
 } else {
@@ -239,17 +223,17 @@ if ( $jd -eq 1 ) {
   $mtime = Get-Date
   lwrite ("$mtime Domain join configuration is set to true")
 
-  # Write a new script for editing WinLogon registry entries 
+  # Write a new script for AD Join and auto logon domain user (if applicable) 
   $mtime = Get-Date
-  lwrite ("$mtime Creating script C:\Terraform\WinLogon.ps1")
-  Set-Content -Path "C:\Terraform\Winlogon.ps1" -Value $script_contents
+  lwrite ("$mtime Creating script C:\Terraform\DomainJoin.ps1")
+  Set-Content -Path "C:\Terraform\DomainJoin.ps1" -Value $script_contents
 
   # Create a schedule task to run this script once a minute
   $mtime = Get-Date
   lwrite ("$mtime Creating scheduled task to run the script once a minute")
 
   # Create a scheduled task action
-  $sta = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-NoProfile -WindowStyle Hidden -command "C:\Terraform\Winlogon.ps1"'
+  $sta = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-NoProfile -WindowStyle Hidden -command "C:\Terraform\DomainJoin.ps1"'
 
   # Create a schedule task trigger
   $stt = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionDuration (New-TimeSpan -Days 1) -RepetitionInterval (New-TimeSpan -Minutes 1)
@@ -261,7 +245,7 @@ if ( $jd -eq 1 ) {
   $sts.CimInstanceProperties.Item('MultipleInstances').Value = 3   # 3 corresponds to 'Stop the existing instance'
 
   # Register new scheduled task
-  Register-ScheduledTask WinlogonUser01 -Action $sta -Settings $sts -Trigger $stt -User "${admin_username}" -Password "${admin_password}"
+  Register-ScheduledTask DomainJoin01 -Action $sta -Settings $sts -Trigger $stt -User "${admin_username}" -Password "${admin_password}"
 } else {
   
   $mtime = Get-Date
@@ -269,25 +253,21 @@ if ( $jd -eq 1 ) {
 
 }
 
+$mtime = Get-Date
+lwrite("$mtime Setting DNS resolver to public DNS")
+$myindex = Get-Netadapter -Name "Ethernet" | Select-Object -ExpandProperty IfIndex
+Set-DNSClientServerAddress -InterfaceIndex $myindex -ServerAddresses "8.8.8.8"
+
 # Check if install_sysmon is true
 $is = "${install_sysmon}"
 $mtime = Get-Date
 if ( $is -eq 1 ) {
   lwrite("$mtime Install sysmon is set to true")
 
-  $mtime = Get-Date
-  lwrite("$mtime Setting DNS resolver to public DNS")
-  $myindex = Get-Netadapter -Name "Ethernet" | Select-Object -ExpandProperty IfIndex
-  Set-DNSClientServerAddress -InterfaceIndex $myindex -ServerAddresses "8.8.8.8"
-
   # Download Sysmon
   $mtime = Get-Date
   lwrite("$mtime Download Sysmon")
   (New-Object System.Net.WebClient).DownloadFile('https://${storage_acct_s}.blob.core.windows.net/${storage_container_s}/${sysmon_zip_s}', 'C:\terraform\Sysmon.zip')
-
-  $mtime = Get-Date
-  lwrite("$mtime Download SwiftOnSecurity sysmon config")
-  (New-Object System.Net.WebClient).DownloadFile('https://github.com/iknowjason/BlueTools/blob/main/configs-pc.zip?raw=true', 'C:\terraform\configs.zip')
 
   # Download Sysmon config xml
   $mtime = Get-Date
@@ -296,7 +276,7 @@ if ( $is -eq 1 ) {
       lwrite("$mtime Download Sysmon config")
       (New-Object System.Net.WebClient).DownloadFile('https://${storage_acct_s}.blob.core.windows.net/${storage_container_s}/${sysmon_config_s}', 'C:\terraform\sysmonconfig-export.xml')
     } catch {
-      Write-Host("Error downloading and unzipping")
+      lwrite("$mtime Error downloading sysmon config")
     }
   }
 
@@ -315,15 +295,25 @@ if ( $is -eq 1 ) {
   lwrite("$mtime Install Sysmon for Sentinel")
   C:\terraform\Sysmon\sysmon.exe -accepteula -i C:\terraform\Sysmon\sysmonconfig-export.xml 
 
-  # If Join Domain is True, set the DNS server back to dc_ip
-  if ( $jd -eq 1 ) {
-    $myindex = Get-Netadapter -Name "Ethernet" | Select-Object -ExpandProperty IfIndex
-    Set-DNSClientServerAddress -InterfaceIndex $myindex -ServerAddresses "${dc_ip}"
-    lwrite("$mtime Join Domain is true, setting DNS server to DC:  ${dc_ip} ")
-  }
-
 } else {
   lwrite("$mtime Install sysmon is set to false")
+}
+
+###
+# Always download PurpleSharp
+###
+if (Test-Path -Path "C:\tools") {
+  lwrite("$mtime C:\tools exists")
+} else {
+  lwrite("$mtime Creating C:\tools")
+  New-Item -Path "C:\tools" -ItemType Directory
+}
+# Test for PurpleSharp and download if necessary
+if (Test-Path -Path "C:\tools\PurpleSharp.exe") {
+  lwrite("$mtime C:\tools\PurpleSharp.exe exists")
+} else {
+  lwrite("$mtime Downloading PurpleSharp to C:\tools\PurpleSharp.exe")
+  Invoke-WebRequest -Uri "https://github.com/mvelazc0/PurpleSharp/releases/download/v1.3/PurpleSharp_x64.exe" -OutFile "C:\tools\PurpleSharp.exe"
 }
 
 # Check if install_art is true
@@ -335,27 +325,6 @@ if ( $art -eq 1 ) {
   # Set AV exclusion path so red team tools can run
   Set-MpPreference -ExclusionPath "C:\Tools"
   lwrite("$mtime Set AV Exclusion path to Tools")
-
-  $mtime = Get-Date
-  lwrite("$mtime Download Elastic Detection Rules")
-
-  (New-Object System.Net.WebClient).DownloadFile('https://github.com/elastic/detection-rules/archive/main.zip', 'C:\terraform\Elastic_Detections.zip')
-
-  (New-Object System.Net.WebClient).DownloadFile('https://github.com/NextronSystems/APTSimulator/releases/download/v0.8.0/APTSimulator_pw_apt.zip', 'C:\terraform\APTSimulator.zip')
-
-  $mtime = Get-Date
-  lwrite("$mtime Expand Elastic Detection Rules zip")
-
-  Expand-Archive -Force -LiteralPath 'C:\terraform\Elastic_Detections.zip' -DestinationPath 'C:\terraform\Elastic_Detections'
-
-  $mtime = Get-Date
-  lwrite("$mtime Download and install Python 3.8.6")
-
-  ### Download Python 3.8
-  (New-Object System.Net.WebClient).DownloadFile('https://www.python.org/ftp/python/3.8.6/python-3.8.6-amd64.exe','C:\terraform\python-3.8.6-amd64.exe')
-
-  ### Quiet install of Python
-  C:\terraform\python-3.8.6-amd64.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
 
   # Get atomic red team (ART)
   $mtime = Get-Date
@@ -380,7 +349,7 @@ if ( $art -eq 1 ) {
       } catch {
         if ($_.Exception.GetType().Name -eq "WebException" -and $_.Exception.Status -eq "Timeout") {
           $mtime = Get-Date
-          lwrite("$mtime Connection timed out. Retrying...")
+          lwrite("$mtime Connection timed out")
         } else {
           $mtime = Get-Date
           lwrite("$mtime An unexpected error occurred:")
@@ -414,31 +383,70 @@ if ( $art -eq 1 ) {
   IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);
   Install-AtomicRedTeam -getAtomics
 
-  #### Detection Rules Requirements installation
-  $mtime = Get-Date
-  lwrite("$mtime before pip install requirements for Elastic")
-  pip install -r C:\terraform\Elastic_Detections\detection-rules-main\requirements.txt
-  lwrite("$mtime after pip install requirements for Elastic")
-
 } else {
   lwrite("$mtime Install atomic red team is set to false")
 }
 
-###
-# Always download PurpleSharp
-###
-if (Test-Path -Path "C:\tools") {
-  lwrite("$mtime C:\tools exists")
+$mtime = Get-Date
+lwrite("$mtime Install Powershell Core")
+iwr -Uri "https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.msi" -Outfile "C:\terraform\Powershell-7.4.1-win-x64.msi"
+msiexec.exe /package "C:\terraform\PowerShell-7.4.1-win-x64.msi" /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1 ADD_PATH=1
+
+# OpenSSH Server
+$mtime = Get-Date
+lwrite("$mtime Install of OpenSSH Server")
+Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
+Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+
+# Start OpenSSH service
+$mtime = Get-Date
+lwrite("$mtime Start SSH Server service")
+Start-Service sshd
+
+# Set startup automatic
+Set-Service -Name sshd -StartupType 'Automatic'
+
+# Firewall rules confirmed
+$mtime = Get-Date
+if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue | Select-Object Name, Enabled)) {
+    lwrite("$mtime Firewall Rule 'OpenSSH-Server-In-TCP' does not exist")
+    New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP' -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 } else {
-  lwrite("$mtime Creating C:\tools")
-  New-Item -Path "C:\tools" -ItemType Directory
+    lwrite("$mtime Firewall rule 'OpenSSH-Server-In-TCP' created")
 }
-# Test for PurpleSharp and download if necessary
-if (Test-Path -Path "C:\tools\PurpleSharp.exe") {
-  lwrite("$mtime C:\tools\PurpleSharp.exe exists")
+
+# Change sshd_config file
+$sshd_config_file = "C:\ProgramData\ssh\sshd_config"
+
+# Allow PasswordAuthentication to yes
+((Get-Content -path $sshd_config_file -raw) -replace '#PasswordAuthentication yes', 'PasswordAuthentication yes') | Set-Content -Path $sshd_config_file
+
+# Change subsystem line for ssh
+$line = Get-Content $sshd_config_file | Select-String "Subsystem        sftp" | Select-Object -ExpandProperty Line
+
+$mtime = Get-Date
+if ($line -eq $null) {
+  lwrite("$mtime Subsystem line not found")
 } else {
-  lwrite("$mtime Downloading PurpleSharp to C:\tools\PurpleSharp.exe")
-  Invoke-WebRequest -Uri "https://github.com/mvelazc0/PurpleSharp/releases/download/v1.3/PurpleSharp_x64.exe" -OutFile "C:\tools\PurpleSharp.exe"
+  lwrite("$mtime Replacing subsystem line in sshd_config file")
+  $content = Get-Content $sshd_config_file
+  $content | ForEach-Object {$_ -replace $line, "Subsystem powershell c:/progra~1/powershell/7/pwsh.exe -sshs -nologo"} | Set-Content $sshd_config_file
+}
+
+# Set default shell to Windows Powershell
+New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
+
+# Restart OpenSSH Service
+$mtime = Get-Date
+lwrite("$mtime Restart sshd service")
+Restart-Service sshd
+
+# If Join Domain is True, set the DNS server back to dc_ip
+if ( $jd -eq 1 ) {
+  $myindex = Get-Netadapter -Name "Ethernet" | Select-Object -ExpandProperty IfIndex
+  Set-DNSClientServerAddress -InterfaceIndex $myindex -ServerAddresses "${dc_ip}"
+  lwrite("$mtime Join Domain is true, setting DNS server to DC:  ${dc_ip} ")
 }
 
 $mtime = Get-Date

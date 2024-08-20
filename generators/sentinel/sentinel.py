@@ -556,6 +556,7 @@ install_art = False
 # Names of the terraform files
 tmain_file = "main_sentinel.tf"
 tproviders_file = "providers.tf"
+tmidentity_file = "midentity.tf"
 tnet_file = "network_sentinel.tf"
 tnsg_file = "nsg_sentinel.tf"
 tdc_file = "dc_sentinel.tf"
@@ -897,6 +898,14 @@ variable "ENDPOINT_HOSTNAME_VAR_NAME" {
   default = "ENDPOINT_HOSTNAME_DEFAULT"
 }
 
+variable "tags_ENDPOINT_HOSTNAME_VAR_NAME" {
+  type = map(any)
+
+  default = {
+    terraform = "true"
+  }
+}
+
 resource "azurerm_public_ip" "AZURERM_PUBLIC_IP_VAR_NAME" {
   name                = "${var.ENDPOINT_HOSTNAME_VAR_NAME}-public-ip-${random_string.suffix.id}"
   location            = var.location
@@ -959,41 +968,61 @@ resource "local_file" "DEBUG_BOOTSTRAP_SCRIPT_VAR_NAME" {
   filename = "${path.module}/output/win10/bootstrap-${var.ENDPOINT_HOSTNAME_VAR_NAME}-sentinel.ps1"
 }
 
-resource "azurerm_windows_virtual_machine" "AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
+resource "azurerm_virtual_machine" "AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
   name                          = "${local.WIN10VMNAME_VAR_NAME}-${random_string.suffix.id}"
   resource_group_name           = "${var.resource_group_name}-${random_string.suffix.id}"
   location                      = var.location
-  size                       = "SIZE_WIN10"
-  computer_name  = local.WIN10VMNAME_VAR_NAME
-  admin_username = var.ADMIN_USERNAME_VAR_NAME
-  admin_password = var.ADMIN_PASSWORD_VAR_NAME
-  provision_vm_agent        = true
-  custom_data    = local.WIN10CUSTOMDATACONTENT_VAR_NAME
-
+  vm_size                       = "SIZE_WIN10"
+  delete_os_disk_on_termination = true
+  
+  identity {
+    type         = var.identity_type
+    identity_ids = [azurerm_user_assigned_identity.uai.id]
+  }
+  
   network_interface_ids         = [
     azurerm_network_interface.AZURERM_NETWORK_INTERFACE_VAR_NAME.id,
   ]
-
-  source_image_reference {
+  
+  storage_image_reference {
     publisher = "MicrosoftWindowsDesktop"
     offer     = "Windows-10"
     sku       = "win10-22h2-pro-g2" 
     version   = "latest"
   }
 
-  os_disk {
+  storage_os_disk {
+    name              = local.WIN10VMNAME_VAR_NAME
     caching           = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    managed_disk_type = "Standard_LRS"
+    create_option     = "FromImage"
   }
-
-  additional_unattend_content {
+  
+  os_profile_windows_config {
+    provision_vm_agent = true
+    winrm {
+      protocol = "HTTP"
+    }
+    additional_unattend_config {
+      pass = "oobeSystem"
+      component = "Microsoft-Windows-Shell-Setup"
+      setting_name = "AutoLogon"
       content      = "<AutoLogon><Password><Value>${var.ADMIN_PASSWORD_VAR_NAME}</Value></Password><Enabled>true</Enabled><LogonCount>1</LogonCount><Username>${var.ADMIN_USERNAME_VAR_NAME}</Username></AutoLogon>"
-      setting = "AutoLogon"
-  }
-
-  additional_unattend_content {
+    }
+    
+    additional_unattend_config {
+      pass = "oobeSystem"
+      component = "Microsoft-Windows-Shell-Setup"
+      setting_name = "FirstLogonCommands"
       content      = file("${path.module}/files/win10/FirstLogonCommands.xml")
-      setting = "FirstLogonCommands"
+    }
+  }
+  
+  os_profile {
+    custom_data    = local.WIN10CUSTOMDATACONTENT_VAR_NAME
+    computer_name  = local.WIN10VMNAME_VAR_NAME
+    admin_username = var.ADMIN_USERNAME_VAR_NAME
+    admin_password = var.ADMIN_PASSWORD_VAR_NAME
   }
 
   depends_on = [
@@ -1003,26 +1032,65 @@ SYSMON_DEPENDS
 }
 
 resource "azurerm_virtual_machine_extension" "AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
-  name                 = "OMSExtension"
-  virtual_machine_id   = azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.id
-  publisher            = "Microsoft.EnterpriseCloud.Monitoring"
-  type                 = "MicrosoftMonitoringAgent"
-  type_handler_version = "1.0"
-  settings = <<SETTINGS
-  {
-    "workspaceId": "${azurerm_log_analytics_workspace.pc.workspace_id}"
-  }
-SETTINGS
+  count                = 1
+  name                 = "AMAExtension-AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME"
+  virtual_machine_id   = azurerm_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.id
+  publisher            = "Microsoft.Azure.Monitor"
+  type                 = "AzureMonitorWindowsAgent"
+  type_handler_version = "1.25"
+  auto_upgrade_minor_version = "true"
+  depends_on = [
+    azurerm_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME,
+    azurerm_log_analytics_workspace.pc
+  ]
 
-  protected_settings = <<PROTECTEDSETTINGS
-  {
-    "workspacekey":  "${azurerm_log_analytics_workspace.pc.primary_shared_key}"
+  tags = merge(var.tags_ENDPOINT_HOSTNAME_VAR_NAME, tomap({ "firstapply" = timestamp() }))
+  
+  lifecycle {
+    ignore_changes = [tags]
   }
-PROTECTEDSETTINGS
-
-  depends_on = [azurerm_log_analytics_workspace.pc]
 }
 
+resource "azurerm_monitor_data_collection_rule" "rule1_AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
+ name                = "dcrule1-AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME"
+ location            = var.location
+ resource_group_name = "${var.resource_group_name}-${random_string.suffix.id}"
+ depends_on          = [azurerm_virtual_machine_extension.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME]
+
+ destinations {
+   log_analytics {
+     workspace_resource_id = azurerm_log_analytics_workspace.pc.id
+     name                  = "log-analytics"
+   }
+ }
+
+ data_flow {
+   streams      = ["Microsoft-Event"]
+   destinations = ["log-analytics"]
+ }
+ 
+  data_sources {
+   windows_event_log {
+     streams = ["Microsoft-Event"]
+     x_path_queries = [
+       "Application!*[System[(Level=1 or Level=2 or Level=3 or Level=4 or Level=0 or Level=5)]]",
+       "Security!*",
+       "System!*[System[(Level=1 or Level=2 or Level=3 or Level=4 or Level=0 or Level=5)]]",
+       "Microsoft-Windows-Sysmon/Operational!*"
+     ]
+     name = "eventLogsDataSource"
+   }
+ }
+}
+ 
+# data collection rule association
+resource "azurerm_monitor_data_collection_rule_association" "dcra-AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
+ count                   = 1
+ name                    = "dcra-AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME"
+ target_resource_id      = azurerm_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.id
+ data_collection_rule_id = azurerm_monitor_data_collection_rule.rule1_AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.id
+}
+ 
 resource "local_file" "HOSTS_CFG_VAR_NAME" {
   content = templatefile("${path.module}/files/win10/hosts.tpl",
     {
@@ -1037,19 +1105,55 @@ resource "local_file" "HOSTS_CFG_VAR_NAME" {
 output "windows_endpoint_details_AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME" {
   value = <<EOS
 -------------------------
-Virtual Machine ${azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.computer_name} 
+Virtual Machine ${var.ENDPOINT_HOSTNAME_VAR_NAME} 
 -------------------------
-Computer Name:  ${azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.computer_name}
+Computer Name:  ${var.ENDPOINT_HOSTNAME_VAR_NAME}
 Private IP: ${var.ENDPOINT_IP_VAR_NAME}
 Public IP:  ${azurerm_public_ip.AZURERM_PUBLIC_IP_VAR_NAME.ip_address}
-local Admin:  ${azurerm_windows_virtual_machine.AZURERM_WINDOWS_VIRTUAL_MACHINE_VAR_NAME.admin_username}
+local Admin:  ${var.ADMIN_USERNAME_VAR_NAME}
 local password: ${var.ADMIN_PASSWORD_VAR_NAME} 
+-------------
+SSH to ${var.ENDPOINT_HOSTNAME_VAR_NAME}
+-------------
+ssh ${var.ADMIN_USERNAME_VAR_NAME}@${azurerm_public_ip.AZURERM_PUBLIC_IP_VAR_NAME.ip_address}
 
 EOS
 }
 
 '''
     return template
+
+def get_midentity_template():
+    template = '''
+
+# Create the User Assigned Managed Identity
+resource "azurerm_user_assigned_identity" "uai" {
+  resource_group_name = azurerm_resource_group.network.name
+  location            = var.location
+  name                = var.identity_name
+}
+
+variable "identity_name" {
+  default = "uaidentity"
+}
+
+variable "identity_type" {
+  default = "SystemAssigned, UserAssigned"
+}
+
+# Assign the reader role on subscription to the Managed Identity
+resource "azurerm_role_assignment" "uai" {
+  scope                = data.azurerm_subscription.mi.id
+  role_definition_name = "Owner"
+  principal_id         = azurerm_user_assigned_identity.uai.principal_id
+}
+
+data "azurerm_subscription" "mi" {
+}
+
+'''
+    return template
+# End of managed identity template
 
 
 def get_providers_template():
@@ -1059,7 +1163,7 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = "=3.13.0"
+      version = "=3.116.0"
     }
   }
 }
@@ -1180,7 +1284,8 @@ resource "azurerm_subnet" "SUBNET_NAME_VARIABLE-subnet" {
   name                 = "${var.resource_group_name}-${var.SUBNET_NAME_VARIABLE-name}-${random_string.suffix.id}"
   resource_group_name  = "${var.resource_group_name}-${random_string.suffix.id}"
   virtual_network_name = azurerm_virtual_network.DEFAULT_VNET_NAME-vnet.name
-  address_prefixes       = [var.SUBNET_NAME_VARIABLE-prefix]
+  address_prefixes     = [var.SUBNET_NAME_VARIABLE-prefix]
+  service_endpoints    = ["Microsoft.Storage"]
 
   depends_on = [azurerm_resource_group.network]
 }
@@ -1199,24 +1304,14 @@ resource "azurerm_subnet_network_security_group_association" "nsg-association-SU
 def get_sentinel_template():
     template = '''
 
-/*variable "sentinel_name" {
-  default = "SENTINEL_NAME"
-}*/
-
 variable "sentinel_location" {
   default = "SENTINEL_LOCATION"
 }
 
-/*resource "azurerm_resource_group" "pc" {
-  name     = var.sentinel_name
-  location = var.sentinel_location
-}*/
 
 resource "azurerm_log_analytics_workspace" "pc" {
-  #name                = var.sentinel_name
   name                = "pc-${random_string.suffix.id}"
   location            = var.sentinel_location
-  #resource_group_name = "${azurerm_resource_group.pc.name}"
   resource_group_name = "${azurerm_resource_group.network.name}"
   sku                 = "PerGB2018"
   retention_in_days   = 90
@@ -1225,7 +1320,6 @@ resource "azurerm_log_analytics_workspace" "pc" {
 resource "azurerm_log_analytics_solution" "pc" {
   solution_name         = "SecurityInsights"
   location              = var.sentinel_location
-  #resource_group_name   = "${azurerm_resource_group.pc.name}"
   resource_group_name = "${azurerm_resource_group.network.name}"
   workspace_resource_id = "${azurerm_log_analytics_workspace.pc.id}"
   workspace_name        = "${azurerm_log_analytics_workspace.pc.name}"
@@ -1235,6 +1329,48 @@ resource "azurerm_log_analytics_solution" "pc" {
   }
 }
 
+# Note:  Adding this diagnostic setting requires special privileges
+# 1. Ensure that owner permissions are added for the SP
+# 2. Ensure that SP has Global Administrator permissions
+# 3. Run this while logged in as global admin, changing the SP_OBJECT_ID to be the SP object id.  The --role ID is for owner
+# az role assignment create --assignee-principal-type  ServicePrincipal --assignee-object-id <SP_OBJECT_ID> --scope "/providers/Microsoft.aadiam" --role b24988ac-6180-42a0-ab88-20f7382dd24c
+resource "azurerm_monitor_aad_diagnostic_setting" "threat_monitoring" {
+  name                       = "threat-monitoring"
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.pc.id
+
+  enabled_log {
+    category = "SignInLogs"
+
+    retention_policy {
+      enabled = true
+    }
+  }
+  
+  enabled_log {
+    category = "AuditLogs"
+
+    retention_policy {
+      enabled = true
+    }
+  }
+
+  enabled_log {
+    category = "MicrosoftGraphActivityLogs"
+
+    retention_policy {
+      enabled = true
+    }
+  }
+  
+  enabled_log {
+    category = "EnrichedOffice365AuditLogs"
+
+    retention_policy {
+      enabled = true
+    }
+  }
+}
+  
 output "sentinel_details" {
   value = <<EOS
 
@@ -1286,8 +1422,8 @@ data "http" "firewall_allowed" {
 }
 
 locals {
-  src_ip = chomp(data.http.firewall_allowed.response_body)
-  #src_ip = "0.0.0.0/0"
+  #src_ip = chomp(data.http.firewall_allowed.response_body)
+  src_ip = "0.0.0.0/0"
 }
 
 # This is the src_ip for white listing Azure NSGs
@@ -1383,6 +1519,16 @@ n = providers_text_file.write(providers_template)
 print("[+] Creating the providers terraform file: ",tproviders_file)
 logging.info('[+] Creating the providers terraform file: %s', tproviders_file)
 providers_text_file.close()
+
+# Get the managed identity template
+midentity_template = get_midentity_template()
+
+# Write the managed identity file
+midentity_text_file = open(tmidentity_file, "w")
+n = midentity_text_file.write(midentity_template)
+print("[+] Creating the managed identity terraform file: ",tmidentity_file)
+logging.info('[+] Creating the managed identity terraform file: %s', tmidentity_file)
+midentity_text_file.close()
 
 # open the network.tf
 net_text_file = open(tnet_file, "w")
@@ -1832,8 +1978,12 @@ data "template_file" "ps_template" {
     ad_domain                 = "DEFAULT_DOMAIN" 
     storage_acct              = "purplecloud${random_string.suffix.id}"
     storage_container	      = var.storage_container_name
+    storage_acct_s            = azurerm_storage_account.sysmon_sentinel.name
+    storage_container_s       = azurerm_storage_container.sysmon_sentinel.name
     users_file                = var.azure_users_file
     aadconnect_file           = var.azure_aadconnect_file
+    sysmon_config_s           = local.sysmon_config_s
+    sysmon_zip_s              = local.sysmon_zip_s
   }
 }
 
@@ -1844,41 +1994,61 @@ resource "local_file" "debug_bootstrap_script" {
 }
 
 
-resource "azurerm_windows_virtual_machine" "domain-controller" {
+resource "azurerm_virtual_machine" "domain-controller" {
   name                          = local.virtual_machine_name
   location                      = var.location
   resource_group_name = "${var.resource_group_name}-${random_string.suffix.id}"
-  size                       = "SIZE_DC"
-  computer_name  = local.virtual_machine_name
-  admin_username = "ADMIN_USERNAME" 
-  admin_password = "ADMIN_PASSWORD" 
-  custom_data    = local.custom_data
-
+  vm_size                       = "SIZE_DC"
+  delete_os_disk_on_termination = true
+  
+  identity {
+    type         = "SystemAssigned"
+  }
+  
   network_interface_ids         = [
     azurerm_network_interface.dc1-nic-int.id,
   ]
-
-  os_disk {
-    caching           = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
-
-  source_image_reference {
+  
+  storage_image_reference {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
     sku       = "2019-Datacenter"
     version   = "latest"
   }
 
-  additional_unattend_content {
-      content      = "<AutoLogon><Password><Value>ADMIN_PASSWORD</Value></Password><Enabled>true</Enabled><LogonCount>1</LogonCount><Username>ADMIN_USERNAME</Username></AutoLogon>"
-      setting = "AutoLogon"
+  storage_os_disk {
+    name = "dc"
+    caching           = "ReadWrite"
+    managed_disk_type = "Standard_LRS"
+    create_option     = "FromImage"
   }
 
-  additional_unattend_content {
+  os_profile_windows_config {
+    provision_vm_agent = true
+    winrm {
+      protocol = "HTTP"
+    }
+    additional_unattend_config {
+      pass = "oobeSystem"
+      component = "Microsoft-Windows-Shell-Setup"
+      setting_name = "AutoLogon"
+      content      = "<AutoLogon><Password><Value>ADMIN_PASSWORD</Value></Password><Enabled>true</Enabled><LogonCount>1</LogonCount><Username>ADMIN_USERNAME</Username></AutoLogon>"
+    }
+    additional_unattend_config {
+      pass = "oobeSystem"
+      component = "Microsoft-Windows-Shell-Setup"
+      setting_name = "FirstLogonCommands"
       content      = file("${path.module}/files/dc/FirstLogonCommands.xml")
-      setting = "FirstLogonCommands"
+    }
+    
+  } 
+  os_profile {
+    computer_name  = local.virtual_machine_name
+    admin_username = "ADMIN_USERNAME" 
+    admin_password = "ADMIN_PASSWORD" 
+    custom_data    = local.custom_data
   }
+   
   depends_on = [
     azurerm_resource_group.network,
     azurerm_storage_blob.ad_connect_msi,
@@ -1886,17 +2056,58 @@ resource "azurerm_windows_virtual_machine" "domain-controller" {
   ]
 }
 
-resource "azurerm_virtual_machine_extension" "create-ad-forest" {
-  name                 = "create-active-directory-forest"
-  virtual_machine_id   = azurerm_windows_virtual_machine.domain-controller.id
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.9"
-  settings = <<SETTINGS
-  {
-    "commandToExecute": "powershell.exe -Command \\"${local.powershell_command}\\""
-  }
-SETTINGS
+resource "azurerm_virtual_machine_extension" "dc_ext" {
+  count                = 1
+  name                 = "monitor-agent-dc"
+  virtual_machine_id   = azurerm_virtual_machine.domain-controller.id
+  publisher            = "Microsoft.Azure.Monitor"
+  type                 = "AzureMonitorWindowsAgent"
+  type_handler_version = "1.25"
+  auto_upgrade_minor_version = "true"
+  depends_on = [
+    azurerm_virtual_machine.domain-controller,
+    azurerm_log_analytics_workspace.pc
+  ]
+}
+
+resource "azurerm_monitor_data_collection_rule" "rule1_dc" {
+ name                = "dcrule1-dc"
+ location            = var.location
+ resource_group_name = "${var.resource_group_name}-${random_string.suffix.id}"
+ depends_on          = [azurerm_virtual_machine_extension.dc_ext]
+
+ destinations {
+   log_analytics {
+     workspace_resource_id = azurerm_log_analytics_workspace.pc.id
+     name                  = "log-analytics"
+   }
+ }
+
+ data_flow {
+   streams      = ["Microsoft-Event"]
+   destinations = ["log-analytics"]
+ }
+ 
+  data_sources {
+   windows_event_log {
+     streams = ["Microsoft-Event"]
+     x_path_queries = [
+       "Application!*[System[(Level=1 or Level=2 or Level=3 or Level=4 or Level=0 or Level=5)]]",
+       "Security!*",
+       "System!*[System[(Level=1 or Level=2 or Level=3 or Level=4 or Level=0 or Level=5)]]",
+       "Microsoft-Windows-Sysmon/Operational!*"
+     ]
+     name = "eventLogsDataSource"
+   }
+ }
+}
+ 
+# data collection rule association
+resource "azurerm_monitor_data_collection_rule_association" "dcra-dc" {
+ count                   = 1
+ name                    = "dcra-dc"
+ target_resource_id      = azurerm_virtual_machine.domain-controller.id
+ data_collection_rule_id = azurerm_monitor_data_collection_rule.rule1_dc.id
 }
 
 resource "local_file" "hosts_cfg" {
@@ -1933,15 +2144,19 @@ output "dc_ad_details" {
 -------------------------
 Domain Controller and AD Details
 -------------------------
-Computer Name:  ${azurerm_windows_virtual_machine.domain-controller.computer_name}
+Computer Name:  dc
 Private IP: DC_IP_ADDRESS 
 Public IP:  ${azurerm_public_ip.dc1-external.ip_address}
-local Admin:  ${azurerm_windows_virtual_machine.domain-controller.admin_username}
+local Admin:  ADMIN_USERNAME
 local password: ADMIN_PASSWORD
 Domain:  DEFAULT_DOMAIN
 WinRM Username:  WINRM_USERNAME
 WinRM Password:  WINRM_PASSWORD
 Storage Container: ${var.storage_container_name}
+-------------
+SSH to dc
+-------------
+ssh ADMIN_USERNAME@${azurerm_public_ip.dc1-external.ip_address}
 EOS
 }
 '''

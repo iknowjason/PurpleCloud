@@ -3,29 +3,31 @@ $Cert = New-SelfSignedCertificate -DnsName $RemoteHostName, $ComputerName `
     -FriendlyName "Test WinRM Cert"
 
 $Cert | Out-String
-
 $Thumbprint = $Cert.Thumbprint
 
+$logfile = "C:\Terraform\bootstrap_log.log"
 Function lwrite {
     Param ([string]$logstring)
     Add-Content $logfile -value $logstring
 }
 
-Write-Host "Enable HTTPS in WinRM"
+$mtime = Get-Date
+lwrite("$mtime Starting bootstrap")
+lwrite("$mtime Enable HTTPS in WinRM")
 $WinRmHttps = "@{Hostname=`"$RemoteHostName`"; CertificateThumbprint=`"$Thumbprint`"}"
 winrm create winrm/config/Listener?Address=*+Transport=HTTPS $WinRmHttps
 
-Write-Host "Set Basic Auth in WinRM"
+lwrite("$mtime Set Basic Auth in WinRM")
 $WinRmBasic = "@{Basic=`"true`"}"
 winrm set winrm/config/service/Auth $WinRmBasic
 
-Write-Host "Open Firewall Ports"
+lwrite("$mtime Open Firewall Ports")
 netsh advfirewall firewall add rule name="Windows Remote Management (HTTP-In)" dir=in action=allow protocol=TCP localport=5985
 netsh advfirewall firewall add rule name="Windows Remote Management (HTTPS-In)" dir=in action=allow protocol=TCP localport=5986
 
 # Beginning of script contents
 $script_contents = '
-$logfile = "C:\Terraform\user_data.log"
+$logfile = "C:\Terraform\bootstrap_log.log"
 Function lwrite {
     Param ([string]$logstring)
     Add-Content $logfile -value $logstring
@@ -45,10 +47,32 @@ lwrite("$mtime storage account: $storage_acct")
 lwrite("$mtime storage container: $storage_container")
 lwrite("$mtime users file: $users_file")
 $mtime = Get-Date
-lwrite ("$mtime Starting to verify AD forest")
-$op = Get-WMIObject Win32_NTDomain | Select -ExpandProperty DnsForestName
 
+if (Get-Module -ListAvailable -Name ADDSDeployment) {
+    Write-Host "ADDSDeployment module is already installed. Skipping installation"
+    lwrite("$mtime ADDSDeployment module is already installed. Skipping installation")
+} else {
+    Write-Host "Going to install ADDSForest"
+    lwrite("$mtime Going to install ADDS Services and Forest")
+
+    $mtime = Get-Date
+    lwrite("$mtime Add Windows Feature ad-domain-services")
+    Add-WindowsFeature -Name ad-domain-services -IncludeManagementTools
+
+    $mtime = Get-Date
+    lwrite("$mtime Import Module ADDSDeployment")
+    Import-Module ADDSDeployment
+
+    $mtime = Get-Date
+    lwrite("$mtime Running Install-ADDSForest cmdlet")
+    $password = ConvertTo-SecureString ${admin_password} -AsPlainText -Force
+    Install-ADDSForest -DomainName $forest -InstallDns -SafeModeAdministratorPassword $password -Force:$true
+    shutdown -r -t 10 
+}
+
+lwrite ("$mtime Starting to verify AD forest")
 # Check of forest is verified
+$op = Get-WMIObject Win32_NTDomain | Select -ExpandProperty DnsForestName
 if ( $op -Contains $forest ){
 
   $mtime = Get-Date
@@ -206,13 +230,13 @@ lwrite ("$mtime End of script contents")
 Set-Content -Path "C:\Terraform\ImportUsers.ps1" -Value $script_contents
 
 #
-# Begin - Create a powershell scheduled task to run this script once a minute
+# Begin - Create a powershell scheduled job to run this script once a minute
 #
 
 $jt = New-JobTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 1) -RepetitionDuration (New-Timespan -Hours 48)
 Register-ScheduledJob -Name ImportUsers01 -ScriptBlock { C:\Terraform\ImportUsers.ps1 } -Trigger $jt
 #
-# End - Create a powershell schedule task to run this script once a minute
+# End - Create a powershell schedule job to run this script once a minute
 #
 
 $mtime = Get-Date
@@ -228,9 +252,85 @@ if ( Test-Path $path ) {
   Invoke-WebRequest -Uri $uri -OutFile $path
 }
 
-#$client = New-Object System.Net.WebClient
-#$client.DownloadFile($url, $path)
-#lwrite ("$mtime Downloaded to $path")
+# Download Sysmon
+$mtime = Get-Date
+lwrite("$mtime Download Sysmon")
+(New-Object System.Net.WebClient).DownloadFile('https://${storage_acct_s}.blob.core.windows.net/${storage_container_s}/${sysmon_zip_s}', 'C:\terraform\Sysmon.zip')
+
+# Download Sysmon config xml
+$mtime = Get-Date
+if (-not(Test-Path -Path "C:\terraform\sysmonconfig-export.xml" -PathType Leaf)) {
+  try {
+    lwrite("$mtime Download Sysmon config")
+    (New-Object System.Net.WebClient).DownloadFile('https://${storage_acct_s}.blob.core.windows.net/${storage_container_s}/${sysmon_config_s}', 'C:\terraform\sysmonconfig-export.xml')
+  } catch {
+    lwrite("$mtime Error downloading Sysmon config")
+  }
+}
+
+# Expand the Sysmon zip archive
+$mtime = Get-Date
+lwrite("$mtime Expand the sysmon zip file")
+Expand-Archive -Force -LiteralPath 'C:\terraform\Sysmon.zip' -DestinationPath 'C:\terraform\Sysmon'
+
+# Copy the Sysmon configuration for SwiftOnSecurity to destination Sysmon folder
+$mtime = Get-Date
+lwrite("$mtime Copy the Sysmon configuration for SwiftOnSecurity to destination Sysmon folder")
+Copy-Item "C:\terraform\sysmonconfig-export.xml" -Destination "C:\terraform\Sysmon"
+
+# Install Sysmon
+$mtime = Get-Date
+lwrite("$mtime Install Sysmon for Sentinel")
+C:\terraform\Sysmon\sysmon.exe -accepteula -i C:\terraform\Sysmon\sysmonconfig-export.xml
+
+lwrite("$mtime Install Powershell Core")
+iwr -Uri "https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.msi" -Outfile "C:\terraform\Powershell-7.4.1-win-x64.msi"
+msiexec.exe /package "C:\terraform\PowerShell-7.4.1-win-x64.msi" /quiet ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1 ENABLE_PSREMOTING=1 REGISTER_MANIFEST=1 USE_MU=1 ENABLE_MU=1 ADD_PATH=1
+
+# OpenSSH Server
+lwrite("$mtime Install of OpenSSH Server")
+Get-WindowsCapability -Online | Where-Object Name -like 'OpenSSH*'
+Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+
+# Start OpenSSH service
+lwrite("$mtime Start SSH Server service")
+Start-Service sshd
+
+# Set startup automatic
+Set-Service -Name sshd -StartupType 'Automatic'
+
+# Firewall rules confirmed
+if (!(Get-NetFirewallRule -Name "OpenSSH-Server-In-TCP" -ErrorAction SilentlyContinue | Select-Object Name, Enabled)) {
+    lwrite("$mtime Firewall Rule 'OpenSSH-Server-In-TCP' does not exist")
+    New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP' -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+} else {
+    lwrite("$mtime Firewall rule 'OpenSSH-Server-In-TCP' created")
+}
+
+# Change sshd_config file
+$sshd_config_file = "C:\ProgramData\ssh\sshd_config"
+
+# Allow PasswordAuthentication to yes
+((Get-Content -path $sshd_config_file -raw) -replace '#PasswordAuthentication yes', 'PasswordAuthentication yes') | Set-Content -Path $sshd_config_file
+
+# Change subsystem line for ssh
+$line = Get-Content $sshd_config_file | Select-String "Subsystem        sftp" | Select-Object -ExpandProperty Line
+
+if ($line -eq $null) {
+  lwrite("$mtime Subsystem line not found")
+} else {
+  lwrite("$mtime Replacing subsystem line in sshd_config file")
+  $content = Get-Content $sshd_config_file
+  $content | ForEach-Object {$_ -replace $line, "Subsystem powershell c:/progra~1/powershell/7/pwsh.exe -sshs -nologo"} | Set-Content $sshd_config_file
+}
+
+# Set default shell to Windows Powershell
+New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -PropertyType String -Force
+
+# Restart OpenSSH Service
+lwrite("$mtime Restart sshd service")
+Restart-Service sshd
 
 $mtime = Get-Date
 lwrite ("$mtime End of bootstrap script")

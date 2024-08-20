@@ -6,6 +6,13 @@ Terraform code generator to create different Azure security labs.
 For full documentation visit:  https://www.purplecloud.network
 
 # Changelog
+## 8/20/24:  Updated Azure Sentinel Generator 
+- On sentinel.py: Updated new Azure Monitor Agent (AMA) automated installation on dc and all windows endpoints!  From now on, all windows endpoints automatically send logs to Log Analytics Workspace / Sentinel.  Updated detection rule filter for Sysmon and Windows / Security event logs.
+- On sentinel.py: Added Diagnostic setting automated terraform deployment to send Entra ID logs to Log Analytics Workspace / Sentinel 
+- On sentinel.py: On Domain Controller, added Sysmon install and sending all Sysmon/Security logs to LAW/Sentinel 
+- On sentinel.py: On Domain Controller, removed CSE and streamlined AD Forest installation through powershell 
+- On sentinel.py: Removed Elastic Detection Rules and APT Simulator 
+
 ## 2/18/24:  Updated Atomic Red Team (ART) installation 
 - On sentinel.py, ad.py:  Updated ART installation to latest method for easy Invoke-Atomics
 - On sentinel.py, ad.py:  Fixed installation bug for Elastic Detection Rules
