@@ -12,6 +12,7 @@ For full documentation visit:  https://www.purplecloud.network
 - On sentinel.py: Added Diagnostic setting automated terraform deployment to send Entra ID logs to Log Analytics Workspace / Sentinel 
 - On sentinel.py: On Domain Controller, added Sysmon install and sending all Sysmon/Security logs to LAW/Sentinel 
 - On sentinel.py: On Domain Controller, removed CSE and streamlined AD Forest installation through powershell 
+- On sentinel.py: On all Windows:  Added Powershell Core and OpenSSH server, remote Powershell over SSH sessions 
 - On sentinel.py: Removed Elastic Detection Rules and APT Simulator 
 
 ## 2/18/24:  Updated Atomic Red Team (ART) installation 
