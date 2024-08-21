@@ -85,6 +85,17 @@ These are the settings that have worked best.  For Azure AD, set up the Service 
 
 For building the Azure infrastructure resources, assigning the Service Principal a role of ```Owner``` can help as well.
 
+**Important Note:**  The Sentinel generator requires a special permission that adds an Entra ID diagnostic setting.  If you want to use the ```sentinel.py``` generator and you are using a Service Principal, you need to add a special permission to the Service Principal you are using with terraform:
+
+Adding this diagnostic setting (for Entra ID logging to Log Analytics Workspace) requires special privileges for your terraform Service Principal to have authorized to read and write changes to aadiam resources (Azure Diagnostic Settings).  You must add a special role to your SP.  You can let terraform run and it will show an error.  You can simply comment out this resource temporarily.
+1. Ensure that owner permissions are added for the SP
+2. Ensure that SP has Global Administrator permissions
+3. Get the ```object_id``` of your terraform service principal.  You can get this from the Azure portal or by looking at the error returned by terraform.
+4. Run this command while logged in as global admin with **az login**, changing the ```SP_OBJECT_ID``` to be your terraform Service Principal's ```object_id```.  The ```--role ID``` is for owner role which you should have added for your SP in step 1.
+```commandline
+az role assignment create --assignee-principal-type  ServicePrincipal --assignee-object-id <SP_OBJECT_ID> --scope "/providers/Microsoft.aadiam" --role b24988ac-6180-42a0-ab88-20f7382dd24c
+```
+
 ### Step 4: Generate Terraform  
 
 Run one of the PurpleCloud scripts to generate terraform.  Each generator lives in a separate directory.  See the usage section for examples.
