@@ -1428,6 +1428,30 @@ resource "azurerm_monitor_aad_diagnostic_setting" "threat_monitoring" {
       enabled = true
     }
   }
+  
+  enabled_log {
+    category = "NonInteractiveUserSignInLogs"
+
+    retention_policy {
+      enabled = true
+    }
+  }
+  
+  enabled_log {
+    category = "ServicePrincipalSignInLogs"
+
+    retention_policy {
+      enabled = true
+    }
+  }
+  
+  enabled_log {
+    category = "ManagedIdentitySignInLogs"
+
+    retention_policy {
+      enabled = true
+    }
+  }
 }
   
 output "sentinel_details" {
