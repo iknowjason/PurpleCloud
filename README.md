@@ -7,7 +7,7 @@ For full documentation visit:  https://www.purplecloud.network
 
 # Changelog
 ## 10/18/24:  Updated Azure Sentinel Generator (Updated AADDiagnostic Setting log categories)
-- On sentinel.py: Added more categories for logging and sending to the LAW, including:  NonInteractiveUserSignInLogs, ServicePrincipalSignInLogs, ManagedIdentitySignInLogs.
+- On sentinel.py: Added more categories for logging and sending to the LAW, including:  NonInteractiveUserSignInLogs, ServicePrincipalSignInLogs, ManagedIdentitySignInLogs.  See the following blog describing this Sentinel code update:  https://medium.com/@iknowjason/sentinel-for-purple-teaming-183b7df7a2f4
 
 ## 10/16/24:  Updated Azure Sentinel Generator (Updated Managed Identity Roles)
 - On sentinel.py: Added more Managed Identity VM attack pathways on each Windows 10 system.  Added for roles of Owner, Virtual Machine Contributor, Key Vault Reader on user-assigned.  On SystemAssigned, added roles of Contributor, Virtual Machine Contributor, Key Vault Reader. 
