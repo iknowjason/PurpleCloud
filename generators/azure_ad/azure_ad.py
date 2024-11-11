@@ -396,7 +396,7 @@ def fetch_sp_template():
     buffer = '''
 # Create service principal 
 resource "azuread_service_principal" "LINE3" {
-  application_id = azuread_application.LINE4.application_id
+  client_id = azuread_application.LINE4.client_id
 
  depends_on = [azuread_application.LINE5]
 }
