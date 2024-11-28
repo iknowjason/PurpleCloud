@@ -84,16 +84,16 @@ variable "logout_url" {
 }
 
 resource "azuread_application_password" "app_consent" {
-  application_object_id = azuread_application.app_consent.object_id
+  application_id = "/applications/${azuread_application.app_consent.object_id}"
 }
 
 data "azuread_client_config" "current" {}
 
 # Create service principal
 resource "azuread_service_principal" "app_consent" {
-  application_id = azuread_application.app_consent.application_id
+  client_id = azuread_application.app_consent.client_id
 
- depends_on = [azuread_application.app_consent]
+  depends_on = [azuread_application.app_consent]
 }
 
 resource "azuread_application" "app_consent" {
@@ -166,7 +166,7 @@ output "app_details" {
 Application Details
 -------------------
 Name:  ${azuread_application.app_consent.display_name}
-Client Id:  ${azuread_application.app_consent.application_id}
+Client Id:  ${azuread_application.app_consent.client_id}
 Redirect URL: ${var.redirect_uris}
 To get the client_secret value:  terraform output client_secret
 -------------------
