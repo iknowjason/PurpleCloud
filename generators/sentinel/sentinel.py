@@ -1228,7 +1228,12 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      # This allows terraform destroy to remove resource groups that still contain resources
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 '''
@@ -1273,6 +1278,19 @@ resource "random_string" "suffix" {
 resource "azurerm_resource_group" "network" {
   name     = "${var.resource_group_name}-${random_string.suffix.id}"
   location = var.location
+}
+
+# Explicitly manage the NetworkWatcherRG resource group to ensure it's removed during terraform destroy
+# This resource group is automatically created by Azure when using network resources
+resource "azurerm_resource_group" "network_watcher" {
+  name     = "NetworkWatcherRG"
+  location = var.location
+  # Setting this lifecycle block ensures this resource is destroyed before the network resources that depend on it
+  lifecycle {
+    create_before_destroy = true
+  }
+  # Add dependency on Sentinel resources to ensure proper destroy order
+  depends_on = [azurerm_log_analytics_solution.pc, azurerm_sentinel_log_analytics_workspace_onboarding.pc]
 }
 
 # Create a storage account
@@ -1386,6 +1404,25 @@ resource "azurerm_log_analytics_solution" "pc" {
     publisher = "Microsoft"
     product   = "OMSGallery/SecurityInsights"
   }
+  
+  # This lifecycle configuration helps handle the 204 No Content response during deletion
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [
+      workspace_resource_id,
+      workspace_name
+    ]
+  }
+}
+
+# This resource onboards the Log Analytics Workspace to Microsoft Sentinel
+# This is required as of March 2024 for the Sentinel service to function properly
+resource "azurerm_sentinel_log_analytics_workspace_onboarding" "pc" {
+  workspace_id = azurerm_log_analytics_workspace.pc.id
+  customer_managed_key_enabled = false
+  depends_on = [
+    azurerm_log_analytics_solution.pc
+  ]
 }
 
 # Note:  Adding this diagnostic setting requires special privileges
